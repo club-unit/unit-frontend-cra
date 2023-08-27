@@ -1,4 +1,5 @@
 import { Author } from "@/types/api/author";
+import { Comment } from "@/types/api/comment";
 
 export interface Post {
   id: number;
@@ -9,5 +10,4 @@ export interface Post {
   isNotice: boolean;
   views: number;
   likes: number;
-  createdTime: string;
 }

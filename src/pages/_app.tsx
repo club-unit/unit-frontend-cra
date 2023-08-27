@@ -24,6 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
           className="bg-transparent text-white text-lg font-bold"
         />
       </Layout.Header>
+
       <Layout.Content>
         <Component {...pageProps} />
       </Layout.Content>

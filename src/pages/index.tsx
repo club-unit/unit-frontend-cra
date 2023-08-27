@@ -1,3 +1,10 @@
+import { Space } from "antd";
+import BranchSection from "@/components/pages/index/BranchSection";
+
 export default function MainPage() {
-  return <div>main</div>;
+  return (
+    <Space direction="vertical" className="p-3">
+      <BranchSection />
+    </Space>
+  );
 }
