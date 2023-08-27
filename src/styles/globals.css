@@ -115,3 +115,7 @@
 body {
   font-family: "Pretendard", sans-serif;
 }
+
+.ant-typography {
+  font-family: Pretendard, Arial, sans-serif;
+}

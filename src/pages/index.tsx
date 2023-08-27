@@ -3,7 +3,7 @@ import BranchSection from "@/components/pages/index/BranchSection";
 
 export default function MainPage() {
   return (
-    <Space direction="vertical" className="p-3">
+    <Space direction="vertical">
       <BranchSection />
     </Space>
   );
