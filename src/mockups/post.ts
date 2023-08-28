@@ -16,7 +16,8 @@ export const posts: Post[] = [
     comments: [
       {
         id: 1,
-        content: "content",
+        content:
+          "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
         author: {
           id: 1,
           profile: {
@@ -74,7 +75,8 @@ export const posts: Post[] = [
     comments: [
       {
         id: 1,
-        content: "content",
+        content:
+          "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
         author: {
           id: 1,
           profile: {
