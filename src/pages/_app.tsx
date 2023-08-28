@@ -24,7 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
           className="bg-transparent text-white text-lg font-bold"
         />
       </Layout.Header>
-      <Layout.Content>
+      <Layout.Content className="flex justify-center">
         <Row className="p-3 max-w-7xl min-h-screen mx-0" gutter={16}>
           <Col span={18}>
             <Component {...pageProps} />
