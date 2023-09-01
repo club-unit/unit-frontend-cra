@@ -31,6 +31,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "autoprefixer": "^10.4.15",
     "husky": "^8.0.0",
