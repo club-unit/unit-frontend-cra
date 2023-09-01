@@ -1,6 +1,6 @@
 import { Post } from "@/types/api/post";
 import { Space, Typography } from "antd";
-import { EyeOutlined, HeartFilled } from "@ant-design/icons";
+import { EyeOutlined } from "@ant-design/icons";
 
 interface Props {
   post: Post;
@@ -18,8 +18,6 @@ function BranchCardElement({ post }: Props) {
         <Space align="center">
           <EyeOutlined />
           <Typography.Text>{post.views}</Typography.Text>
-          <HeartFilled />
-          <Typography.Text>{post.likes}</Typography.Text>
         </Space>
       </Space>
     </Space>
