@@ -1,6 +1,6 @@
 import { Card, Space } from "antd";
 import { branchSlugs } from "@/constants/branches";
-import { posts } from "@/mockups/post";
+import { MOCKUP_POST_LIST } from "@/mockups/post";
 import BranchCardElement from "@/components/pages/index/BranchCardElement";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 function BranchCard({ slug }: Props) {
-  const postsResponse = posts;
+  const postsResponse = MOCKUP_POST_LIST;
 
   return (
     <Card size="small" title={slug.toUpperCase()} extra={<a href="#">더보기</a>}>
