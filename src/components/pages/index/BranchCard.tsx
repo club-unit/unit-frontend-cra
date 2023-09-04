@@ -1,10 +1,10 @@
 import { Card, Space } from "antd";
-import { branchSlugs } from "@/constants/branches";
+import { BRANCH_SLUGS } from "@/constants/branches";
 import { posts } from "@/mockups/post";
 import BranchCardElement from "@/components/pages/index/BranchCardElement";
 
 interface Props {
-  slug: (typeof branchSlugs)[number];
+  slug: (typeof BRANCH_SLUGS)[number];
 }
 
 function BranchCard({ slug }: Props) {
