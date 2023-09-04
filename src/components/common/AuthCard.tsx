@@ -1,5 +1,8 @@
 import { Button, Card, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { useAuth } from "@/contexts/auth/AuthProvider";
+import { clientAxios } from "@/utils/clientAxios";
+import { API_ROUTES } from "@/constants/routes";
 
 interface LoginForm {
   username: string;
@@ -8,8 +11,20 @@ interface LoginForm {
 }
 
 function AuthCard() {
-  const onFinish = (values: LoginForm) => {
-    console.log("Received values of form: ", values);
+  const { login } = useAuth();
+  const onFinish = async (values: LoginForm) => {
+    try {
+      const {
+        data: { access, refresh },
+      } = await clientAxios.post<{ access: string; refresh: string }>(
+        API_ROUTES.token.root(),
+        values
+      );
+      login(access, refresh);
+    } catch (error) {
+      console.error(error);
+      // TODO: Notification & 에러 처리
+    }
   };
 
   return (
