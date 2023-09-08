@@ -3,14 +3,14 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useState 
 import { User } from "@/types/api/user";
 import { clientAxios, setupAxiosInterceptors } from "@/utils/clientAxios";
 import { API_ROUTES } from "@/constants/routes";
-import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from "@/constants/jwt";
+import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME, REFRESH_MAX_AGE } from "@/constants/jwt";
 import Router from "next/router";
 import { notification } from "antd";
 
 interface AuthContextValue {
   user: User | null;
   token: string | null;
-  login: (access: string, refresh: string) => void;
+  login: (access: string, refresh: string, remember: boolean) => void;
   logout: () => void;
   isLoggedIn: boolean;
   isLoading: boolean;
@@ -78,12 +78,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setupAxiosInterceptors(handleUnauthenticated);
   }, [fetchAndSetUser, access, handleUnauthenticated]);
 
-  const login = (access: string, refresh: string) => {
+  const login = (access: string, refresh: string, remember: boolean) => {
     setIsLoadingCookie(true);
     setAccess(access);
     clientAxios.defaults.headers["Authorization"] = `Bearer ${access}`;
     Cookies.set(ACCESS_COOKIE_NAME, access);
-    Cookies.set(REFRESH_COOKIE_NAME, refresh);
+    Cookies.set(REFRESH_COOKIE_NAME, refresh, {
+      "max-age": remember ? String(REFRESH_MAX_AGE) : undefined,
+    });
     fetchAndSetUser(access);
     setIsLoadingCookie(false);
   };

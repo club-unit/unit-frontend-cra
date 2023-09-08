@@ -21,7 +21,7 @@ function AuthCard() {
         API_ROUTES.token.root(),
         values
       );
-      login(access, refresh);
+      login(access, refresh, values.remember);
     } catch (error) {
       console.error(error);
       // TODO: Notification & 에러 처리
