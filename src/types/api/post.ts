@@ -5,9 +5,12 @@ export interface Post {
   id: number;
   title: string;
   content: string;
+  category: string;
   author: Author;
-  comments: Comment[];
-  isNotice: boolean;
+  isPinned: boolean;
   views: number;
-  likes: number;
+}
+
+export interface PostDetail extends Post {
+  comments: Comment[];
 }

@@ -4,5 +4,5 @@ export interface Board {
   name: string;
   slug: string;
   categories: Category[];
-  children: Board[] | null;
+  children: Board[];
 }

@@ -1,122 +1,81 @@
-import { Post } from "@/types/api/post";
+import { Post, PostDetail } from "@/types/api/post";
 
-export const posts: Post[] = [
-  {
+export const MOCKUP_POST_DETAIL: PostDetail = {
+  id: 1,
+  title: "title example1",
+  category: "공지",
+  content:
+    "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
+  author: {
     id: 1,
-    title: "title example1",
-    content:
-      "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
-    author: {
-      id: 1,
-      profile: {
-        name: "홍길동",
-        branch: "JUNGSAN",
-      },
+    profile: {
+      name: "홍길동",
+      branch: "JUNGSAN",
+      rank: "asdf",
+      responsibility: "asdf",
     },
-    comments: [
-      {
+  },
+  comments: [
+    {
+      id: 1,
+      content:
+        "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
+      author: {
         id: 1,
-        content:
-          "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
-        author: {
-          id: 1,
-          profile: {
-            name: "홍길동",
-            branch: "JUNGSAN",
-          },
+        profile: {
+          name: "홍길동",
+          branch: "JUNGSAN",
+          rank: "asdf",
+          responsibility: "asdf",
         },
       },
-    ],
-    isNotice: false,
-    views: 10,
-    likes: 20,
-  },
-  {
-    id: 2,
-    title: "title exampl2",
-    content:
-      "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
-    author: {
-      id: 1,
-      profile: {
-        name: "홍길동",
-        branch: "JUNGSAN",
-      },
-    },
-    comments: [
-      {
-        id: 1,
-        content: "content",
-        author: {
+      children: [
+        {
           id: 1,
-          profile: {
-            name: "홍길동",
-            branch: "JUNGSAN",
+          content:
+            "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
+          author: {
+            id: 1,
+            profile: {
+              name: "홍길동",
+              branch: "JUNGSAN",
+              rank: "asdf",
+              responsibility: "asdf",
+            },
           },
+          children: [],
+          created: "2017-03-16T17:40:00+09:00",
         },
-      },
-    ],
-    isNotice: false,
-    views: 10,
-    likes: 20,
-  },
-  {
-    id: 3,
-    title: "title exampl3",
-    content:
-      "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
-    author: {
-      id: 1,
-      profile: {
-        name: "홍길동",
-        branch: "JUNGSAN",
-      },
+      ],
+      created: "2017-03-16T17:40:00+09:00",
     },
-    comments: [
-      {
-        id: 1,
-        content:
-          "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
-        author: {
-          id: 1,
-          profile: {
-            name: "홍길동",
-            branch: "JUNGSAN",
-          },
-        },
-      },
-    ],
-    isNotice: false,
-    views: 10,
-    likes: 20,
-  },
-  {
-    id: 4,
-    title: "title exampl4",
-    content:
-      "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
-    author: {
-      id: 1,
-      profile: {
-        name: "홍길동",
-        branch: "JUNGSAN",
-      },
+  ],
+  isPinned: false,
+  views: 10,
+};
+
+const MOCKUP_POST_LIST_ELEMENT: (num: number) => Post = (num) => ({
+  id: num,
+  title: "example" + num,
+  content:
+    "contentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontentcontent",
+  category: "string",
+  author: {
+    id: 1,
+    profile: {
+      name: "홍길동",
+      branch: "JUNGSAN",
+      rank: "asdf",
+      responsibility: "asdf",
     },
-    comments: [
-      {
-        id: 1,
-        content: "content",
-        author: {
-          id: 1,
-          profile: {
-            name: "홍길동",
-            branch: "JUNGSAN",
-          },
-        },
-      },
-    ],
-    isNotice: false,
-    views: 10,
-    likes: 20,
   },
+  isPinned: false,
+  views: 10,
+});
+
+export const MOCKUP_POST_LIST: Post[] = [
+  MOCKUP_POST_LIST_ELEMENT(1),
+  MOCKUP_POST_LIST_ELEMENT(2),
+  MOCKUP_POST_LIST_ELEMENT(3),
+  MOCKUP_POST_LIST_ELEMENT(4),
 ];
