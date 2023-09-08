@@ -5,7 +5,7 @@ import { clientAxios, setupAxiosInterceptors } from "@/utils/clientAxios";
 import { API_ROUTES } from "@/constants/routes";
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME, REFRESH_MAX_AGE } from "@/constants/jwt";
 import Router from "next/router";
-import { notification } from "antd";
+import { useNotification } from "@/contexts/notification/NotificationProvider";
 
 interface AuthContextValue {
   user: User | null;
@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingCookie, setIsLoadingCookie] = useState(true);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
-  const [api, contextHolder] = notification.useNotification();
+  const { api } = useNotification();
 
   const fetchAndSetUser = useCallback(async (token: string) => {
     setIsLoadingUser(true);
@@ -113,7 +113,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         handleUnauthenticated: handleUnauthenticated,
       }}
     >
-      {contextHolder}
       {children}
     </AuthContext.Provider>
   );
