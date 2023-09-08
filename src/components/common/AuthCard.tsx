@@ -3,6 +3,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useAuth } from "@/contexts/auth/AuthProvider";
 import { clientAxios } from "@/utils/clientAxios";
 import { API_ROUTES } from "@/constants/routes";
+import Link from "next/link";
 
 interface LoginForm {
   username: string;
@@ -53,18 +54,18 @@ function AuthCard() {
           <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox>로그인 상태 유지</Checkbox>
           </Form.Item>
-          <a className="text-blue-600 underline" href="">
+          <Link className="text-blue-600 underline" href="/pw-reset">
             비밀번호 찾기
-          </a>
+          </Link>
         </div>
         <Form.Item className="mt-2 mb-2">
           <Button type="primary" htmlType="submit" className="bg-blue-600 w-full">
             로그인
           </Button>
         </Form.Item>
-        <a href="" className="text-blue-600 underline">
+        <Link href="/register" className="text-blue-600 underline">
           회원가입
-        </a>
+        </Link>
       </Form>
     </Card>
   );
