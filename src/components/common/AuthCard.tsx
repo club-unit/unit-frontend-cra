@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/auth/AuthProvider";
 import { clientAxios } from "@/utils/clientAxios";
 import { API_ROUTES } from "@/constants/routes";
 import Link from "next/link";
+import { useNotification } from "@/contexts/notification/NotificationProvider";
 
 interface LoginForm {
   username: string;
@@ -13,6 +14,7 @@ interface LoginForm {
 
 function AuthCard() {
   const { login } = useAuth();
+  const { api } = useNotification();
   const onFinish = async (values: LoginForm) => {
     try {
       const {
@@ -23,8 +25,8 @@ function AuthCard() {
       );
       login(access, refresh, values.remember);
     } catch (error) {
-      console.error(error);
-      // TODO: Notification & 에러 처리
+      //@TODO: 에러 핸들링
+      // api.error({message: "인증 오류", description: "알 수 없는 인증 오류 입니다"});
     }
   };
 

@@ -26,20 +26,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoadingUser, setIsLoadingUser] = useState(true);
   const { api } = useNotification();
 
-  const fetchAndSetUser = useCallback(async (token: string) => {
-    setIsLoadingUser(true);
+  const fetchAndSetUser = useCallback(
+    async (token: string) => {
+      setIsLoadingUser(true);
 
-    try {
-      const { data } = await clientAxios.get<User>(API_ROUTES.users.my(), {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUser(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoadingUser(false);
-    }
-  }, []);
+      try {
+        const { data } = await clientAxios.get<User>(API_ROUTES.users.my(), {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(data);
+      } catch (error) {
+        //@TODO: 에러 핸들링
+        api.error({ message: "인증 오류", description: "알 수 없는 인증 오류 입니다" });
+      } finally {
+        setIsLoadingUser(false);
+      }
+    },
+    [api]
+  );
 
   const handleUnauthenticated = useCallback(async () => {
     try {
