@@ -1,6 +1,6 @@
-export const BRANCH_SLUGS = ["green", "donga", "city", "union", "jamsil", "jungsan"];
+import { Branch } from "@/types/api/profile";
 
-export type Branch = "GREEN" | "DONGA" | "CITY" | "UNION" | "JAMSIL" | "JUNGSAN";
+export const BRANCH_SLUGS = ["green", "donga", "city", "union", "jamsil", "jungsan"];
 
 export const BRANCH_LOOKUP_TABLE: Record<Branch, string> = {
   GREEN: "그린",
