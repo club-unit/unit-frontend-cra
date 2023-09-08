@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 function AuthOrUserCard() {
   const { isLoggedIn } = useAuth();
   const router = useRouter();
-  console.log(router.pathname);
 
   if (["/register", "/pw-reset"].includes(router.pathname)) {
     return null;
