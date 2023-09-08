@@ -1,25 +1,14 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { Col, Layout, Menu, Row } from "antd";
-import Link from "next/link";
-import { MOCKUP_BOARDS } from "@/mockups/boards";
+import { Col, Layout, Row } from "antd";
 import { AuthProvider } from "@/contexts/auth/AuthProvider";
 import AuthOrUserCard from "@/components/common/AuthOrUserCard";
 import { NotificationProvider } from "@/contexts/notification/NotificationProvider";
 import { SWRConfig } from "swr";
 import { fetcher } from "@/utils/fetcher";
+import Navbar from "@/components/common/Navbar";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const boardsResponse = MOCKUP_BOARDS;
-  const menuItems = boardsResponse.map((item) => ({
-    label: <Link href="#">{item.name}</Link>,
-    key: item.slug,
-    children: item.children?.map((child) => ({
-      label: <Link href="#">{child.name}</Link>,
-      key: child.slug,
-    })),
-  }));
-
   return (
     <SWRConfig
       value={{
@@ -31,11 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <AuthProvider>
           <Layout>
             <Layout.Header>
-              <Menu
-                items={menuItems}
-                mode="horizontal"
-                className="bg-transparent text-white text-lg font-bold"
-              />
+              <Navbar />
             </Layout.Header>
             <Layout.Content className="flex justify-center">
               <Row className="p-3 max-w-7xl min-h-screen mx-0" gutter={16}>
