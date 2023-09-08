@@ -3,8 +3,8 @@ import type { AppProps } from "next/app";
 import { Col, Layout, Menu, Row } from "antd";
 import Link from "next/link";
 import { MOCKUP_BOARDS } from "@/mockups/boards";
-import AuthCard from "@/components/common/AuthCard";
 import { AuthProvider } from "@/contexts/auth/AuthProvider";
+import AuthOrUserCard from "@/components/common/AuthOrUserCard";
 
 export default function App({ Component, pageProps }: AppProps) {
   const boardsResponse = MOCKUP_BOARDS;
@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
             </Col>
             <Col span={6} className="pt-2">
-              <AuthCard />
+              <AuthOrUserCard />
             </Col>
           </Row>
         </Layout.Content>
