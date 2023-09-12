@@ -8,13 +8,13 @@ interface Props {
 }
 
 function BranchCard({ slug }: Props) {
-  const postsResponse = { ...MOCKUP_POST_LIST, results: MOCKUP_POST_LIST.results.slice(0, 3) };
+  const postsResponse = MOCKUP_POST_LIST;
 
   return (
-    <Card size="small" title={slug.toUpperCase()} extra={<a href="#">더보기</a>}>
+    <Card size="small" title={slug.toUpperCase()} extra={<a href={`/${slug}`}>더보기</a>}>
       <Space direction="vertical" size="middle" className="w-full">
         {postsResponse.results.map((post) => (
-          <BranchCardElement key={post.id} post={post} />
+          <BranchCardElement key={post.id} post={post} slug={slug} />
         ))}
       </Space>
     </Card>

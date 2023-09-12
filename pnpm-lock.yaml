@@ -49,6 +49,9 @@ dependencies:
     version: 5.1.6
 
 devDependencies:
+  "@types/js-cookie":
+    specifier: ^3.0.3
+    version: 3.0.3
   "@typescript-eslint/eslint-plugin":
     specifier: ^6.4.0
     version: 6.4.0(@typescript-eslint/parser@6.4.0)(eslint@8.47.0)(typescript@5.1.6)
@@ -586,6 +589,13 @@ packages:
     dependencies:
       tslib: 2.6.2
     dev: false
+
+  /@types/js-cookie@3.0.3:
+    resolution:
+      {
+        integrity: sha512-Xe7IImK09HP1sv2M/aI+48a20VX+TdRJucfq4vfRVy6nWN8PYPOEnlMRSgxJAgYQIXJVL8dZ4/ilAM7dWNaOww==,
+      }
+    dev: true
 
   /@types/json-schema@7.0.12:
     resolution:
