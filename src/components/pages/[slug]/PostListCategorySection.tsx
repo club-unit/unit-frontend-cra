@@ -4,16 +4,16 @@ import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   categories: Category[];
-  categoryName: string;
-  setCategoryName: Dispatch<SetStateAction<string>>;
+  currentCategory: string | number;
+  setCurrentCategory: Dispatch<SetStateAction<string | number>>;
 }
 
-function PostListCategorySection({ categories }: Props) {
+function PostListCategorySection({ categories, currentCategory, setCurrentCategory }: Props) {
   const categoryList = categories.map((category) => category.name);
 
   return (
     <div className="w-full">
-      <Segmented options={categoryList} />
+      <Segmented options={categoryList} value={currentCategory} onChange={setCurrentCategory} />
     </div>
   );
 }

@@ -16,4 +16,7 @@ export const API_ROUTES = {
     bySlugAndPostIdAndId: (slug: string, postId: number, id: number) =>
       `/boards/posts/${slug}/${postId}/comments/${id}`,
   },
+  categories: {
+    bySlug: (slug: string) => `/boards/${slug}/categories/`,
+  },
 };
