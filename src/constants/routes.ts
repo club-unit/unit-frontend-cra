@@ -8,12 +8,15 @@ export const API_ROUTES = {
     root: () => "/boards/",
   },
   posts: {
-    bySlug: (slug: string) => `/boards/${slug}/`,
+    bySlug: (slug: string) => `/boards/${slug}/posts/`,
     bySlugAndId: (slug: string, id: number) => `/boards/posts/${slug}/${id}`,
   },
   comments: {
     bySlugAndPostId: (slug: string, postId: number) => `/boards/posts/${slug}/${postId}/comments/`,
     bySlugAndPostIdAndId: (slug: string, postId: number, id: number) =>
       `/boards/posts/${slug}/${postId}/comments/${id}`,
+  },
+  categories: {
+    bySlug: (slug: string) => `/boards/${slug}/categories/`,
   },
 };

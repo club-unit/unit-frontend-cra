@@ -9,6 +9,7 @@ export interface Post {
   author: Author;
   isPinned: boolean;
   views: number;
+  created: string;
 }
 
 export interface PostDetail extends Post {
