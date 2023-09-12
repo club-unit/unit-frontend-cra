@@ -37,7 +37,6 @@ function PostListPage() {
       : null
   );
   const categoryList = categories ? [{ name: "전체" }, ...categories] : [{ name: "전체" }];
-  console.log(page);
 
   return (
     <>
