@@ -8,15 +8,21 @@ import { API_ROUTES } from "@/constants/routes";
 import { useAuth } from "@/contexts/auth/AuthProvider";
 import { Category } from "@/types/api/category";
 import { Spin } from "antd";
+import PostListMainSection from "@/components/pages/[slug]/PostListMainSection";
 
 function PostListPage() {
   const router = useRouter();
   const { token } = useAuth();
   const [currentCategory, setCurrentCategory] = useState<string | number>("전체");
+  const [page, setPage] = useState<number>(1);
   const { data: posts } = useSWR<CommonPagedResponse<Post>>(
     router.query.slug
       ? {
           url: API_ROUTES.posts.bySlug(String(router.query.slug)),
+          query: {
+            category__name: currentCategory !== "전체" ? currentCategory : undefined,
+            page,
+          },
           token,
         }
       : null
@@ -43,6 +49,7 @@ function PostListPage() {
       ) : (
         <Spin />
       )}
+      {posts ? <PostListMainSection posts={posts.results} /> : <Spin />}
     </>
   );
 }

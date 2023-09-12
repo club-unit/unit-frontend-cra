@@ -53,6 +53,7 @@ export const MOCKUP_POST_DETAIL: PostDetail = {
   ],
   isPinned: false,
   views: 10,
+  created: "",
 };
 
 const MOCKUP_POST_LIST_ELEMENT: (num: number) => Post = (num) => ({
@@ -72,6 +73,7 @@ const MOCKUP_POST_LIST_ELEMENT: (num: number) => Post = (num) => ({
   },
   isPinned: false,
   views: 10,
+  created: "",
 });
 
 export const MOCKUP_POST_LIST: CommonPagedResponse<Post> = {

@@ -23,6 +23,9 @@ dependencies:
   axios:
     specifier: ^1.5.0
     version: 1.5.0
+  dayjs:
+    specifier: ^1.11.9
+    version: 1.11.9
   eslint:
     specifier: 8.47.0
     version: 8.47.0
