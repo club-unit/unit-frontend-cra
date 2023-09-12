@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/auth/AuthProvider";
 import { Category } from "@/types/api/category";
 import { Spin } from "antd";
 import PostListMainSection from "@/components/pages/[slug]/PostListMainSection";
+import PostListPaginationSection from "@/components/pages/[slug]/PostListPaginationSection";
 
 function PostListPage() {
   const router = useRouter();
@@ -35,8 +36,8 @@ function PostListPage() {
         }
       : null
   );
-
   const categoryList = categories ? [{ name: "전체" }, ...categories] : [{ name: "전체" }];
+  console.log(page);
 
   return (
     <>
@@ -50,6 +51,7 @@ function PostListPage() {
         <Spin />
       )}
       {posts ? <PostListMainSection posts={posts.results} /> : <Spin />}
+      <PostListPaginationSection page={page} setPage={setPage} total={posts?.count} />
     </>
   );
 }
