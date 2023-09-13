@@ -1,4 +1,4 @@
-import "@/styles/globals.css";
+import "@/globals.css";
 import type { AppProps } from "next/app";
 import { Col, Layout, Row } from "antd";
 import { AuthProvider } from "@/contexts/auth/AuthProvider";
