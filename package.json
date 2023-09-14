@@ -6,7 +6,6 @@
     "start": "sudo PORT=80 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "next lint",
     "check-types": "tsc --pretty --noEmit",
     "check-format": "prettier --check .",
     "check-lint": "eslint . --ext ts --ext tsx --ext js",
