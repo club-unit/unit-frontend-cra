@@ -1,4 +1,4 @@
-import { Branch } from "@/types/api/profile";
+import { Branch } from "src/types/api/profile";
 
 export const BRANCH_SLUGS = ["green", "donga", "city", "union", "jamsil", "jungsan"];
 

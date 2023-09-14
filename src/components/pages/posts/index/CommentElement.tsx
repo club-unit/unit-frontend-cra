@@ -1,5 +1,5 @@
-import { Comment } from "@/types/api/comment";
 import { Typography } from "antd";
+import { Comment } from "src/types/api/comment";
 
 interface Props {
   comment: Comment;

@@ -1,9 +1,27 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import { Col, Layout, Row } from "antd";
+import MainPage from "src/pages/MainPage";
+import AuthOrUserCard from "src/components/common/AuthOrUserCard";
+import Navbar from "src/components/common/Navbar";
 
 function App() {
   return (
-    <div>asdf</div>
+    <Layout>
+      <Layout.Header>
+        <Navbar />
+      </Layout.Header>
+      <Layout.Content className="flex justify-center">
+        <Row className="p-3 w-[80vw] min-h-screen mx-0" gutter={16}>
+          <Col span={18}>
+            <MainPage />
+          </Col>
+          <Col span={6} className="pt-2">
+            <AuthOrUserCard />
+          </Col>
+        </Row>
+      </Layout.Content>
+      <Layout.Footer></Layout.Footer>
+    </Layout>
   );
 }
 

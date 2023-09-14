@@ -1,17 +1,18 @@
 import { Image, Table } from "antd";
-import { Post } from "@/types/api/post";
-import { Author } from "@/types/api/author";
 import dayjs from "dayjs";
 import React from "react";
 import { PushpinFilled } from "@ant-design/icons";
-import { useRouter } from "next/router";
+import { Post } from "src/types/api/post";
+import { Author } from "src/types/api/author";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface Props {
   posts: Post[];
 }
 
 function PostListMainSection({ posts }: Props) {
-  const router = useRouter();
+  const { slug } = useParams();
+  const navigate = useNavigate();
   const columns = [
     {
       title: "분류",
@@ -73,7 +74,7 @@ function PostListMainSection({ posts }: Props) {
         size="small"
         onRow={(post) => {
           return {
-            onClick: () => router.push(`/${router.query.slug}/${post.id}`),
+            onClick: () => navigate(`/${slug}/${post.id}`),
             className: "hover:cursor-pointer",
           };
         }}

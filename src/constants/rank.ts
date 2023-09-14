@@ -1,4 +1,4 @@
-import { Rank } from "@/types/api/profile";
+import { Rank } from "src/types/api/profile";
 
 export const RANK_LOOKUP_TABLE: Record<Rank, string> = {
   NONE: "비회원",

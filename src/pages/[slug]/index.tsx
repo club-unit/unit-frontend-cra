@@ -1,18 +1,18 @@
-import PostListCategorySection from "@/components/pages/[slug]/PostListCategorySection";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import useSWR from "swr";
-import { CommonListResponse, CommonPagedResponse } from "@/types/api/common";
-import { Post } from "@/types/api/post";
-import { API_ROUTES } from "@/constants/routes";
-import { useAuth } from "@/contexts/auth/AuthProvider";
-import { Category } from "@/types/api/category";
 import { Spin } from "antd";
-import PostListMainSection from "@/components/pages/[slug]/PostListMainSection";
-import PostListPaginationSection from "@/components/pages/[slug]/PostListPaginationSection";
+import { Post } from "src/types/api/post";
+import { CommonListResponse, CommonPagedResponse } from "src/types/api/common";
+import { API_ROUTES } from "src/constants/routes";
+import { Category } from "src/types/api/category";
+import PostListCategorySection from "src/components/pages/[slug]/PostListCategorySection";
+import PostListMainSection from "src/components/pages/[slug]/PostListMainSection";
+import PostListPaginationSection from "src/components/pages/[slug]/PostListPaginationSection";
+import useAuth from "src/contexts/auth/useAuth";
 
 function PostListPage() {
-  const router = useRouter();
+  // const router = useRouter();
+  const router = { query: { slug: "green" } };
   const { token } = useAuth();
   const [currentCategory, setCurrentCategory] = useState<string | number>("전체");
   const [page, setPage] = useState<number>(1);

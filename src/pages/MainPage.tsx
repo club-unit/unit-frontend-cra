@@ -1,5 +1,5 @@
 import { Space } from "antd";
-import BranchSection from "@/components/pages/index/BranchSection";
+import BranchSection from "src/components/pages/index/BranchSection";
 
 export default function MainPage() {
   return (

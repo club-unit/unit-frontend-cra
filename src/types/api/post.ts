@@ -1,5 +1,5 @@
-import { Author } from "@/types/api/author";
-import { Comment } from "@/types/api/comment";
+import { Author } from "src/types/api/author";
+import { Comment } from "src/types/api/comment";
 
 export interface Post {
   id: number;

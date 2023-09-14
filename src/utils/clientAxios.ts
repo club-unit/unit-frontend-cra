@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const clientAxios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
+  baseURL: process.env.REACT_APP_API_ENDPOINT,
 });
 
 export const setupAxiosInterceptors = (handleUnauthenticated: () => void) => {

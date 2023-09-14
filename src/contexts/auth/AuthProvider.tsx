@@ -1,11 +1,10 @@
 import Cookies from "js-cookie";
-import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
-import { User } from "@/types/api/user";
-import { clientAxios, setupAxiosInterceptors } from "@/utils/clientAxios";
-import { API_ROUTES } from "@/constants/routes";
-import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME, REFRESH_MAX_AGE } from "@/constants/jwt";
-import Router from "next/router";
-import { useNotification } from "@/contexts/notification/NotificationProvider";
+import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
+import { User } from "src/types/api/user";
+import { clientAxios, setupAxiosInterceptors } from "src/utils/clientAxios";
+import { API_ROUTES } from "src/constants/routes";
+import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME, REFRESH_MAX_AGE } from "src/constants/jwt";
+import useNotification from "src/contexts/notification/useNotfication";
 
 interface AuthContextValue {
   user: User | null;
@@ -17,9 +16,9 @@ interface AuthContextValue {
   handleUnauthenticated: () => void;
 }
 
-const AuthContext = createContext<AuthContextValue | null>(null);
+export const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+function AuthProvider({ children }: { children: ReactNode }) {
   const [access, setAccess] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingCookie, setIsLoadingCookie] = useState(true);
@@ -59,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       fetchAndSetUser(access);
       setIsLoadingCookie(false);
     } catch (error) {
-      Router.push("/");
+      // Router.push("/");
       Cookies.remove(ACCESS_COOKIE_NAME);
       Cookies.remove(REFRESH_COOKIE_NAME);
       api.error({ message: "로그인 만료", description: "로그인이 만료되었습니다." });
@@ -122,12 +121,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-
-  if (context == null) {
-    throw new Error("AuthProvider 안에서 사용해주세요");
-  }
-
-  return context;
-}
+export default AuthProvider;

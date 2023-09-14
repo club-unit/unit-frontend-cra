@@ -1,6 +1,6 @@
-import { PAGE_SIZE } from "@/constants/pagination";
 import { Pagination } from "antd";
 import { Dispatch, SetStateAction } from "react";
+import { PAGE_SIZE } from "src/constants/pagination";
 
 interface Props {
   page: number;
