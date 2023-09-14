@@ -1,6 +1,6 @@
 import { Typography } from "antd";
-import { Post } from "@/types/api/post";
 import { EyeOutlined } from "@ant-design/icons";
+import { Post } from "src/types/api/post";
 
 interface Props {
   post: Post;

@@ -1,6 +1,6 @@
 import { Segmented } from "antd";
-import { Category } from "@/types/api/category";
 import { Dispatch, SetStateAction } from "react";
+import { Category } from "src/types/api/category";
 
 interface Props {
   categories: Category[];

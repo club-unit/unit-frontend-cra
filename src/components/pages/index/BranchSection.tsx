@@ -1,5 +1,5 @@
 import { Col, Row } from "antd";
-import BranchCard from "@/components/pages/index/BranchCard";
+import BranchCard from "src/components/pages/index/BranchCard";
 
 function BranchSection() {
   return (

@@ -1,7 +1,7 @@
 import { Card, Space } from "antd";
-import { BRANCH_SLUGS } from "@/constants/branches";
-import { MOCKUP_POST_LIST } from "@/mockups/post";
-import BranchCardElement from "@/components/pages/index/BranchCardElement";
+import { BRANCH_SLUGS } from "src/constants/branches";
+import { MOCKUP_POST_LIST } from "src/mockups/post";
+import BranchCardElement from "src/components/pages/index/BranchCardElement";
 
 interface Props {
   slug: (typeof BRANCH_SLUGS)[number];

@@ -1,4 +1,4 @@
-import { ProfileDetail } from "@/types/api/profile";
+import { ProfileDetail } from "src/types/api/profile";
 
 export interface User {
   id: string;

@@ -1,5 +1,5 @@
-import { Board } from "@/types/api/board";
-import { CommonListResponse } from "@/types/api/common";
+import { CommonListResponse } from "src/types/api/common";
+import { Board } from "src/types/api/board";
 
 export const MOCKUP_BOARDS: CommonListResponse<Board> = [
   {

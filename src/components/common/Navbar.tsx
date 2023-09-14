@@ -1,10 +1,10 @@
 import { Menu } from "antd";
-import Link from "next/link";
 import useSWR from "swr";
-import { CommonListResponse } from "@/types/api/common";
-import { Board } from "@/types/api/board";
-import { API_ROUTES } from "@/constants/routes";
-import { useAuth } from "@/contexts/auth/AuthProvider";
+import useAuth from "src/contexts/auth/useAuth";
+import { CommonListResponse } from "src/types/api/common";
+import { Board } from "src/types/api/board";
+import { API_ROUTES } from "src/constants/routes";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const { token } = useAuth();
@@ -13,10 +13,10 @@ function Navbar() {
     token,
   });
   const menuItems = boardsResponse?.map((item) => ({
-    label: <Link href={`/${item.slug}`}>{item.name}</Link>,
+    label: <Link to={`/${item.slug}`}>{item.name}</Link>,
     key: item.slug,
     children: item.children?.map((child) => ({
-      label: <Link href={`/${child.slug}`}>{child.name}</Link>,
+      label: <Link to={`/${child.slug}`}>{child.name}</Link>,
       key: child.slug,
     })),
   }));

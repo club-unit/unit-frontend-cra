@@ -1,9 +1,8 @@
 import { Card, Divider, Image, Typography } from "antd";
-import { useAuth } from "@/contexts/auth/AuthProvider";
-import React from "react";
 import { BellFilled } from "@ant-design/icons";
-import Link from "next/link";
-import { BRANCH_LOOKUP_TABLE } from "@/constants/branches";
+import useAuth from "src/contexts/auth/useAuth";
+import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
+import { Link } from "react-router-dom";
 
 function UserCard() {
   const { user, logout } = useAuth();
@@ -46,7 +45,7 @@ function UserCard() {
 
           <Divider className="my-2" />
           <div className="flex justify-between align-middle h-fit">
-            <Link href="/">
+            <Link to="/">
               <BellFilled />
             </Link>
             <Typography.Text

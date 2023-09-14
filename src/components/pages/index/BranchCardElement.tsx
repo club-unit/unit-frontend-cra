@@ -1,9 +1,9 @@
-import { Post } from "@/types/api/post";
 import { Space, Typography } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
 import React from "react";
-import Link from "next/link";
-import { BRANCH_SLUGS } from "@/constants/branches";
+import { Post } from "src/types/api/post";
+import { BRANCH_SLUGS } from "src/constants/branches";
+import { Link } from "react-router-dom";
 
 interface Props {
   post: Post;
@@ -12,7 +12,7 @@ interface Props {
 
 function BranchCardElement({ post, slug }: Props) {
   return (
-    <Link href={`/${slug}/${post.id}`}>
+    <Link to={`/${slug}/${post.id}`}>
       <Space
         direction="vertical"
         size={0}

@@ -1,5 +1,5 @@
-import { Post, PostDetail } from "@/types/api/post";
-import { CommonPagedResponse } from "@/types/api/common";
+import { Post, PostDetail } from "src/types/api/post";
+import { CommonPagedResponse } from "src/types/api/common";
 
 export const MOCKUP_POST_DETAIL: PostDetail = {
   id: 1,

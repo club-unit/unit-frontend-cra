@@ -1,13 +1,13 @@
-import { useAuth } from "@/contexts/auth/AuthProvider";
-import UserCard from "@/components/common/UserCard";
-import AuthCard from "@/components/common/AuthCard";
-import { useRouter } from "next/router";
+import useAuth from "src/contexts/auth/useAuth";
+import UserCard from "src/components/common/UserCard";
+import AuthCard from "src/components/common/AuthCard";
+import { useLocation } from "react-router-dom";
 
 function AuthOrUserCard() {
   const { isLoggedIn } = useAuth();
-  const router = useRouter();
+  const location = useLocation();
 
-  if (["/register", "/pw-reset"].includes(router.pathname)) {
+  if (["/register", "/pw-reset"].includes(location.pathname)) {
     return null;
   }
 

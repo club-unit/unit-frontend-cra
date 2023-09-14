@@ -1,4 +1,4 @@
-import { Profile } from "@/types/api/profile";
+import { Profile } from "src/types/api/profile";
 
 export interface Author {
   id: number;

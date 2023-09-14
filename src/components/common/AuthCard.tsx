@@ -1,10 +1,10 @@
 import { Button, Card, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { useAuth } from "@/contexts/auth/AuthProvider";
-import { clientAxios } from "@/utils/clientAxios";
-import { API_ROUTES } from "@/constants/routes";
-import Link from "next/link";
-import { useNotification } from "@/contexts/notification/NotificationProvider";
+import { clientAxios } from "src/utils/clientAxios";
+import { API_ROUTES } from "src/constants/routes";
+import useAuth from "src/contexts/auth/useAuth";
+import useNotification from "src/contexts/notification/useNotfication";
+import { Link } from "react-router-dom";
 
 interface LoginForm {
   username: string;
@@ -26,7 +26,7 @@ function AuthCard() {
       login(access, refresh, values.remember);
     } catch (error) {
       //@TODO: 에러 핸들링
-      // api.error({message: "인증 오류", description: "알 수 없는 인증 오류 입니다"});
+      api.error({ message: "인증 오류", description: "알 수 없는 인증 오류 입니다" });
     }
   };
 
@@ -56,7 +56,7 @@ function AuthCard() {
           <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox>로그인 상태 유지</Checkbox>
           </Form.Item>
-          <Link className="text-blue-600 underline" href="/pw-reset">
+          <Link className="text-blue-600 underline" to="/pw-reset">
             비밀번호 찾기
           </Link>
         </div>
@@ -65,7 +65,7 @@ function AuthCard() {
             로그인
           </Button>
         </Form.Item>
-        <Link href="/register" className="text-blue-600 underline">
+        <Link to="/register" className="text-blue-600 underline">
           회원가입
         </Link>
       </Form>

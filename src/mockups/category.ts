@@ -1,4 +1,4 @@
-import { Category } from "@/types/api/category";
+import { Category } from "src/types/api/category";
 
 export const MOCKUP_CATEGORIES: Category[] = [
   {

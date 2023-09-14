@@ -1,4 +1,4 @@
-import { clientAxios } from "@/utils/clientAxios";
+import { clientAxios } from "src/utils/clientAxios";
 
 export interface FetcherArgs {
   url: string;
