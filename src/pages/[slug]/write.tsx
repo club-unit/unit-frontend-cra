@@ -42,6 +42,21 @@ function PostWritePage() {
       api.error({ message: "게시글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
     }
   };
+  const handleImage = (blobInfo: {
+    id: () => string;
+    name: () => string;
+    filename: () => string;
+    blob: () => Blob;
+    base64: () => string;
+    blobUri: () => string;
+    uri: () => string | undefined;
+  }) => {
+    const formData = new FormData();
+    formData.append("image", blobInfo.blob());
+    return clientAxios
+      .post<{ url: string }>(API_ROUTES.posts.uploadImage(slug ? slug : ""), formData)
+      .then((res) => res.data.url);
+  };
 
   return (
     <>
@@ -97,6 +112,7 @@ function PostWritePage() {
               "lists table link charmap searchreplace | " +
               "image media codesample emoticons fullscreen preview | " +
               "removeformat | help ",
+            images_upload_handler: handleImage,
           }}
         />
         <Form.Item className="flex mt-6 justify-end">
