@@ -9,12 +9,12 @@ export const API_ROUTES = {
   },
   posts: {
     bySlug: (slug: string) => `/boards/${slug}/posts/`,
-    bySlugAndId: (slug: string, id: number) => `/boards/posts/${slug}/${id}`,
+    bySlugAndId: (slug: string, id: number) => `/boards/${slug}/posts/${id}`,
   },
   comments: {
-    bySlugAndPostId: (slug: string, postId: number) => `/boards/posts/${slug}/${postId}/comments/`,
+    bySlugAndPostId: (slug: string, postId: number) => `/boards/${slug}/posts/${postId}/comments/`,
     bySlugAndPostIdAndId: (slug: string, postId: number, id: number) =>
-      `/boards/posts/${slug}/${postId}/comments/${id}`,
+      `/boards/${slug}/posts/${postId}/comments/${id}`,
   },
   categories: {
     bySlug: (slug: string) => `/boards/${slug}/categories/`,

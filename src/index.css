@@ -119,3 +119,8 @@ body {
 .ant-typography {
   font-family: Pretendard, Arial, sans-serif;
 }
+
+.anticon {
+  margin-top: auto;
+  margin-bottom: auto;
+}
