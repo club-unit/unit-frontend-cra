@@ -8,20 +8,33 @@ import { API_ROUTES } from "src/constants/routes";
 import { Spin } from "antd";
 import { useParams } from "react-router-dom";
 import useAuth from "src/contexts/auth/useAuth";
+import { useState } from "react";
+import PostEditSection from "src/components/pages/posts/index/PostEditSection";
+import PostEditHeaderSection from "src/components/pages/posts/index/PostEditHeaderSection";
 
 function PostPage() {
   const { slug, id } = useParams();
   const { token } = useAuth();
-  const { data: post } = useSWR<PostDetail>({
+  const { data: post, mutate } = useSWR<PostDetail>({
     url: API_ROUTES.posts.bySlugAndId(String(slug), Number(id)),
     token,
   });
+  const [isEditing, setIsEditing] = useState(false);
 
   return post ? (
     <>
-      <PostHeaderSection post={post} />
-      <PostContentSection />
-      <PostFooterSection />
+      {isEditing ? (
+        <>
+          <PostEditHeaderSection />
+          <PostEditSection post={post} setIsEditing={setIsEditing} mutate={mutate} />
+        </>
+      ) : (
+        <>
+          <PostHeaderSection post={post} />
+          <PostContentSection post={post} />
+          <PostFooterSection setIsEditing={setIsEditing} />
+        </>
+      )}
       <PostCommentSection comments={post.comments} />
     </>
   ) : (
