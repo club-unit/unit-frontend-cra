@@ -8,6 +8,7 @@ import PasswordResetPage from "src/pages/pw-reset";
 import RegisterPage from "src/pages/register";
 import PostListPage from "src/pages/[slug]";
 import PostPage from "src/pages/[slug]/[Id]";
+import PostWritePage from "src/pages/[slug]/write";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/:slug">
                 <Route path="" element={<PostListPage />} />
+                <Route path="write" element={<PostWritePage />} />
                 <Route path=":id" element={<PostPage />} />
               </Route>
             </Routes>
