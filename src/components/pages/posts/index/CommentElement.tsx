@@ -10,7 +10,7 @@ interface Props {
 
 function CommentElement({ comment, isChildren }: Props) {
   return (
-    <div className={`${isChildren ? "w-11/12" : "w-full"} items-end border-t-2 ml-auto`}>
+    <div className={`${isChildren ? "w-[98%]" : "w-full"} items-end border-t-2 ml-auto`}>
       <div className="flex flex-col py-2 px-4 w-full gap-2">
         <div className="flex justify-between w-full">
           <div className="flex gap-1">
