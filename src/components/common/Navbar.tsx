@@ -26,8 +26,6 @@ function Navbar() {
     })),
   }));
 
-  console.log(menuItems);
-
   return (
     <Menu
       items={menuItems}
