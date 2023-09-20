@@ -12,7 +12,12 @@ function Navbar() {
     url: API_ROUTES.boards.root(),
     token,
   });
-  const menuItems = boardsResponse?.map((item) => ({
+
+  const boardsAndHome = boardsResponse
+    ? [{ slug: "", name: "UNIT", children: [] }, ...boardsResponse]
+    : [{ slug: "", name: "UNIT", children: [] }];
+
+  const menuItems = boardsAndHome?.map((item) => ({
     label: <Link to={`/${item.slug}`}>{item.name}</Link>,
     key: item.slug,
     children: item.children?.map((child) => ({
@@ -20,6 +25,8 @@ function Navbar() {
       key: child.slug,
     })),
   }));
+
+  console.log(menuItems);
 
   return (
     <Menu
