@@ -6,6 +6,7 @@ export const API_ROUTES = {
   },
   boards: {
     root: () => "/boards/",
+    summary: () => "/boards/summary",
   },
   posts: {
     bySlug: (slug: string) => `/boards/${slug}/posts/`,
