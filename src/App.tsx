@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Layout, Row } from "antd";
-import MainPage from "src/pages/MainPage";
+import Index from "src/pages";
 import AuthOrUserCard from "src/components/common/AuthOrUserCard";
 import Navbar from "src/components/common/Navbar";
 import { Route, Routes } from "react-router-dom";
@@ -8,6 +8,7 @@ import PasswordResetPage from "src/pages/pw-reset";
 import RegisterPage from "src/pages/register";
 import PostListPage from "src/pages/[slug]";
 import PostPage from "src/pages/[slug]/[Id]";
+import PostWritePage from "src/pages/[slug]/write";
 
 function App() {
   return (
@@ -19,11 +20,12 @@ function App() {
         <Row className="p-3 w-[80vw] min-h-screen mx-0" gutter={16}>
           <Col span={18}>
             <Routes>
-              <Route path="/" element={<MainPage />} />
+              <Route path="/" element={<Index />} />
               <Route path="/pw-reset" element={<PasswordResetPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/:slug">
                 <Route path="" element={<PostListPage />} />
+                <Route path="write" element={<PostWritePage />} />
                 <Route path=":id" element={<PostPage />} />
               </Route>
             </Routes>

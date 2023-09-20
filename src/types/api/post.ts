@@ -12,6 +12,15 @@ export interface Post {
   created: string;
 }
 
+export interface PostSummary {
+  id: number;
+  title: string;
+  shortenContent: string;
+  author: Author;
+  views: number;
+  created: string;
+}
+
 export interface PostDetail extends Post {
   comments: Comment[];
 }
