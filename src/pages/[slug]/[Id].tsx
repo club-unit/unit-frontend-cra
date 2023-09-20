@@ -35,7 +35,7 @@ function PostPage() {
           <PostFooterSection setIsEditing={setIsEditing} />
         </>
       )}
-      <PostCommentSection comments={post.comments} />
+      <PostCommentSection comments={post.comments} mutate={mutate} />
     </>
   ) : (
     <Spin />

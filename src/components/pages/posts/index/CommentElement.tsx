@@ -2,13 +2,18 @@ import { Button, Image, Typography } from "antd";
 import { Comment } from "src/types/api/comment";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { Dispatch } from "react";
+import CommentInput from "src/components/pages/posts/index/CommentInput";
 
 interface Props {
   comment: Comment;
   isChildren?: boolean;
+  replyingParent: number | null;
+  setReplyingParent: Dispatch<number | null>;
+  mutate: () => void;
 }
 
-function CommentElement({ comment, isChildren }: Props) {
+function CommentElement({ comment, isChildren, replyingParent, setReplyingParent, mutate }: Props) {
   return (
     <div className={`${isChildren ? "w-[98%]" : "w-full"} items-end border-t-2 ml-auto`}>
       <div className="flex flex-col py-2 px-4 w-full gap-2">
@@ -36,7 +41,7 @@ function CommentElement({ comment, isChildren }: Props) {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button size="small" type="text">
+            <Button size="small" type="text" onClick={() => setReplyingParent(comment.id)}>
               답글
             </Button>
             <Button size="small" type="text">
@@ -48,9 +53,21 @@ function CommentElement({ comment, isChildren }: Props) {
           </div>
         </div>
         <Typography.Text>{comment.content}</Typography.Text>
+        {replyingParent === comment.id ? (
+          <CommentInput parentId={comment.id} mutate={mutate} />
+        ) : null}
       </div>
       {comment.children.length
-        ? comment.children.map((child) => <CommentElement comment={child} isChildren />)
+        ? comment.children.map((child) => (
+            <CommentElement
+              key={child.id}
+              comment={child}
+              isChildren
+              replyingParent={replyingParent}
+              setReplyingParent={setReplyingParent}
+              mutate={mutate}
+            />
+          ))
         : null}
     </div>
   );
