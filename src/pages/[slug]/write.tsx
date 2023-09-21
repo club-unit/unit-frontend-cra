@@ -107,10 +107,10 @@ function PostWritePage() {
             ],
             toolbar:
               "undo redo | blocks | " +
-              "bold italic forecolor | alignleft aligncenter " +
+              "bold italic forecolor backcolor | alignleft aligncenter " +
               "alignright alignjustify | bullist numlist outdent indent | " +
               "lists table link charmap searchreplace | " +
-              "image media codesample emoticons fullscreen preview | " +
+              "image fullscreen preview | " +
               "removeformat | help ",
             images_upload_handler: handleImage,
           }}

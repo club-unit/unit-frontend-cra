@@ -7,7 +7,7 @@ import { API_ROUTES } from "src/constants/routes";
 import { Category } from "src/types/api/category";
 import PostListCategorySection from "src/components/pages/[slug]/PostListCategorySection";
 import PostListMainSection from "src/components/pages/[slug]/PostListMainSection";
-import PostListPaginationSection from "src/components/pages/[slug]/PostListPaginationSection";
+import PostListBottomSection from "src/components/pages/[slug]/PostListBottomSection";
 import useAuth from "src/contexts/auth/useAuth";
 import { useParams } from "react-router-dom";
 
@@ -50,7 +50,7 @@ function PostListPage() {
         <Spin />
       )}
       {posts ? <PostListMainSection posts={posts.results} /> : <Spin />}
-      <PostListPaginationSection page={page} setPage={setPage} total={posts?.count} />
+      <PostListBottomSection page={page} setPage={setPage} total={posts?.count} />
     </>
   );
 }
