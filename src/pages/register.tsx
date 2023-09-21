@@ -1,11 +1,16 @@
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Steps } from "antd";
 import AgreeSection from "src/components/pages/register/AgreeSection";
+import FormSection from "src/components/pages/register/FormSection";
 
 function RegisterPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const next = () => setCurrentStep(currentStep + 1);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentStep]);
 
   return (
     <>
@@ -26,7 +31,11 @@ function RegisterPage() {
         ]}
         className="mb-4"
       />
-      {currentStep === 0 ? <AgreeSection next={next} /> : null}
+      {currentStep === 0 ? (
+        <AgreeSection next={next} />
+      ) : currentStep === 1 ? (
+        <FormSection setCurrentStep={setCurrentStep} />
+      ) : null}
     </>
   );
 }
