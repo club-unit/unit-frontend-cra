@@ -36,13 +36,14 @@ function UserCard() {
             </div>
             <Typography.Text className="text-gray-500 font-light">{user.username}</Typography.Text>
           </div>
-          <div className="flex justify-start gap-1">
-            <Typography.Text className="text-blue-500">{`${
-              BRANCH_LOOKUP_TABLE[user.profile.branch]
-            }지구대에서`}</Typography.Text>
-            <Typography.Text className="text-blue-500">{`${user.profile.activityTerm}학기째 활동 중!`}</Typography.Text>
-          </div>
-
+          {user.profile.rank !== "NONE" && (
+            <div className="flex justify-start gap-1">
+              <Typography.Text className="text-blue-500">{`${
+                BRANCH_LOOKUP_TABLE[user.profile.branch]
+              }지구대에서`}</Typography.Text>
+              <Typography.Text className="text-blue-500">{`${user.profile.activityTerm}학기째 활동 중!`}</Typography.Text>
+            </div>
+          )}
           <Divider className="my-2" />
           <div className="flex justify-between align-middle h-fit">
             <Link to="/">
