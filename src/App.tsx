@@ -3,7 +3,7 @@ import { Col, Layout, Row } from "antd";
 import Index from "src/pages";
 import AuthOrUserCard from "src/components/common/AuthOrUserCard";
 import Navbar from "src/components/common/Navbar";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import PasswordResetPage from "src/pages/pw-reset";
 import RegisterPage from "src/pages/register";
 import PostListPage from "src/pages/[slug]";
@@ -11,8 +11,6 @@ import PostPage from "src/pages/[slug]/[Id]";
 import PostWritePage from "src/pages/[slug]/write";
 
 function App() {
-  const { pathname } = useLocation();
-
   return (
     <Layout>
       <Layout.Header>
