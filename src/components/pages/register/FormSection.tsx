@@ -25,10 +25,10 @@ function FormSection({ setCurrentStep }: Props) {
     const registerForm = { ...value, birthDate: dateString };
     try {
       await clientAxios.post(API_ROUTES.users.signUp(), registerForm);
+      setCurrentStep(3);
     } catch (e) {
       api.error({ message: "회원가입에 실패하였습니다.", description: "다시 시도해주세요." });
     }
-    setCurrentStep(3);
   };
 
   return (
