@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import useAuth from "src/contexts/auth/useAuth";
 import { useState } from "react";
 import PostEditSection from "src/components/pages/posts/index/PostEditSection";
-import PostEditHeaderSection from "src/components/pages/posts/index/PostEditHeaderSection";
+import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 
 function PostPage() {
   const { slug, id } = useParams();
@@ -25,7 +25,7 @@ function PostPage() {
     <>
       {isEditing ? (
         <>
-          <PostEditHeaderSection />
+          <ContentHeaderSection title={`${slug} 글 수정`} />
           <PostEditSection post={post} setIsEditing={setIsEditing} mutate={mutate} />
         </>
       ) : (

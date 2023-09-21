@@ -3,6 +3,7 @@ import { ClockCircleOutlined, CommentOutlined, EyeOutlined, TagFilled } from "@a
 import { PostDetail } from "src/types/api/post";
 import IconWithText from "src/components/common/IconWithText";
 import dayjs from "dayjs";
+import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 
 interface Props {
   post: PostDetail;
@@ -11,9 +12,7 @@ interface Props {
 function PostHeaderSection({ post }: Props) {
   return (
     <div className="w-full">
-      <Typography.Title level={2} className="mx-2">
-        {post.title}
-      </Typography.Title>
+      <ContentHeaderSection title={post.title} />
       <div className="flex flex-row w-full h-fit border-y-2 p-4 justify-between">
         <div className="flex gap-4">
           <div className="flex gap-1">

@@ -5,12 +5,12 @@ import { CommonListResponse } from "src/types/api/common";
 import { Category } from "src/types/api/category";
 import { API_ROUTES } from "src/constants/routes";
 import useAuth from "src/contexts/auth/useAuth";
-import PostWriteHeaderSection from "src/components/pages/posts/write/PostWriteHeaderSection";
 import { Editor } from "@tinymce/tinymce-react";
 import { useState } from "react";
 import { PostDetail } from "src/types/api/post";
 import useNotification from "src/contexts/notification/useNotfication";
 import { clientAxios } from "src/utils/clientAxios";
+import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 
 interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned"> {}
 
@@ -60,7 +60,7 @@ function PostWritePage() {
 
   return (
     <>
-      <PostWriteHeaderSection />
+      <ContentHeaderSection title={`${slug} 글쓰기`} />
       <Form onFinish={onFinish}>
         <div className="flex gap-4">
           <Form.Item
