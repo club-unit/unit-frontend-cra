@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Steps } from "antd";
 import AgreeSection from "src/components/pages/register/AgreeSection";
 import FormSection from "src/components/pages/register/FormSection";
+import SuccessSection from "src/components/pages/register/SuccessSection";
 
 function RegisterPage() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -35,7 +36,9 @@ function RegisterPage() {
         <AgreeSection next={next} />
       ) : currentStep === 1 ? (
         <FormSection setCurrentStep={setCurrentStep} />
-      ) : null}
+      ) : (
+        <SuccessSection />
+      )}
     </>
   );
 }
