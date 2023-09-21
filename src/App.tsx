@@ -9,6 +9,7 @@ import RegisterPage from "src/pages/register";
 import PostListPage from "src/pages/[slug]";
 import PostPage from "src/pages/[slug]/[Id]";
 import PostWritePage from "src/pages/[slug]/write";
+import MyPage from "src/pages/my-page";
 
 function App() {
   const location = useLocation();
@@ -23,6 +24,7 @@ function App() {
           <Col span={!["/register", "/pw-reset"].includes(location.pathname) ? 18 : 24}>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/my-page" element={<MyPage />} />
               <Route path="/pw-reset" element={<PasswordResetPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/:slug">
@@ -33,7 +35,7 @@ function App() {
             </Routes>
           </Col>
           {!["/register", "/pw-reset"].includes(location.pathname) && (
-            <Col span={6} className="pt-2">
+            <Col span={6} className="mt-2">
               <AuthOrUserCard />
             </Col>
           )}
