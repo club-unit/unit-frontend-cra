@@ -2,11 +2,10 @@ import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import { useState } from "react";
 import { Steps } from "antd";
 import AgreeSection from "src/components/pages/register/AgreeSection";
-import RegisterButtonSection from "src/components/pages/register/RegisterButtonSection";
 
 function RegisterPage() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [isAgreed, setIsAgreed] = useState(false);
+  const next = () => setCurrentStep(currentStep + 1);
 
   return (
     <>
@@ -27,12 +26,7 @@ function RegisterPage() {
         ]}
         className="mb-4"
       />
-      {currentStep === 0 ? <AgreeSection setIsAgreed={setIsAgreed} /> : null}
-      <RegisterButtonSection
-        currentStep={currentStep}
-        setCurrentStep={setCurrentStep}
-        isAgreed={isAgreed}
-      />
+      {currentStep === 0 ? <AgreeSection next={next} /> : null}
     </>
   );
 }

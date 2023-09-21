@@ -1,16 +1,13 @@
-import { Card, Checkbox } from "antd";
-import { Dispatch, useEffect, useState } from "react";
+import { Button, Card, Checkbox } from "antd";
+import { useState } from "react";
 
 interface Props {
-  setIsAgreed: Dispatch<boolean>;
+  next: () => void;
 }
 
-function AgreeSection({ setIsAgreed }: Props) {
+function AgreeSection({ next }: Props) {
   const [ruleChecked, setRuleChecked] = useState(false);
   const [infoChecked, setInfoChecked] = useState(false);
-  useEffect(() => {
-    setIsAgreed(ruleChecked && infoChecked);
-  }, [setIsAgreed, ruleChecked, infoChecked]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -318,6 +315,16 @@ function AgreeSection({ setIsAgreed }: Props) {
           개인정보처리방침에 동의합니다.
         </Checkbox>
       </Card>
+      <div className="flex w-full gap-2 justify-end mt-2">
+        <Button
+          type="primary"
+          className="bg-blue-600"
+          disabled={!(ruleChecked && infoChecked)}
+          onClick={() => next()}
+        >
+          다음 단계로
+        </Button>
+      </div>
     </div>
   );
 }
