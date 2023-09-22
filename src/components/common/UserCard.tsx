@@ -2,10 +2,11 @@ import { Card, Divider, Image, Typography } from "antd";
 import { BellFilled } from "@ant-design/icons";
 import useAuth from "src/contexts/auth/useAuth";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function UserCard() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <Card size="small" title="Profile">
@@ -36,11 +37,23 @@ function UserCard() {
             </div>
             <Typography.Text className="text-gray-500 font-light">{user.username}</Typography.Text>
           </div>
-          <div className="flex justify-start gap-1">
-            <Typography.Text className="text-blue-500">{`${
-              BRANCH_LOOKUP_TABLE[user.profile.branch]
-            }지구대에서`}</Typography.Text>
-            <Typography.Text className="text-blue-500">{`${user.profile.activityTerm}학기째 활동 중!`}</Typography.Text>
+          {user.profile.rank !== "NONE" && (
+            <div className="flex justify-start gap-1">
+              <Typography.Text className="text-gray-500">{`${
+                BRANCH_LOOKUP_TABLE[user.profile.branch]
+              }지구대에서 ${user.profile.activityTerm}학기째 활동 중! (${
+                user.profile.generation
+              }기)`}</Typography.Text>
+            </div>
+          )}
+          <div className="flex justify-end">
+            <Typography.Text
+              className="text-blue-500 hover:cursor-pointer"
+              underline
+              onClick={() => navigate("/my-page")}
+            >
+              내 정보 보기
+            </Typography.Text>
           </div>
 
           <Divider className="my-2" />

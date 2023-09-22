@@ -1,5 +1,13 @@
-function PostContentSection() {
-  return <div className="h-1/2 p-4">content</div>;
+import { PostDetail } from "src/types/api/post";
+
+interface Props {
+  post: PostDetail;
+}
+
+function PostContentSection({ post }: Props) {
+  return (
+    <div dangerouslySetInnerHTML={{ __html: post.content }} className="post-content-wrapper" />
+  );
 }
 
 export default PostContentSection;

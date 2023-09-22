@@ -119,3 +119,143 @@ body {
 .ant-typography {
   font-family: Pretendard, Arial, sans-serif;
 }
+
+.anticon {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.post-content-wrapper {
+  line-height: 1.5;
+  color: black;
+  word-wrap: break-word;
+
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  & h1 {
+    font-size: 2em;
+  }
+
+  & h2 {
+    font-size: 1.5em;
+  }
+
+  & h3 {
+    font-size: 1.17em;
+  }
+
+  & h4 {
+    font-size: 1em;
+  }
+
+  & h5 {
+    font-size: 0.83em;
+  }
+
+  & h6 {
+    font-size: 0.67em;
+  }
+
+  & p {
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  & b,
+  strong {
+    font-weight: bold;
+  }
+
+  & i,
+  em {
+    font-style: italic;
+  }
+
+  & ul {
+    list-style-type: disc;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding-left: 40px;
+  }
+
+  & ol {
+    list-style-type: decimal;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding-left: 40px;
+  }
+
+  & li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  & blockquote {
+    margin: 1em 40px;
+    padding-left: 15px;
+    border-left: 4px solid #ccc;
+  }
+
+  & code {
+    font-family: monospace;
+    padding: 2px 4px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+  }
+
+  & pre {
+    font-family: monospace;
+    margin: 1em 0;
+    padding: 1em;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    overflow: auto;
+  }
+
+  & a {
+    color: blue;
+    text-decoration: underline;
+  }
+
+  & a:hover {
+    text-decoration: none;
+  }
+
+  & table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+  }
+
+  & th,
+  & td {
+    border: 1px solid #ccc;
+    padding: 8px;
+  }
+
+  & th {
+    font-weight: bold;
+    background-color: #f5f5f5;
+  }
+
+  & img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  & hr {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+  }
+}
