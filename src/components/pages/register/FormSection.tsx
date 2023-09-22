@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Form, Input } from "antd";
+import { Button, Card, DatePicker, Form, Input, Select } from "antd";
 import { Dispatch } from "react";
 import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
@@ -84,6 +84,19 @@ function FormSection({ setCurrentStep }: Props) {
           className="w-80"
         >
           <Input />
+        </Form.Item>
+        <Form.Item
+          label="성별"
+          name="sex"
+          rules={[{ required: true, message: "성별을 입력하세요!" }]}
+          className="w-80"
+        >
+          <Select
+            options={[
+              { value: 1, label: "남" },
+              { value: 2, label: "여" },
+            ]}
+          />
         </Form.Item>
         <Form.Item
           label="생년월일"
