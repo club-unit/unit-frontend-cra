@@ -6,10 +6,10 @@ phases:
       nodejs: 18.x
   pre_build:
     commands:
-      - pnpm install
+      - npm install
   build:
     commands:
-      - pnpm run build
+      - npm run build
 artifacts:
   base-directory: "build"
   files:
