@@ -10,7 +10,6 @@
     "check-format": "prettier --check .",
     "check-lint": "eslint . --ext ts --ext tsx --ext js",
     "format": "prettier --write .",
-    "preinstall": "npx only-allow pnpm",
     "prepare": "husky install"
   },
   "dependencies": {

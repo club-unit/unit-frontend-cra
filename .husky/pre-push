@@ -3,7 +3,7 @@
 
 echo '🏛🏛🏛🏛... Before push, Trying to build now. 🏛🏛🏛🏛'
 
-pnpm run build ||
+npm run build ||
 (
     echo '❌👷🔨❌ Your production build failed ❌👷🔨❌
             Next build failed: View the errors above to see why.
