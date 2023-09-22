@@ -20,7 +20,7 @@ function BranchCardElement({ post, slug }: Props) {
       >
         <Typography.Text strong>{post.title}</Typography.Text>
         <Typography.Paragraph type="secondary" ellipsis={{ rows: 2 }}>
-          {post.shortenContent.replace(/<[^>]*>?/g, "")}
+          {post.shortenContent}
         </Typography.Paragraph>
         <Space className="my-0" align="center">
           <Typography.Text type="secondary">{post.author.profile.name} | </Typography.Text>
