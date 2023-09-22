@@ -17,6 +17,7 @@ import { useState } from "react";
 import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
+import { withAuth } from "src/components/common/withAuth";
 
 interface PWInput {
   currentPassword: string;
@@ -156,4 +157,6 @@ function MyPage() {
   );
 }
 
-export default MyPage;
+const MyWithAuth = withAuth(MyPage, true);
+
+export default MyWithAuth;
