@@ -3,20 +3,21 @@ export const API_ROUTES = {
   users: {
     my: () => "/users/my/",
     signUp: () => "/users/sign-up/",
+    changePassword: () => "/users/my/change-password/",
   },
   boards: {
     root: () => "/boards/",
-    summary: () => "/boards/summary",
+    summary: () => "/boards/summary/",
   },
   posts: {
     bySlug: (slug: string) => `/boards/${slug}/posts/`,
-    bySlugAndId: (slug: string, id: number) => `/boards/${slug}/posts/${id}`,
+    bySlugAndId: (slug: string, id: number) => `/boards/${slug}/posts/${id}/`,
     uploadImage: (slug: string) => `/boards/${slug}/posts/upload-image/`,
   },
   comments: {
     bySlugAndPostId: (slug: string, postId: number) => `/boards/${slug}/posts/${postId}/comments/`,
     bySlugAndPostIdAndId: (slug: string, postId: number, id: number) =>
-      `/boards/${slug}/posts/${postId}/comments/${id}`,
+      `/boards/${slug}/posts/${postId}/comments/${id}/`,
   },
   categories: {
     bySlug: (slug: string) => `/boards/${slug}/categories/`,
