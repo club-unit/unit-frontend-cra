@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18.x
+  pre_build:
+    commands:
+      - pnpm install
+  build:
+    commands:
+      - pnpm run build
+artifacts:
+  base-directory: "build"
+  files:
+    - "**/*"

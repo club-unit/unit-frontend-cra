@@ -4,6 +4,7 @@ import { Steps } from "antd";
 import AgreeSection from "src/components/pages/register/AgreeSection";
 import FormSection from "src/components/pages/register/FormSection";
 import SuccessSection from "src/components/pages/register/SuccessSection";
+import { withAuth } from "src/components/common/withAuth";
 
 function RegisterPage() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -43,4 +44,6 @@ function RegisterPage() {
   );
 }
 
-export default RegisterPage;
+const RegisterWithAuth = withAuth(RegisterPage, false);
+
+export default RegisterWithAuth;
