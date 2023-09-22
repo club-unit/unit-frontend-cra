@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { Spin } from "antd";
 import { Post } from "src/types/api/post";
@@ -37,6 +37,9 @@ function PostListPage() {
       : null
   );
   const categoryList = categories ? [{ name: "전체" }, ...categories] : [{ name: "전체" }];
+  useEffect(() => {
+    setPage(1);
+  }, [currentCategory]);
 
   return (
     <>
