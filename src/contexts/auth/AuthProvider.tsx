@@ -3,7 +3,12 @@ import { createContext, ReactNode, useCallback, useEffect, useState } from "reac
 import { User } from "src/types/api/user";
 import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
-import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME, REFRESH_MAX_AGE } from "src/constants/jwt";
+import {
+  ACCESS_COOKIE_NAME,
+  REFRESH_COOKIE_NAME,
+  REFRESH_INTERVAL,
+  REFRESH_MAX_AGE,
+} from "src/constants/jwt";
 import useNotification from "src/contexts/notification/useNotfication";
 
 interface AuthContextValue {
@@ -43,21 +48,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
     [api]
   );
 
-  useEffect(() => {
-    setIsLoadingCookie(true);
-
-    const storedValue = Cookies.get(ACCESS_COOKIE_NAME);
-    if (storedValue) {
-      setAccess(storedValue);
-      clientAxios.defaults.headers["Authorization"] = `Bearer ${access}`;
-      fetchAndSetUser(storedValue);
-    } else {
-      setAccess(null);
-      setIsLoadingUser(false);
-    }
-    setIsLoadingCookie(false);
-  }, [fetchAndSetUser, access]);
-
   const login = (access: string, refresh: string, remember: boolean) => {
     setIsLoadingCookie(true);
     setAccess(access);
@@ -79,6 +69,38 @@ function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoadingCookie(false);
     window.location.replace("/");
   };
+
+  const refresh = useCallback(async () => {
+    try {
+      const refreshValue = Cookies.get(REFRESH_COOKIE_NAME);
+      if (refreshValue) {
+        const response = await clientAxios.post(API_ROUTES.token.refresh(), {
+          refresh: refreshValue,
+        });
+        const newAccessToken = response.data.access;
+        setAccess(newAccessToken);
+        clientAxios.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        Cookies.set(ACCESS_COOKIE_NAME, newAccessToken);
+      } else {
+        logout();
+      }
+    } catch (error) {
+      api.error({
+        message: "Token refresh error",
+        description: "Failed to refresh the access token.",
+      });
+      logout();
+    }
+  }, [api, logout]);
+
+  useEffect(() => {
+    setIsLoadingCookie(true);
+    const refreshInterval = setInterval(() => {
+      refresh();
+    }, REFRESH_INTERVAL);
+    setIsLoadingCookie(false);
+    return () => clearInterval(refreshInterval);
+  }, [refresh]);
 
   return (
     <AuthContext.Provider
