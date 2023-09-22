@@ -15,6 +15,7 @@ interface LoginForm {
 function AuthCard() {
   const { login } = useAuth();
   const { api } = useNotification();
+  const [form] = Form.useForm<LoginForm>();
   const onFinish = async (values: LoginForm) => {
     try {
       const {
@@ -24,9 +25,15 @@ function AuthCard() {
         values
       );
       login(access, refresh, values.remember);
-    } catch (error) {
-      //@TODO: 에러 핸들링
-      api.error({ message: "인증 오류", description: "알 수 없는 인증 오류 입니다" });
+    } catch (e: any) {
+      if (
+        e.response.data.detail === "지정된 자격 증명에 해당하는 활성화된 사용자를 찾을 수 없습니다"
+      ) {
+        api.error({ message: "인증 오류", description: "아이디 또는 비밀번호가 틀렸습니다." });
+        form.resetFields();
+      } else {
+        api.error({ message: "인증 오류", description: "알 수 없는 인증 오류 입니다" });
+      }
     }
   };
 
@@ -36,6 +43,7 @@ function AuthCard() {
         name="normal_login"
         initialValues={{ remember: true }}
         onFinish={onFinish}
+        form={form}
         layout="vertical"
       >
         <Form.Item
