@@ -1,5 +1,5 @@
-import React from "react";
-import { Layout } from "antd";
+import React, { useState } from "react";
+import { Drawer, FloatButton, Layout } from "antd";
 import Navbar from "src/components/common/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Index from "src/pages";
@@ -10,9 +10,13 @@ import PostListPage from "src/pages/[slug]";
 import PostWritePage from "src/pages/[slug]/write";
 import PostPage from "src/pages/[slug]/[Id]";
 import AuthOrUserCard from "src/components/common/AuthOrUserCard";
+import { LoginOutlined, UserOutlined } from "@ant-design/icons";
+import useAuth from "src/contexts/auth/useAuth";
 
 function App() {
   const location = useLocation();
+  const [open, setOpen] = useState(false);
+  const { isLoggedIn } = useAuth();
 
   return (
     <Layout>
@@ -33,6 +37,13 @@ function App() {
                 <Route path=":id" element={<PostPage />} />
               </Route>
             </Routes>
+            <FloatButton
+              onClick={() => setOpen(true)}
+              icon={isLoggedIn ? <UserOutlined /> : <LoginOutlined />}
+            />
+            <Drawer placement="right" onClose={() => setOpen(false)} open={open}>
+              <AuthOrUserCard />
+            </Drawer>
           </div>
           {!["/register", "/pw-reset"].includes(location.pathname) && (
             <div className="hidden xl:block pt-4">
