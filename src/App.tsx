@@ -1,15 +1,15 @@
 import React from "react";
-import { Col, Layout, Row } from "antd";
-import Index from "src/pages";
-import AuthOrUserCard from "src/components/common/AuthOrUserCard";
+import { Layout } from "antd";
 import Navbar from "src/components/common/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
-import PostListPage from "src/pages/[slug]";
-import PostPage from "src/pages/[slug]/[Id]";
-import PostWritePage from "src/pages/[slug]/write";
+import Index from "src/pages";
 import MyWithAuth from "src/pages/my-page";
 import PasswordResetWithAuth from "src/pages/pw-reset";
 import RegisterWithAuth from "src/pages/register";
+import PostListPage from "src/pages/[slug]";
+import PostWritePage from "src/pages/[slug]/write";
+import PostPage from "src/pages/[slug]/[Id]";
+import AuthOrUserCard from "src/components/common/AuthOrUserCard";
 
 function App() {
   const location = useLocation();
@@ -20,8 +20,8 @@ function App() {
         <Navbar />
       </Layout.Header>
       <Layout.Content className="flex justify-center">
-        <Row className="p-3 w-[80vw] min-h-screen mx-0" gutter={16}>
-          <Col span={!["/register", "/pw-reset"].includes(location.pathname) ? 18 : 24}>
+        <div className="grid grid-cols-4 w-[80vw] min-h-screen mx-0 gap-2">
+          <div className="col-span-3">
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/my-page" element={<MyWithAuth />} />
@@ -33,13 +33,13 @@ function App() {
                 <Route path=":id" element={<PostPage />} />
               </Route>
             </Routes>
-          </Col>
+          </div>
           {!["/register", "/pw-reset"].includes(location.pathname) && (
-            <Col span={6} className="mt-2">
+            <div>
               <AuthOrUserCard />
-            </Col>
+            </div>
           )}
-        </Row>
+        </div>
       </Layout.Content>
       <Layout.Footer></Layout.Footer>
     </Layout>

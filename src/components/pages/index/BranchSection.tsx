@@ -1,29 +1,16 @@
-import { Col, Row } from "antd";
 import BranchCard from "src/components/pages/index/BranchCard";
 
 function BranchSection() {
   return (
     <>
-      <Row gutter={[16, 16]}>
-        <Col span={8}>
-          <BranchCard slug="green" />
-        </Col>
-        <Col span={8}>
-          <BranchCard slug="donga" />
-        </Col>
-        <Col span={8}>
-          <BranchCard slug="city" />
-        </Col>
-        <Col span={8}>
-          <BranchCard slug="union" />
-        </Col>
-        <Col span={8}>
-          <BranchCard slug="jamsil" />
-        </Col>
-        <Col span={8}>
-          <BranchCard slug="jungsan" />
-        </Col>
-      </Row>
+      <div className="grid grid-cols-3 gap-2">
+        <BranchCard slug="green" />
+        <BranchCard slug="donga" />
+        <BranchCard slug="city" />
+        <BranchCard slug="union" />
+        <BranchCard slug="jamsil" />
+        <BranchCard slug="jungsan" />
+      </div>
     </>
   );
 }
