@@ -20,8 +20,8 @@ function App() {
         <Navbar />
       </Layout.Header>
       <Layout.Content className="flex justify-center">
-        <div className="grid grid-cols-1 xl:grid-cols-4 w-[80vw] min-h-screen mx-0 gap-2">
-          <div className="col-span-1 xl:col-span-3">
+        <div className="grid grid-cols-1 xl:grid-cols-4 w-[90vw] md:w-[80vw] 2xl:w-5/6 min-h-screen mx-0 gap-4">
+          <div className="col-span-1 xl:col-span-3 pt-4">
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/my-page" element={<MyWithAuth />} />
@@ -35,7 +35,7 @@ function App() {
             </Routes>
           </div>
           {!["/register", "/pw-reset"].includes(location.pathname) && (
-            <div className="hidden xl:block">
+            <div className="hidden xl:block pt-4">
               <AuthOrUserCard />
             </div>
           )}

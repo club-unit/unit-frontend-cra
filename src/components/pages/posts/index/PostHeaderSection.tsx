@@ -13,8 +13,8 @@ function PostHeaderSection({ post }: Props) {
   return (
     <div className="w-full">
       <ContentHeaderSection title={post.title} />
-      <div className="flex flex-row w-full h-fit border-y-2 p-4 justify-between">
-        <div className="flex gap-4">
+      <div className="flex flex-row w-full h-fit border-y-2 p-4 justify-between flex-wrap gap-2">
+        <div className="flex gap-2 flex-wrap">
           <div className="flex gap-1">
             <Image
               height={20}
@@ -33,9 +33,11 @@ function PostHeaderSection({ post }: Props) {
               )}
             <Typography.Text>{post.author.profile.name}</Typography.Text>
           </div>
-          <IconWithText icon={<TagFilled />} text={post.category} />
-          <IconWithText icon={<CommentOutlined />} text={post.comments.length} />
-          <IconWithText icon={<EyeOutlined />} text={post.views} />
+          <div className="flex gap-2">
+            <IconWithText icon={<TagFilled />} text={post.category} />
+            <IconWithText icon={<CommentOutlined />} text={post.comments.length} />
+            <IconWithText icon={<EyeOutlined />} text={post.views} />
+          </div>
         </div>
         <IconWithText
           icon={<ClockCircleOutlined />}
