@@ -8,6 +8,7 @@ import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import { useParams } from "react-router-dom";
 import useNotification from "src/contexts/notification/useNotfication";
+import useAuth from "src/contexts/auth/useAuth";
 
 interface Props {
   comment: Comment;
@@ -20,6 +21,7 @@ interface Props {
 function CommentElement({ comment, isChildren, replyingParent, setReplyingParent, mutate }: Props) {
   const { slug, id } = useParams();
   const { api } = useNotification();
+  const { user } = useAuth();
 
   const handleDelete = async () => {
     try {
@@ -75,12 +77,16 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
             >
               답글
             </Button>
-            <Button size="small" type="text">
-              수정
-            </Button>
-            <Button size="small" type="text" onClick={handleDelete}>
-              삭제
-            </Button>
+            {comment.author.id === user?.id && (
+              <>
+                <Button size="small" type="text">
+                  수정
+                </Button>
+                <Button size="small" type="text" onClick={handleDelete}>
+                  삭제
+                </Button>
+              </>
+            )}
           </div>
         </div>
         <Typography.Text>{comment.content}</Typography.Text>

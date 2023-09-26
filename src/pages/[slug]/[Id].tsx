@@ -10,9 +10,11 @@ import { useState } from "react";
 import PostEditSection from "src/components/pages/posts/index/PostEditSection";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import useAuthSWR from "src/hooks/useAuthSWR";
+import useAuth from "src/contexts/auth/useAuth";
 
 function PostPage() {
   const { slug, id } = useParams();
+  const { user } = useAuth();
   const { data: post, mutate } = useAuthSWR<PostDetail>({
     url: API_ROUTES.posts.bySlugAndId(String(slug), Number(id)),
   });
@@ -29,7 +31,7 @@ function PostPage() {
         <>
           <PostHeaderSection post={post} />
           <PostContentSection post={post} />
-          <PostFooterSection setIsEditing={setIsEditing} />
+          <PostFooterSection setIsEditing={setIsEditing} isMine={post?.author?.id === user?.id} />
         </>
       )}
       <PostCommentSection comments={post.comments} mutate={mutate} />

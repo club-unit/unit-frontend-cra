@@ -7,9 +7,10 @@ import useNotification from "src/contexts/notification/useNotfication";
 
 interface Props {
   setIsEditing: Dispatch<boolean>;
+  isMine: boolean;
 }
 
-function PostFooterSection({ setIsEditing }: Props) {
+function PostFooterSection({ setIsEditing, isMine }: Props) {
   const { slug, id } = useParams();
   const { api } = useNotification();
   const navigate = useNavigate();
@@ -32,12 +33,14 @@ function PostFooterSection({ setIsEditing }: Props) {
           </Button>
         </Link>
       </div>
-      <div className="flex gap-2 justify-end">
-        <Button onClick={() => setIsEditing(true)}>수정</Button>
-        <Button type="primary" danger onClick={() => handleDelete()}>
-          삭제
-        </Button>
-      </div>
+      {isMine && (
+        <div className="flex gap-2 justify-end">
+          <Button onClick={() => setIsEditing(true)}>수정</Button>
+          <Button type="primary" danger onClick={() => handleDelete()}>
+            삭제
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
