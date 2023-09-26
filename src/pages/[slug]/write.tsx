@@ -11,6 +11,8 @@ import { PostDetail } from "src/types/api/post";
 import useNotification from "src/contexts/notification/useNotfication";
 import { clientAxios } from "src/utils/clientAxios";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
+import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
+import { Branch } from "src/types/api/profile";
 
 interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned"> {}
 
@@ -60,14 +62,16 @@ function PostWritePage() {
 
   return (
     <>
-      <ContentHeaderSection title={`${slug} 글쓰기`} />
+      <ContentHeaderSection
+        title={`${BRANCH_LOOKUP_TABLE[slug?.toUpperCase() as Branch]} 글쓰기`}
+      />
       <Form onFinish={onFinish}>
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           <Form.Item
             label="카테고리"
             name="category"
             rules={[{ required: true, message: "카테고리를 선택하세요!" }]}
-            className="w-1/4"
+            className="w-1/2"
           >
             <Select options={categoryOptions} />
           </Form.Item>
