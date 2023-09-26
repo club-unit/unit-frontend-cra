@@ -1,18 +1,22 @@
-import React from "react";
-import { Col, Layout, Row } from "antd";
-import Index from "src/pages";
-import AuthOrUserCard from "src/components/common/AuthOrUserCard";
+import React, { useState } from "react";
+import { Drawer, FloatButton, Layout } from "antd";
 import Navbar from "src/components/common/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
-import PostListPage from "src/pages/[slug]";
-import PostPage from "src/pages/[slug]/[Id]";
-import PostWritePage from "src/pages/[slug]/write";
+import Index from "src/pages";
 import MyWithAuth from "src/pages/my-page";
 import PasswordResetWithAuth from "src/pages/pw-reset";
 import RegisterWithAuth from "src/pages/register";
+import PostListPage from "src/pages/[slug]";
+import PostWritePage from "src/pages/[slug]/write";
+import PostPage from "src/pages/[slug]/[Id]";
+import AuthOrUserCard from "src/components/common/AuthOrUserCard";
+import { LoginOutlined, UserOutlined } from "@ant-design/icons";
+import useAuth from "src/contexts/auth/useAuth";
 
 function App() {
   const location = useLocation();
+  const [open, setOpen] = useState(false);
+  const { isLoggedIn } = useAuth();
 
   return (
     <Layout>
@@ -20,8 +24,8 @@ function App() {
         <Navbar />
       </Layout.Header>
       <Layout.Content className="flex justify-center">
-        <Row className="p-3 w-[80vw] min-h-screen mx-0" gutter={16}>
-          <Col span={!["/register", "/pw-reset"].includes(location.pathname) ? 18 : 24}>
+        <div className="grid grid-cols-1 xl:grid-cols-4 w-[90vw] md:w-[80vw] 2xl:w-5/6 min-h-screen mx-0 gap-4">
+          <div className="col-span-1 xl:col-span-3 pt-4">
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/my-page" element={<MyWithAuth />} />
@@ -33,13 +37,20 @@ function App() {
                 <Route path=":id" element={<PostPage />} />
               </Route>
             </Routes>
-          </Col>
-          {!["/register", "/pw-reset"].includes(location.pathname) && (
-            <Col span={6} className="mt-2">
+            <FloatButton
+              onClick={() => setOpen(true)}
+              icon={isLoggedIn ? <UserOutlined /> : <LoginOutlined />}
+            />
+            <Drawer placement="right" onClose={() => setOpen(false)} open={open}>
               <AuthOrUserCard />
-            </Col>
+            </Drawer>
+          </div>
+          {!["/register", "/pw-reset"].includes(location.pathname) && (
+            <div className="hidden xl:block pt-4">
+              <AuthOrUserCard />
+            </div>
           )}
-        </Row>
+        </div>
       </Layout.Content>
       <Layout.Footer></Layout.Footer>
     </Layout>

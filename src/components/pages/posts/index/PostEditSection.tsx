@@ -65,7 +65,7 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
 
   return (
     <Form onFinish={onFinish}>
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-wrap">
         <Form.Item
           label="카테고리"
           name="category"
