@@ -1,16 +1,13 @@
 import { Menu } from "antd";
-import useSWR from "swr";
-import useAuth from "src/contexts/auth/useAuth";
 import { CommonListResponse } from "src/types/api/common";
 import { Board } from "src/types/api/board";
 import { API_ROUTES } from "src/constants/routes";
 import { Link } from "react-router-dom";
+import useAuthSWR from "src/hooks/useAuthSWR";
 
 function Navbar() {
-  const { token } = useAuth();
-  const { data: boardsResponse } = useSWR<CommonListResponse<Board>>({
+  const { data: boardsResponse } = useAuthSWR<CommonListResponse<Board>>({
     url: API_ROUTES.boards.root(),
-    token,
   });
 
   const boardsAndHome = boardsResponse

@@ -2,14 +2,15 @@ import { Dispatch } from "react";
 import { Button } from "antd";
 import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useNotification from "src/contexts/notification/useNotfication";
 
 interface Props {
   setIsEditing: Dispatch<boolean>;
+  isMine: boolean;
 }
 
-function PostFooterSection({ setIsEditing }: Props) {
+function PostFooterSection({ setIsEditing, isMine }: Props) {
   const { slug, id } = useParams();
   const { api } = useNotification();
   const navigate = useNavigate();
@@ -24,11 +25,22 @@ function PostFooterSection({ setIsEditing }: Props) {
   };
 
   return (
-    <div className="flex gap-2 justify-end">
-      <Button onClick={() => setIsEditing(true)}>수정</Button>
-      <Button type="primary" danger onClick={() => handleDelete()}>
-        삭제
-      </Button>
+    <div className="flex justify-between">
+      <div className="flex gap-2 justify-end">
+        <Link to={`/${slug}`}>
+          <Button type="primary" className="bg-blue-600">
+            목록으로
+          </Button>
+        </Link>
+      </div>
+      {isMine && (
+        <div className="flex gap-2 justify-end">
+          <Button onClick={() => setIsEditing(true)}>수정</Button>
+          <Button type="primary" danger onClick={() => handleDelete()}>
+            삭제
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

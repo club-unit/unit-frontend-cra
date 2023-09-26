@@ -12,6 +12,7 @@ import PostPage from "src/pages/[slug]/[Id]";
 import AuthOrUserCard from "src/components/common/AuthOrUserCard";
 import { LoginOutlined, UserOutlined } from "@ant-design/icons";
 import useAuth from "src/contexts/auth/useAuth";
+import NotFoundPage from "src/pages/404";
 
 function App() {
   const location = useLocation();
@@ -36,13 +37,18 @@ function App() {
                 <Route path="write" element={<PostWritePage />} />
                 <Route path=":id" element={<PostPage />} />
               </Route>
+              <Route path="/*" element={<NotFoundPage />} />
             </Routes>
             <FloatButton
               onClick={() => setOpen(true)}
               icon={isLoggedIn ? <UserOutlined /> : <LoginOutlined />}
+              className="bg-blue-600"
+              type="primary"
+              description={isLoggedIn ? "User" : "Login"}
+              shape="square"
             />
             <Drawer placement="right" onClose={() => setOpen(false)} open={open}>
-              <AuthOrUserCard />
+              <AuthOrUserCard setOpen={setOpen} />
             </Drawer>
           </div>
           {!["/register", "/pw-reset"].includes(location.pathname) && (

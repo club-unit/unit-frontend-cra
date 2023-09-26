@@ -1,5 +1,5 @@
 import { Space, Typography } from "antd";
-import { EyeOutlined } from "@ant-design/icons";
+import { CommentOutlined, EyeOutlined } from "@ant-design/icons";
 import React from "react";
 import { BRANCH_SLUGS } from "src/constants/branches";
 import { Link } from "react-router-dom";
@@ -27,6 +27,10 @@ function BranchCardElement({ post, slug }: Props) {
           <div className="flex gap-1">
             <EyeOutlined />
             <Typography.Text>{post.views}</Typography.Text>
+          </div>
+          <div className="flex gap-1">
+            <CommentOutlined />
+            <Typography.Text>{post.numComments}</Typography.Text>
           </div>
         </Space>
       </Space>
