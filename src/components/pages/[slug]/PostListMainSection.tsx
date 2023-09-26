@@ -50,6 +50,7 @@ function PostListMainSection({ posts }: Props) {
             {profile.responsibility !== "NONE" && profile.responsibility !== "NORMAL" && (
               <Image
                 height={innerWidth > 768 ? 20 : 15}
+                width={innerWidth > 768 ? 35 : 25}
                 src={`/icons/responsibility/${profile.responsibility}.png`}
                 alt={String(profile.responsibility)}
                 preview={false}
@@ -57,6 +58,7 @@ function PostListMainSection({ posts }: Props) {
             )}
             <Image
               height={innerWidth > 768 ? 20 : 15}
+              width={innerWidth > 768 ? 35 : 25}
               src={`/icons/rank/${profile.rank}.png`}
               alt={String(profile.rank)}
               preview={false}

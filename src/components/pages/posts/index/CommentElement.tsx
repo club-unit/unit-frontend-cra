@@ -40,6 +40,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
           <div className="flex gap-2 flex-wrap">
             <Image
               height={20}
+              width={35}
               src={`/icons/rank/${comment.author.profile.rank}.png`}
               alt={String(comment.author.profile.rank)}
               preview={false}
@@ -48,6 +49,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
               comment.author.profile.responsibility !== "NORMAL" && (
                 <Image
                   height={20}
+                  width={35}
                   src={`/icons/responsibility/${comment.author.profile.responsibility}.png`}
                   alt={String(comment.author?.profile.responsibility)}
                   preview={false}

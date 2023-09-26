@@ -15,6 +15,7 @@ function UserCard() {
             {user && (
               <Image
                 height={27}
+                width={45}
                 src={`/icons/rank/${user.profile.rank}.png`}
                 alt={String(user.profile.rank)}
                 preview={false}
@@ -23,6 +24,7 @@ function UserCard() {
             {user.profile.responsibility !== "NONE" && user.profile.responsibility !== "NORMAL" && (
               <Image
                 height={27}
+                width={45}
                 src={`/icons/responsibility/${user.profile.responsibility}.png`}
                 alt={String(user?.profile.responsibility)}
                 preview={false}
