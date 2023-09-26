@@ -25,8 +25,8 @@ export const AuthContext = createContext<AuthContextValue | null>(null);
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoadingCookie, setIsLoadingCookie] = useState(true);
-  const [isLoadingUser, setIsLoadingUser] = useState(true);
+  const [isLoadingCookie, setIsLoadingCookie] = useState(false);
+  const [isLoadingUser, setIsLoadingUser] = useState(false);
   const { api } = useNotification();
 
   const fetchAndSetUser = useCallback(
