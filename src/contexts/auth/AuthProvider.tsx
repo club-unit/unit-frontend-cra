@@ -48,6 +48,17 @@ function AuthProvider({ children }: { children: ReactNode }) {
     [api]
   );
 
+  useEffect(() => {
+    const storedValue = Cookies.get(ACCESS_COOKIE_NAME);
+    if (storedValue) {
+      setAccess(storedValue);
+      clientAxios.defaults.headers["Authorization"] = `Bearer ${access}`;
+      fetchAndSetUser(storedValue);
+    } else {
+      setAccess(null);
+    }
+  }, [fetchAndSetUser, access]);
+
   const login = (access: string, refresh: string, remember: boolean) => {
     setIsLoadingCookie(true);
     setAccess(access);
@@ -95,6 +106,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setIsLoadingCookie(true);
+
     const refreshInterval = setInterval(() => {
       refresh();
     }, REFRESH_INTERVAL);
