@@ -44,7 +44,7 @@ function App() {
               icon={isLoggedIn ? <UserOutlined /> : <LoginOutlined />}
             />
             <Drawer placement="right" onClose={() => setOpen(false)} open={open}>
-              <AuthOrUserCard />
+              <AuthOrUserCard setOpen={setOpen} />
             </Drawer>
           </div>
           {!["/register", "/pw-reset"].includes(location.pathname) && (

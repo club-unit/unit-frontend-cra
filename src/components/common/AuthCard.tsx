@@ -5,6 +5,7 @@ import { API_ROUTES } from "src/constants/routes";
 import useAuth from "src/contexts/auth/useAuth";
 import useNotification from "src/contexts/notification/useNotfication";
 import { Link } from "react-router-dom";
+import { Dispatch } from "react";
 
 interface LoginForm {
   username: string;
@@ -12,7 +13,11 @@ interface LoginForm {
   remember: boolean;
 }
 
-function AuthCard() {
+interface Props {
+  setOpen?: Dispatch<boolean>;
+}
+
+function AuthCard({ setOpen }: Props) {
   const { login } = useAuth();
   const { api } = useNotification();
   const [form] = Form.useForm<LoginForm>();
@@ -25,6 +30,9 @@ function AuthCard() {
         values
       );
       login(access, refresh, values.remember);
+      if (setOpen) {
+        setOpen(false);
+      }
     } catch (e: any) {
       if (
         e.response.data.detail === "지정된 자격 증명에 해당하는 활성화된 사용자를 찾을 수 없습니다"
