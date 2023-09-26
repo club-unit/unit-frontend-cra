@@ -1,6 +1,5 @@
 import { Button, Checkbox, Form, Input, Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import useSWR from "swr";
 import { CommonListResponse } from "src/types/api/common";
 import { Category } from "src/types/api/category";
 import { API_ROUTES } from "src/constants/routes";
@@ -11,19 +10,17 @@ import { PostDetail } from "src/types/api/post";
 import useNotification from "src/contexts/notification/useNotfication";
 import { clientAxios } from "src/utils/clientAxios";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
-import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
-import { Branch } from "src/types/api/profile";
+import useAuthSWR from "src/hooks/useAuthSWR";
 
 interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned"> {}
 
 function PostWritePage() {
   const { slug } = useParams();
-  const { token, user } = useAuth();
-  const { data: categories } = useSWR<CommonListResponse<Category>>(
+  const { user } = useAuth();
+  const { data: categories } = useAuthSWR<CommonListResponse<Category>>(
     slug
       ? {
           url: API_ROUTES.categories.bySlug(slug),
-          token,
         }
       : null
   );
@@ -62,20 +59,13 @@ function PostWritePage() {
 
   return (
     <>
-      <ContentHeaderSection
-        title={`${BRANCH_LOOKUP_TABLE[slug?.toUpperCase() as Branch]} 글쓰기`}
-      />
+      <ContentHeaderSection title="글쓰기" />
       <Form onFinish={onFinish}>
         <div className="flex gap-4 flex-wrap">
-          <Form.Item
-            label="카테고리"
-            name="category"
-            rules={[{ required: true, message: "카테고리를 선택하세요!" }]}
-            className="w-1/2"
-          >
+          <Form.Item label="카테고리" name="category" className="w-1/2">
             <Select options={categoryOptions} />
           </Form.Item>
-          <Form.Item label="고정글 여부" name="isPinned">
+          <Form.Item label="고정글 여부" name="isPinned" valuePropName="checked">
             <Checkbox />
           </Form.Item>
         </div>

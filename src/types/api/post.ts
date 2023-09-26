@@ -19,6 +19,7 @@ export interface PostSummary {
   author: Author;
   views: number;
   created: string;
+  numComments: number;
 }
 
 export interface PostDetail extends Post {
