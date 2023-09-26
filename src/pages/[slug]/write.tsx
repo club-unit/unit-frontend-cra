@@ -75,7 +75,7 @@ function PostWritePage() {
           >
             <Select options={categoryOptions} />
           </Form.Item>
-          <Form.Item label="고정글 여부" name="isPinned">
+          <Form.Item label="고정글 여부" name="isPinned" valuePropName="checked">
             <Checkbox />
           </Form.Item>
         </div>

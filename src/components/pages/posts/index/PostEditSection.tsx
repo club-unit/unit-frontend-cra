@@ -75,7 +75,12 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
         >
           <Select options={categoryOptions} />
         </Form.Item>
-        <Form.Item label="고정글 여부" name="isPinned" initialValue={post.isPinned}>
+        <Form.Item
+          label="고정글 여부"
+          name="isPinned"
+          initialValue={post.isPinned}
+          valuePropName="checked"
+        >
           <Checkbox />
         </Form.Item>
       </div>
