@@ -1,4 +1,4 @@
-import { Card, Space } from "antd";
+import { Card, Empty, Space } from "antd";
 import { BRANCH_SLUGS } from "src/constants/branches";
 import BranchCardElement from "src/components/pages/index/BranchCardElement";
 import useSWR from "swr";
@@ -21,6 +21,7 @@ function BranchCard({ slug }: Props) {
       <Space direction="vertical" size="middle" className="w-full">
         {branchSummary?.map((post) => <BranchCardElement key={post.id} post={post} slug={slug} />)}
       </Space>
+      {!branchSummary?.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
     </Card>
   );
 }
