@@ -15,6 +15,7 @@ interface AuthContextValue {
   user: User | null;
   login: (access: string, refresh: string, remember: boolean) => void;
   logout: () => void;
+  refresh: () => void;
   isLoggedIn: boolean;
   isLoading: boolean;
 }
@@ -118,6 +119,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
         user,
         login,
         logout,
+        refresh,
         isLoggedIn: !!access,
         isLoading: isLoadingCookie || isLoadingUser,
       }}
