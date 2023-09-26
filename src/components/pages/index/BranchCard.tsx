@@ -1,18 +1,18 @@
 import { Card, Empty, Space } from "antd";
 import { BRANCH_SLUGS } from "src/constants/branches";
 import BranchCardElement from "src/components/pages/index/BranchCardElement";
-import useSWR from "swr";
 import { CommonListResponse } from "src/types/api/common";
 import { BoardSummary } from "src/types/api/summary";
 import { API_ROUTES } from "src/constants/routes";
 import { Link } from "react-router-dom";
+import useAuthSWR from "src/hooks/useAuthSWR";
 
 interface Props {
   slug: (typeof BRANCH_SLUGS)[number];
 }
 
 function BranchCard({ slug }: Props) {
-  const { data: postsResponse } = useSWR<CommonListResponse<BoardSummary>>({
+  const { data: postsResponse } = useAuthSWR<CommonListResponse<BoardSummary>>({
     url: API_ROUTES.boards.summary(),
   });
   const branchSummary = postsResponse?.filter((board) => board.slug === slug)?.at(0)?.posts;

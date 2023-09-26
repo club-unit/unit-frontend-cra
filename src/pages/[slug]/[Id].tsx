@@ -2,22 +2,19 @@ import PostHeaderSection from "src/components/pages/posts/index/PostHeaderSectio
 import PostContentSection from "src/components/pages/posts/index/PostContentSection";
 import PostFooterSection from "src/components/pages/posts/index/PostFooterSection";
 import PostCommentSection from "src/components/pages/posts/index/PostCommentSection";
-import useSWR from "swr";
 import { PostDetail } from "src/types/api/post";
 import { API_ROUTES } from "src/constants/routes";
 import { Spin } from "antd";
 import { useParams } from "react-router-dom";
-import useAuth from "src/contexts/auth/useAuth";
 import { useState } from "react";
 import PostEditSection from "src/components/pages/posts/index/PostEditSection";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
+import useAuthSWR from "src/hooks/useAuthSWR";
 
 function PostPage() {
   const { slug, id } = useParams();
-  const { token } = useAuth();
-  const { data: post, mutate } = useSWR<PostDetail>({
+  const { data: post, mutate } = useAuthSWR<PostDetail>({
     url: API_ROUTES.posts.bySlugAndId(String(slug), Number(id)),
-    token,
   });
   const [isEditing, setIsEditing] = useState(false);
 

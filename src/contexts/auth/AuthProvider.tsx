@@ -13,7 +13,6 @@ import useNotification from "src/contexts/notification/useNotfication";
 
 interface AuthContextValue {
   user: User | null;
-  token: string | null;
   login: (access: string, refresh: string, remember: boolean) => void;
   logout: () => void;
   isLoggedIn: boolean;
@@ -117,7 +116,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        token: access,
         login,
         logout,
         isLoggedIn: !!access,

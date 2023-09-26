@@ -4,12 +4,12 @@ import { Dispatch, useState } from "react";
 import { Button, Checkbox, Form, Input, Select } from "antd";
 import { useParams } from "react-router-dom";
 import useAuth from "src/contexts/auth/useAuth";
-import useSWR from "swr";
 import { CommonListResponse } from "src/types/api/common";
 import { Category } from "src/types/api/category";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
 import { clientAxios } from "src/utils/clientAxios";
+import useAuthSWR from "src/hooks/useAuthSWR";
 
 interface Props {
   post: PostDetail;
@@ -21,12 +21,11 @@ interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned">
 
 function PostEditSection({ post, setIsEditing, mutate }: Props) {
   const { slug, id } = useParams();
-  const { token, user } = useAuth();
-  const { data: categories } = useSWR<CommonListResponse<Category>>(
+  const { user } = useAuth();
+  const { data: categories } = useAuthSWR<CommonListResponse<Category>>(
     slug
       ? {
           url: API_ROUTES.categories.bySlug(slug),
-          token,
         }
       : null
   );
