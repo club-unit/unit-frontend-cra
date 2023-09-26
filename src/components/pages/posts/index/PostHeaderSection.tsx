@@ -18,6 +18,7 @@ function PostHeaderSection({ post }: Props) {
           <div className="flex gap-1">
             <Image
               height={20}
+              width={35}
               src={`/icons/rank/${post.author.profile.rank}.png`}
               alt={String(post.author.profile.rank)}
               preview={false}
@@ -26,6 +27,7 @@ function PostHeaderSection({ post }: Props) {
               post.author.profile.responsibility !== "NORMAL" && (
                 <Image
                   height={20}
+                  width={35}
                   src={`/icons/responsibility/${post.author.profile.responsibility}.png`}
                   alt={String(post.author?.profile.responsibility)}
                   preview={false}

@@ -121,6 +121,7 @@ function MyPage() {
       children: user && (
         <Image
           height={20}
+          width={35}
           src={`/icons/rank/${user.profile.rank}.png`}
           alt={String(user.profile.rank)}
           preview={false}
@@ -133,6 +134,7 @@ function MyPage() {
       children: (
         <Image
           height={20}
+          width={35}
           src={`/icons/responsibility/${user?.profile.responsibility}.png`}
           alt={String(user?.profile.responsibility)}
           preview={false}
