@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Drawer, FloatButton, Layout } from "antd";
 import Navbar from "src/components/common/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -18,6 +18,8 @@ function App() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const { isLoggedIn } = useAuth();
+
+  useEffect(() => setOpen(false), [location.pathname]);
 
   return (
     <Layout>
