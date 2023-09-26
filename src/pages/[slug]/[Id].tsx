@@ -11,8 +11,6 @@ import useAuth from "src/contexts/auth/useAuth";
 import { useState } from "react";
 import PostEditSection from "src/components/pages/posts/index/PostEditSection";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
-import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
-import { Branch } from "src/types/api/profile";
 
 function PostPage() {
   const { slug, id } = useParams();
@@ -27,9 +25,7 @@ function PostPage() {
     <>
       {isEditing ? (
         <>
-          <ContentHeaderSection
-            title={`${BRANCH_LOOKUP_TABLE[slug?.toUpperCase() as Branch]} 글 수정`}
-          />
+          <ContentHeaderSection title="글 수정" />
           <PostEditSection post={post} setIsEditing={setIsEditing} mutate={mutate} />
         </>
       ) : (

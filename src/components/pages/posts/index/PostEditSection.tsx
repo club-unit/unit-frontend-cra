@@ -66,13 +66,7 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
   return (
     <Form onFinish={onFinish}>
       <div className="flex gap-4 flex-wrap">
-        <Form.Item
-          label="카테고리"
-          name="category"
-          initialValue={post.category}
-          rules={[{ required: true, message: "카테고리를 선택하세요!" }]}
-          className="w-1/4"
-        >
+        <Form.Item label="카테고리" name="category" initialValue={post.category} className="w-1/4">
           <Select options={categoryOptions} />
         </Form.Item>
         <Form.Item
