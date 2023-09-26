@@ -47,6 +47,13 @@ function PostListMainSection({ posts }: Props) {
       render: ({ profile }: Author) => {
         return (
           <div className="flex gap-1 align-middle text-xs md:text-sm">
+            <Image
+              height={innerWidth > 768 ? 20 : 15}
+              width={innerWidth > 768 ? 35 : 25}
+              src={`/icons/rank/${profile.rank}.png`}
+              alt={String(profile.rank)}
+              preview={false}
+            />
             {profile.responsibility !== "NONE" && profile.responsibility !== "NORMAL" && (
               <Image
                 height={innerWidth > 768 ? 20 : 15}
@@ -56,13 +63,7 @@ function PostListMainSection({ posts }: Props) {
                 preview={false}
               />
             )}
-            <Image
-              height={innerWidth > 768 ? 20 : 15}
-              width={innerWidth > 768 ? 35 : 25}
-              src={`/icons/rank/${profile.rank}.png`}
-              alt={String(profile.rank)}
-              preview={false}
-            />
+
             {profile.name}
           </div>
         );
