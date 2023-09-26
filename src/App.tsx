@@ -12,6 +12,7 @@ import PostPage from "src/pages/[slug]/[Id]";
 import AuthOrUserCard from "src/components/common/AuthOrUserCard";
 import { LoginOutlined, UserOutlined } from "@ant-design/icons";
 import useAuth from "src/contexts/auth/useAuth";
+import NotFoundPage from "src/pages/404";
 
 function App() {
   const location = useLocation();
@@ -36,6 +37,7 @@ function App() {
                 <Route path="write" element={<PostWritePage />} />
                 <Route path=":id" element={<PostPage />} />
               </Route>
+              <Route path="/*" element={<NotFoundPage />} />
             </Routes>
             <FloatButton
               onClick={() => setOpen(true)}

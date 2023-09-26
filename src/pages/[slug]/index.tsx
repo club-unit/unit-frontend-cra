@@ -39,17 +39,19 @@ function PostListPage() {
 
   return (
     <>
-      {categories ? (
-        <PostListCategorySection
-          categories={categoryList}
-          currentCategory={currentCategory}
-          setCurrentCategory={setCurrentCategory}
-        />
-      ) : (
+      {!categories || !posts ? (
         <Spin />
+      ) : (
+        <>
+          <PostListCategorySection
+            categories={categoryList}
+            currentCategory={currentCategory}
+            setCurrentCategory={setCurrentCategory}
+          />
+          <PostListMainSection posts={posts.results} />
+          <PostListBottomSection page={page} setPage={setPage} total={posts?.count} />
+        </>
       )}
-      {posts ? <PostListMainSection posts={posts.results} /> : <Spin />}
-      <PostListBottomSection page={page} setPage={setPage} total={posts?.count} />
     </>
   );
 }
