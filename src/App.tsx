@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Drawer, FloatButton, Layout } from "antd";
 import Navbar from "src/components/common/Navbar";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Index from "src/pages";
 import MyWithAuth from "src/pages/my-page";
 import PasswordResetWithAuth from "src/pages/pw-reset";
@@ -13,50 +13,11 @@ import AuthOrUserCard from "src/components/common/AuthOrUserCard";
 import { LoginOutlined, UserOutlined } from "@ant-design/icons";
 import useAuth from "src/contexts/auth/useAuth";
 import NotFoundPage from "src/pages/404";
-import { clientAxios } from "src/utils/clientAxios";
-import useNotification from "src/contexts/notification/useNotfication";
 
 function App() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState<any>();
-  const { isLoggedIn, refresh } = useAuth();
-  const { api } = useNotification();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const interceptor = clientAxios.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        setError(error);
-        return Promise.reject(error);
-      }
-    );
-
-    return () => {
-      clientAxios.interceptors.response.eject(interceptor);
-    };
-  }, [setError]);
-
-  useEffect(() => {
-    if (error) {
-      if (error?.response?.status === 403) {
-        api.error({ message: "권한이 없습니다." });
-      } else if (error?.response?.status === 401) {
-        if (
-          error?.response?.data?.detail === "이 토큰은 모든 타입의 토큰에 대해 유효하지 않습니다"
-        ) {
-          refresh();
-        } else if (
-          error?.response?.data?.detail ===
-          "자격 인증데이터(authentication credentials)가 제공되지 않았습니다."
-        ) {
-          navigate("/");
-          api.error({ message: "로그인이 필요합니다." });
-        }
-      }
-    }
-  }, [api, error, navigate, refresh]);
+  const { isLoggedIn } = useAuth();
 
   return (
     <Layout>
