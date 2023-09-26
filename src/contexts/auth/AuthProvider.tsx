@@ -5,6 +5,7 @@ import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import {
   ACCESS_COOKIE_NAME,
+  ACCESS_MAX_AGE,
   REFRESH_COOKIE_NAME,
   REFRESH_INTERVAL,
   REFRESH_MAX_AGE,
@@ -23,7 +24,6 @@ interface AuthContextValue {
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
 function AuthProvider({ children }: { children: ReactNode }) {
-  const [access, setAccess] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingCookie, setIsLoadingCookie] = useState(true);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
@@ -50,19 +50,16 @@ function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const storedValue = Cookies.get(ACCESS_COOKIE_NAME);
     if (storedValue) {
-      setAccess(storedValue);
-      clientAxios.defaults.headers["Authorization"] = `Bearer ${access}`;
+      clientAxios.defaults.headers["Authorization"] = `Bearer ${storedValue}`;
       fetchAndSetUser(storedValue);
-    } else {
-      setAccess(null);
     }
-  }, [fetchAndSetUser, access]);
+  }, [fetchAndSetUser]);
 
   const login = (access: string, refresh: string, remember: boolean) => {
     setIsLoadingCookie(true);
-    setAccess(access);
     clientAxios.defaults.headers["Authorization"] = `Bearer ${access}`;
-    Cookies.set(ACCESS_COOKIE_NAME, access);
+    localStorage.setItem("remember", String(remember));
+    Cookies.set(ACCESS_COOKIE_NAME, access, { "max-age": String(ACCESS_MAX_AGE) });
     Cookies.set(REFRESH_COOKIE_NAME, refresh, {
       "max-age": remember ? String(REFRESH_MAX_AGE) : undefined,
     });
@@ -72,7 +69,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setIsLoadingCookie(true);
-    setAccess(null);
     setUser(null);
     Cookies.remove(ACCESS_COOKIE_NAME);
     Cookies.remove(REFRESH_COOKIE_NAME);
@@ -88,16 +84,20 @@ function AuthProvider({ children }: { children: ReactNode }) {
           refresh: refreshValue,
         });
         const newAccessToken = response.data.access;
-        setAccess(newAccessToken);
+        const newRefreshToken = response.data.refresh;
         clientAxios.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
-        Cookies.set(ACCESS_COOKIE_NAME, newAccessToken);
+        Cookies.set(ACCESS_COOKIE_NAME, newAccessToken, { "max-age": String(ACCESS_MAX_AGE) });
+        Cookies.set(REFRESH_COOKIE_NAME, newRefreshToken, {
+          "max-age":
+            localStorage.getItem("remember") === "true" ? String(REFRESH_MAX_AGE) : undefined,
+        });
       } else {
         logout();
       }
     } catch (error) {
       api.error({
-        message: "Token refresh error",
-        description: "Failed to refresh the access token.",
+        message: "로그인이 만료되었습니다.",
+        description: "다시 로그인해주세요.",
       });
       logout();
     }
@@ -105,7 +105,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setIsLoadingCookie(true);
-
     const refreshInterval = setInterval(() => {
       refresh();
     }, REFRESH_INTERVAL);
@@ -120,7 +119,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
         login,
         logout,
         refresh,
-        isLoggedIn: !!access,
+        isLoggedIn: !!Cookies.get(ACCESS_COOKIE_NAME),
         isLoading: isLoadingCookie || isLoadingUser,
       }}
     >
