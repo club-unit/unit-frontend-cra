@@ -32,7 +32,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
   const fetchAndSetUser = useCallback(
     async (token: string) => {
       setIsLoadingUser(true);
-
       try {
         const { data } = await clientAxios.get<User>(API_ROUTES.users.my(), {
           headers: { Authorization: `Bearer ${token}` },
