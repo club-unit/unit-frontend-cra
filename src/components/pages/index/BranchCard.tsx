@@ -19,7 +19,7 @@ function BranchCard({ slug }: Props) {
 
   return (
     <Card size="small" title={slug.toUpperCase()} extra={<Link to={`/${slug}`}>더보기</Link>}>
-      <Space direction="vertical" size="middle" className="w-full">
+      <Space direction="vertical" size="middle">
         {branchSummary?.map((post) => <BranchCardElement key={post.id} post={post} slug={slug} />)}
       </Space>
       {!branchSummary?.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
