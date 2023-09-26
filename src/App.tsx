@@ -42,6 +42,10 @@ function App() {
             <FloatButton
               onClick={() => setOpen(true)}
               icon={isLoggedIn ? <UserOutlined /> : <LoginOutlined />}
+              className="bg-blue-600"
+              type="primary"
+              description={isLoggedIn ? "User" : "Login"}
+              shape="square"
             />
             <Drawer placement="right" onClose={() => setOpen(false)} open={open}>
               <AuthOrUserCard setOpen={setOpen} />
