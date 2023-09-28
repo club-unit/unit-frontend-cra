@@ -7,14 +7,17 @@ import { Category } from "src/types/api/category";
 import PostListCategorySection from "src/components/pages/[slug]/PostListCategorySection";
 import PostListMainSection from "src/components/pages/[slug]/PostListMainSection";
 import PostListBottomSection from "src/components/pages/[slug]/PostListBottomSection";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuthSWR from "src/hooks/useAuthSWR";
+import useNotification from "src/contexts/notification/useNotfication";
 
 function PostListPage() {
   const { slug } = useParams();
   const [currentCategory, setCurrentCategory] = useState<string | number>("전체");
   const [page, setPage] = useState<number>(1);
-  const { data: posts } = useAuthSWR<CommonPagedResponse<Post>>(
+  const navigate = useNavigate();
+  const { api } = useNotification();
+  const { data: posts, error } = useAuthSWR<CommonPagedResponse<Post>>(
     slug
       ? {
           url: API_ROUTES.posts.bySlug(slug),
@@ -33,9 +36,17 @@ function PostListPage() {
       : null
   );
   const categoryList = categories ? [{ name: "전체" }, ...categories] : [{ name: "전체" }];
+
   useEffect(() => {
     setPage(1);
   }, [currentCategory]);
+
+  useEffect(() => {
+    if (error?.response?.status === 404) {
+      api.error({ message: "존재하지 않는 게시판입니다." });
+      navigate("/");
+    }
+  }, [api, error, navigate, slug]);
 
   return (
     <>

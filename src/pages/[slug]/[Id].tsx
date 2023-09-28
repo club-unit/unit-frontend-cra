@@ -4,21 +4,36 @@ import PostCommentSection from "src/components/pages/posts/index/PostCommentSect
 import { PostDetail } from "src/types/api/post";
 import { API_ROUTES } from "src/constants/routes";
 import { Card, Spin } from "antd";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import PostEditSection from "src/components/pages/posts/index/PostEditSection";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import useAuthSWR from "src/hooks/useAuthSWR";
 import useAuth from "src/contexts/auth/useAuth";
 import PostHeaderSection from "src/components/pages/posts/index/PostHeaderSection";
+import useNotification from "src/contexts/notification/useNotfication";
 
 function PostPage() {
   const { slug, id } = useParams();
   const { user } = useAuth();
-  const { data: post, mutate } = useAuthSWR<PostDetail>({
+  const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
+  const { api } = useNotification();
+
+  const {
+    data: post,
+    mutate,
+    error,
+  } = useAuthSWR<PostDetail>({
     url: API_ROUTES.posts.bySlugAndId(String(slug), Number(id)),
   });
-  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (error?.response?.status === 404) {
+      api.error({ message: "존재하지 않는 게시글입니다." });
+      navigate(`/${slug}`);
+    }
+  }, [api, error, navigate, slug]);
 
   return post ? (
     <div className="flex flex-col gap-2">
