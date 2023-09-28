@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, Select } from "antd";
+import { Button, Card, Checkbox, Form, Input, Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { CommonListResponse } from "src/types/api/common";
 import { Category } from "src/types/api/category";
@@ -46,7 +46,7 @@ function PostWritePage() {
   };
 
   return (
-    <>
+    <Card>
       <ContentHeaderSection title="글쓰기" />
       <Form onFinish={onFinish}>
         <div className="flex gap-4 flex-wrap">
@@ -72,7 +72,7 @@ function PostWritePage() {
           </Button>
         </Form.Item>
       </Form>
-    </>
+    </Card>
   );
 }
 

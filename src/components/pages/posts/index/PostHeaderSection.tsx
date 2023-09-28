@@ -3,7 +3,6 @@ import { ClockCircleOutlined, CommentOutlined, EyeOutlined, TagFilled } from "@a
 import { PostDetail } from "src/types/api/post";
 import IconWithText from "src/components/common/IconWithText";
 import dayjs from "dayjs";
-import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import BadgeSet from "src/components/common/BadgeSet";
 
 interface Props {
@@ -12,9 +11,9 @@ interface Props {
 
 function PostHeaderSection({ post }: Props) {
   return (
-    <div className="w-full">
-      <ContentHeaderSection title={post.title} />
-      <div className="flex flex-row w-full h-fit border-y-2 p-4 justify-between flex-wrap gap-2">
+    <div className="w-full py-4">
+      <Typography.Paragraph>{post.title}</Typography.Paragraph>
+      <div className="flex w-full h-fit p-2 justify-between flex-wrap gap-2 font-medium">
         <div className="flex gap-2 flex-wrap">
           <div className="flex gap-1 items-center">
             <BadgeSet user={post.author} height={20} />
@@ -28,7 +27,7 @@ function PostHeaderSection({ post }: Props) {
         </div>
         <IconWithText
           icon={<ClockCircleOutlined />}
-          text={dayjs(post.created).format("MM/DD hh:mm")}
+          text={dayjs(post.created).format("YYYY/MM/DD hh:mm")}
         />
       </div>
     </div>
