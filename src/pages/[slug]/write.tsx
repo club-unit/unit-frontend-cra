@@ -34,9 +34,12 @@ function PostWritePage() {
   const onFinish = async (values: FormValues) => {
     const post = { ...values, author: user?.id, content };
     try {
-      await clientAxios.post(API_ROUTES.posts.bySlug(String(slug)), post);
+      const { data: newPost } = await clientAxios.post<PostDetail>(
+        API_ROUTES.posts.bySlug(String(slug)),
+        post
+      );
       api.success({ message: "게시글이 등록되었습니다." });
-      navigate(`/${slug}`);
+      navigate(`/${slug}/${newPost.id}`);
     } catch (e) {
       api.error({ message: "게시글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
     }
