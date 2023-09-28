@@ -1,9 +1,10 @@
-import { Space, Typography } from "antd";
+import { Typography } from "antd";
 import { CommentOutlined, EyeOutlined } from "@ant-design/icons";
 import React from "react";
 import { BRANCH_SLUGS } from "src/constants/branches";
 import { Link } from "react-router-dom";
 import { PostSummary } from "src/types/api/post";
+import BadgeSet from "src/components/common/BadgeSet";
 
 interface Props {
   post: PostSummary;
@@ -13,16 +14,13 @@ interface Props {
 function BranchCardElement({ post, slug }: Props) {
   return (
     <Link to={`/${slug}/${post.id}`}>
-      <Space
-        direction="vertical"
-        size={0}
-        className="w-full h-fit hover:cursor-pointer hover:font-bold"
-      >
-        <Typography.Text strong>{post.title}</Typography.Text>
-        <Typography.Paragraph type="secondary" ellipsis={{ rows: 2 }}>
+      <div className="flex flex-col h-fit hover:cursor-pointer hover:font-bold gap-1">
+        <Typography.Text ellipsis>{post.title}</Typography.Text>
+        <Typography.Paragraph type="secondary" ellipsis={{ rows: 2 }} style={{ marginBottom: 0 }}>
           {post.shortenContent}
         </Typography.Paragraph>
-        <Space className="my-0" align="center">
+        <div className="my-0 flex items-center gap-1">
+          <BadgeSet user={post.author} height={17} />
           <Typography.Text type="secondary">{post.author.profile.name} | </Typography.Text>
           <div className="flex gap-1">
             <EyeOutlined />
@@ -32,8 +30,8 @@ function BranchCardElement({ post, slug }: Props) {
             <CommentOutlined />
             <Typography.Text>{post.numComments}</Typography.Text>
           </div>
-        </Space>
-      </Space>
+        </div>
+      </div>
     </Link>
   );
 }

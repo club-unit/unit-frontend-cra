@@ -1,9 +1,10 @@
-import { Menu } from "antd";
+import { Menu, MenuProps } from "antd";
 import { CommonListResponse } from "src/types/api/common";
 import { Board } from "src/types/api/board";
 import { API_ROUTES } from "src/constants/routes";
 import { Link } from "react-router-dom";
 import useAuthSWR from "src/hooks/useAuthSWR";
+import { useEffect, useState } from "react";
 
 function Navbar() {
   const { data: boardsResponse } = useAuthSWR<CommonListResponse<Board>>({
@@ -11,23 +12,43 @@ function Navbar() {
   });
 
   const boardsAndHome = boardsResponse
-    ? [{ slug: "", name: "UNIT", children: [] }, ...boardsResponse]
-    : [{ slug: "", name: "UNIT", children: [] }];
+    ? [{ slug: "home", name: "UNIT", children: [] }, ...boardsResponse]
+    : [{ slug: "home", name: "UNIT", children: [] }];
 
   const menuItems = boardsAndHome?.map((item) => ({
-    label: <Link to={`/${item.slug}`}>{item.name}</Link>,
+    label: item.children.length ? (
+      item.name
+    ) : (
+      <Link to={`/${item.slug === "home" ? "" : item.slug}`}>{item.name}</Link>
+    ),
     key: item.slug,
-    children: item.children?.map((child) => ({
-      label: <Link to={`/${child.slug}`}>{child.name}</Link>,
-      key: child.slug,
-    })),
+    children: item.children.length
+      ? item.children?.map((child) => ({
+          label: <Link to={`/${child.slug}`}>{child.name}</Link>,
+          key: child.slug,
+        }))
+      : undefined,
   }));
+
+  const [current, setCurrent] = useState("");
+
+  const onClick: MenuProps["onClick"] = (e) => {
+    setCurrent(e.key);
+  };
+
+  useEffect(() => {
+    if (current === "home") {
+      setCurrent("");
+    }
+  }, [current]);
 
   return (
     <Menu
       items={menuItems}
       mode="horizontal"
       className="bg-transparent text-white text-lg font-bold"
+      selectedKeys={[current]}
+      onClick={onClick}
     />
   );
 }

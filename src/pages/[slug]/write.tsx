@@ -1,16 +1,16 @@
-import { Button, Checkbox, Form, Input, Select } from "antd";
+import { Button, Card, Checkbox, Form, Input, Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { CommonListResponse } from "src/types/api/common";
 import { Category } from "src/types/api/category";
 import { API_ROUTES } from "src/constants/routes";
 import useAuth from "src/contexts/auth/useAuth";
-import { Editor } from "@tinymce/tinymce-react";
 import { useState } from "react";
 import { PostDetail } from "src/types/api/post";
 import useNotification from "src/contexts/notification/useNotfication";
 import { clientAxios } from "src/utils/clientAxios";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import useAuthSWR from "src/hooks/useAuthSWR";
+import ContentEditor from "src/components/common/ContentEditor";
 
 interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned"> {}
 
@@ -29,41 +29,42 @@ function PostWritePage() {
     label: category.name,
   }));
   const [content, setContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { api } = useNotification();
   const navigate = useNavigate();
   const onFinish = async (values: FormValues) => {
+    setIsSubmitting(true);
     const post = { ...values, author: user?.id, content };
     try {
-      await clientAxios.post(API_ROUTES.posts.bySlug(String(slug)), post);
+      const { data: newPost } = await clientAxios.post<PostDetail>(
+        API_ROUTES.posts.bySlug(String(slug)),
+        post
+      );
       api.success({ message: "게시글이 등록되었습니다." });
-      navigate(`/${slug}`);
+      navigate(`/${slug}/${newPost.id}`);
     } catch (e) {
       api.error({ message: "게시글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
+    } finally {
+      setIsSubmitting(false);
     }
-  };
-  const handleImage = (blobInfo: {
-    id: () => string;
-    name: () => string;
-    filename: () => string;
-    blob: () => Blob;
-    base64: () => string;
-    blobUri: () => string;
-    uri: () => string | undefined;
-  }) => {
-    const formData = new FormData();
-    formData.append("image", blobInfo.blob());
-    return clientAxios
-      .post<{ url: string }>(API_ROUTES.posts.uploadImage(slug ? slug : ""), formData)
-      .then((res) => res.data.url);
   };
 
   return (
-    <>
+    <Card>
       <ContentHeaderSection title="글쓰기" />
       <Form onFinish={onFinish}>
         <div className="flex gap-4 flex-wrap">
-          <Form.Item label="카테고리" name="category" className="w-1/2">
-            <Select options={categoryOptions} />
+          <Form.Item
+            label="카테고리"
+            name="category"
+            className="w-1/2"
+            rules={
+              categoryOptions?.length
+                ? [{ required: true, message: "카테고리를 입력하세요!" }]
+                : undefined
+            }
+          >
+            <Select options={categoryOptions} disabled={!categoryOptions?.length} />
           </Form.Item>
           <Form.Item label="고정글 여부" name="isPinned" valuePropName="checked">
             <Checkbox />
@@ -77,45 +78,14 @@ function PostWritePage() {
         >
           <Input />
         </Form.Item>
-        <Editor
-          apiKey={process.env.REACT_APP_EDITOR_API_KEY}
-          onEditorChange={setContent}
-          init={{
-            height: 400,
-            menubar: false,
-            plugins: [
-              "lists",
-              "link",
-              "image",
-              "charmap",
-              "preview",
-              "searchreplace",
-              "fullscreen",
-              "media",
-              "table",
-              "code",
-              "help",
-              "emoticons",
-              "codesample",
-              "quickbars",
-            ],
-            toolbar:
-              "undo redo | blocks | " +
-              "bold italic forecolor backcolor | alignleft aligncenter " +
-              "alignright alignjustify | bullist numlist outdent indent | " +
-              "lists table link charmap searchreplace | " +
-              "image fullscreen preview | " +
-              "removeformat | help ",
-            images_upload_handler: handleImage,
-          }}
-        />
+        <ContentEditor setContent={setContent} />
         <Form.Item className="flex mt-6 justify-end">
-          <Button type="primary" htmlType="submit" className="bg-blue-600">
+          <Button type="primary" htmlType="submit" className="bg-blue-600" disabled={isSubmitting}>
             저장하기
           </Button>
         </Form.Item>
       </Form>
-    </>
+    </Card>
   );
 }
 

@@ -1,5 +1,5 @@
-import { Dispatch } from "react";
-import { Button } from "antd";
+import { Dispatch, useState } from "react";
+import { Button, Modal } from "antd";
 import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -13,6 +13,7 @@ interface Props {
 function PostFooterSection({ setIsEditing, isMine }: Props) {
   const { slug, id } = useParams();
   const { api } = useNotification();
+  const [isOnDelete, setIsOnDelete] = useState(false);
   const navigate = useNavigate();
   const handleDelete = async () => {
     try {
@@ -36,11 +37,28 @@ function PostFooterSection({ setIsEditing, isMine }: Props) {
       {isMine && (
         <div className="flex gap-2 justify-end">
           <Button onClick={() => setIsEditing(true)}>수정</Button>
-          <Button type="primary" danger onClick={() => handleDelete()}>
+          <Button type="primary" danger onClick={() => setIsOnDelete(true)}>
             삭제
           </Button>
         </div>
       )}
+      <Modal
+        open={isOnDelete}
+        title="게시글 삭제 확인"
+        onOk={handleDelete}
+        onCancel={() => setIsOnDelete(false)}
+        okText="삭제"
+        cancelText="취소"
+        okType="danger"
+        footer={(_, { OkBtn, CancelBtn }) => (
+          <>
+            <CancelBtn />
+            <OkBtn />
+          </>
+        )}
+      >
+        <p>게시글을 삭제하시겠습니까?</p>
+      </Modal>
     </div>
   );
 }
