@@ -1,8 +1,8 @@
-import { Button, Image, Typography } from "antd";
+import { Button, Image, Modal, Typography } from "antd";
 import { Comment } from "src/types/api/comment";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { Dispatch } from "react";
+import { Dispatch, useState } from "react";
 import CommentInput from "src/components/pages/posts/index/CommentInput";
 import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
@@ -22,6 +22,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
   const { slug, id } = useParams();
   const { api } = useNotification();
   const { user } = useAuth();
+  const [isOnDelete, setIsOnDelete] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -82,7 +83,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
                 <Button size="small" type="text">
                   수정
                 </Button>
-                <Button size="small" type="text" onClick={handleDelete}>
+                <Button size="small" type="text" onClick={() => setIsOnDelete(true)}>
                   삭제
                 </Button>
               </>
@@ -93,6 +94,23 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
         {replyingParent === comment.id ? (
           <CommentInput parentId={comment.id} mutate={mutate} />
         ) : null}
+        <Modal
+          open={isOnDelete}
+          title="댓글 삭제 확인"
+          onOk={handleDelete}
+          onCancel={() => setIsOnDelete(false)}
+          okText="삭제"
+          cancelText="취소"
+          okType="danger"
+          footer={(_, { OkBtn, CancelBtn }) => (
+            <>
+              <CancelBtn />
+              <OkBtn />
+            </>
+          )}
+        >
+          <p>댓글을 삭제하시겠습니까?</p>
+        </Modal>
       </div>
       {comment.children.length
         ? comment.children.map((child) => (
