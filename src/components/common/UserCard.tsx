@@ -8,7 +8,7 @@ function UserCard() {
   const navigate = useNavigate();
 
   return (
-    <Card size="small" title="Profile">
+    <Card size="small" title="내 정보">
       {user && (
         <>
           <div className="flex gap-2 align-middle flex-wrap mb-2">

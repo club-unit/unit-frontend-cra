@@ -46,7 +46,7 @@ function App() {
               icon={isLoggedIn ? <UserOutlined /> : <LoginOutlined />}
               className="bg-blue-600"
               type="primary"
-              description={isLoggedIn ? "User" : "Login"}
+              description={isLoggedIn ? "내정보" : "로그인"}
               shape="square"
             />
             <Drawer placement="right" onClose={() => setOpen(false)} open={open}>

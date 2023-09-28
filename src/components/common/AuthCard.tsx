@@ -46,7 +46,7 @@ function AuthCard({ setOpen }: Props) {
   };
 
   return (
-    <Card size="small" title="Login">
+    <Card size="small" title="로그인">
       <Form
         name="normal_login"
         initialValues={{ remember: true }}
