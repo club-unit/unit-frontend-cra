@@ -1,4 +1,4 @@
-import { Button, Image, Modal, Typography } from "antd";
+import { Button, Modal, Typography } from "antd";
 import { Comment } from "src/types/api/comment";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -9,6 +9,7 @@ import { API_ROUTES } from "src/constants/routes";
 import { useParams } from "react-router-dom";
 import useNotification from "src/contexts/notification/useNotfication";
 import useAuth from "src/contexts/auth/useAuth";
+import BadgeSet from "src/components/common/BadgeSet";
 
 interface Props {
   comment: Comment;
@@ -40,24 +41,8 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
     <div className={`${isChildren ? "w-[98%]" : "w-full"} items-end border-t-2 ml-auto`}>
       <div className="flex flex-col py-2 px-4 w-full gap-2">
         <div className="flex justify-between w-full flex-wrap">
-          <div className="flex gap-2 flex-wrap">
-            <Image
-              height={20}
-              width={35}
-              src={`/icons/rank/${comment.author.profile.rank}.png`}
-              alt={String(comment.author.profile.rank)}
-              preview={false}
-            />
-            {comment.author.profile.responsibility !== "NONE" &&
-              comment.author.profile.responsibility !== "NORMAL" && (
-                <Image
-                  height={20}
-                  width={35}
-                  src={`/icons/responsibility/${comment.author.profile.responsibility}.png`}
-                  alt={String(comment.author?.profile.responsibility)}
-                  preview={false}
-                />
-              )}
+          <div className="flex gap-1 items-center">
+            <BadgeSet user={comment.author} height={20} />
             <Typography.Text className="whitespace-nowrap">
               {comment.author.profile.name}
             </Typography.Text>
