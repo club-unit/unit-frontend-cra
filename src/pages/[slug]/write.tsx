@@ -50,8 +50,17 @@ function PostWritePage() {
       <ContentHeaderSection title="글쓰기" />
       <Form onFinish={onFinish}>
         <div className="flex gap-4 flex-wrap">
-          <Form.Item label="카테고리" name="category" className="w-1/2">
-            <Select options={categoryOptions} />
+          <Form.Item
+            label="카테고리"
+            name="category"
+            className="w-1/2"
+            rules={
+              categoryOptions?.length
+                ? [{ required: true, message: "카테고리를 입력하세요!" }]
+                : undefined
+            }
+          >
+            <Select options={categoryOptions} disabled={!categoryOptions?.length} />
           </Form.Item>
           <Form.Item label="고정글 여부" name="isPinned" valuePropName="checked">
             <Checkbox />
