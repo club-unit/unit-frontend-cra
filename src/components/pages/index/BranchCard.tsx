@@ -1,4 +1,4 @@
-import { Card, Empty, Space } from "antd";
+import { Card, Empty } from "antd";
 import { BRANCH_SLUGS } from "src/constants/branches";
 import BranchCardElement from "src/components/pages/index/BranchCardElement";
 import { CommonListResponse } from "src/types/api/common";
@@ -19,9 +19,9 @@ function BranchCard({ slug }: Props) {
 
   return (
     <Card size="small" title={slug.toUpperCase()} extra={<Link to={`/${slug}`}>더보기</Link>}>
-      <Space direction="vertical" size="middle">
+      <div className="flex flex-col gap-4">
         {branchSummary?.map((post) => <BranchCardElement key={post.id} post={post} slug={slug} />)}
-      </Space>
+      </div>
       {!branchSummary?.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
     </Card>
   );
