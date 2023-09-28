@@ -91,8 +91,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
           "max-age":
             localStorage.getItem("remember") === "true" ? String(REFRESH_MAX_AGE) : undefined,
         });
-      } else {
-        logout();
       }
     } catch (error) {
       api.error({

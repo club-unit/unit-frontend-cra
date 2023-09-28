@@ -1,4 +1,3 @@
-import { Editor } from "@tinymce/tinymce-react";
 import { PostDetail } from "src/types/api/post";
 import { Dispatch, useState } from "react";
 import { Button, Checkbox, Form, Input, Select } from "antd";
@@ -10,6 +9,7 @@ import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
 import { clientAxios } from "src/utils/clientAxios";
 import useAuthSWR from "src/hooks/useAuthSWR";
+import ContentEditor from "src/components/common/ContentEditor";
 
 interface Props {
   post: PostDetail;
@@ -34,8 +34,10 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
     label: category.name,
   }));
   const [content, setContent] = useState(post.content);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { api } = useNotification();
   const onFinish = async (values: FormValues) => {
+    setIsSubmitting(true);
     const post = { ...values, author: user?.id, content };
     try {
       await clientAxios.patch(API_ROUTES.posts.bySlugAndId(String(slug), Number(id)), post);
@@ -44,22 +46,9 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
       api.success({ message: "게시글이 수정되었습니다." });
     } catch (e) {
       api.error({ message: "게시글 수정에 실패하였습니다.", description: "다시 시도해주세요." });
+    } finally {
+      setIsSubmitting(false);
     }
-  };
-  const handleImage = (blobInfo: {
-    id: () => string;
-    name: () => string;
-    filename: () => string;
-    blob: () => Blob;
-    base64: () => string;
-    blobUri: () => string;
-    uri: () => string | undefined;
-  }) => {
-    const formData = new FormData();
-    formData.append("image", blobInfo.blob());
-    return clientAxios
-      .post<{ url: string }>(API_ROUTES.posts.uploadImage(slug ? slug : ""), formData)
-      .then((res) => res.data.url);
   };
 
   return (
@@ -86,41 +75,9 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
       >
         <Input />
       </Form.Item>
-      <Editor
-        apiKey={process.env.REACT_APP_EDITOR_API_KEY}
-        onEditorChange={setContent}
-        initialValue={post.content}
-        init={{
-          height: 400,
-          menubar: false,
-          plugins: [
-            "lists",
-            "link",
-            "image",
-            "charmap",
-            "preview",
-            "searchreplace",
-            "fullscreen",
-            "media",
-            "table",
-            "code",
-            "help",
-            "emoticons",
-            "codesample",
-            "quickbars",
-          ],
-          toolbar:
-            "undo redo | blocks | " +
-            "bold italic forecolor backcolor | alignleft aligncenter " +
-            "alignright alignjustify | bullist numlist outdent indent | " +
-            "lists table link charmap searchreplace | " +
-            "image fullscreen preview | " +
-            "removeformat | help ",
-          images_upload_handler: handleImage,
-        }}
-      />
+      <ContentEditor setContent={setContent} initialValue={post.content} />
       <Form.Item className="flex mt-6 justify-end">
-        <Button type="primary" htmlType="submit" className="bg-blue-600">
+        <Button type="primary" htmlType="submit" className="bg-blue-600" disabled={isSubmitting}>
           저장하기
         </Button>
       </Form.Item>

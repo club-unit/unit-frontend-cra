@@ -72,7 +72,10 @@ function FormSection({ setCurrentStep }: Props) {
         <Form.Item
           label="전화번호"
           name="phoneNumber"
-          rules={[{ required: true, message: "전화번호를 입력하세요!" }]}
+          rules={[
+            { required: true, message: "전화번호를 입력하세요!" },
+            { pattern: /^[0-9]+$/, message: "숫자만 입력해주세요!" },
+          ]}
           className="w-80"
         >
           <Input />

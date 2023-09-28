@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
+import { useState } from "react";
 
 interface Props {
   parentId?: number;
@@ -17,7 +18,10 @@ function CommentInput({ parentId, mutate }: Props) {
   const { slug, id } = useParams();
   const { api } = useNotification();
   const [form] = Form.useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const onFinish = async (values: FormValues) => {
+    setIsSubmitting(true);
     const comment = { content: values.content, parentComment: parentId, post: id };
     try {
       await clientAxios.post(
@@ -29,6 +33,8 @@ function CommentInput({ parentId, mutate }: Props) {
       api.success({ message: "댓글이 등록되었습니다." });
     } catch (e) {
       api.error({ message: "댓글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -42,7 +48,7 @@ function CommentInput({ parentId, mutate }: Props) {
         <Input.TextArea rows={4} placeholder="댓글을 입력하세요" />
       </Form.Item>
       <Form.Item className="flex justify-end">
-        <Button type="primary" htmlType="submit" className="bg-blue-600">
+        <Button type="primary" htmlType="submit" className="bg-blue-600" disabled={isSubmitting}>
           등록
         </Button>
       </Form.Item>

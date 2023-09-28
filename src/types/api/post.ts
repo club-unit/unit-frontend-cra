@@ -9,6 +9,7 @@ export interface Post {
   author: Author;
   isPinned: boolean;
   views: number;
+  numComments: number;
   created: string;
 }
 
