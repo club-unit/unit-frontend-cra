@@ -1,5 +1,5 @@
 import { Table, Typography } from "antd";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { PushpinFilled } from "@ant-design/icons";
 import { Post } from "src/types/api/post";
 import { Author } from "src/types/api/author";
@@ -11,16 +11,9 @@ interface Props {
   posts: Post[];
 }
 
-function PostListMainSection({ posts }: Props) {
+function PostListTableSection({ posts }: Props) {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    const resizeListener = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", resizeListener);
-  });
   const columns = [
     {
       title: "",
@@ -65,7 +58,13 @@ function PostListMainSection({ posts }: Props) {
             dayjs(created).day() === dayjs().day() && "text-red-600"
           }`}
         >
-          {dayjs(created).format(dayjs(created).year() === dayjs().year() ? "MM.DD" : "YYYY.MM.DD")}
+          {dayjs(created).format(
+            dayjs(created).year() === dayjs().year()
+              ? dayjs(created).day() === dayjs().day()
+                ? `${dayjs().hour() - dayjs(created).hour()} 시간전`
+                : "MM.DD"
+              : "YYYY.MM.DD"
+          )}
         </Typography.Text>
       ),
       width: 100,
@@ -104,4 +103,4 @@ function PostListMainSection({ posts }: Props) {
   );
 }
 
-export default PostListMainSection;
+export default PostListTableSection;
