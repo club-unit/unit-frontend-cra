@@ -15,8 +15,11 @@ interface Props {
 function BranchCard({ slug }: Props) {
   const { data: postsResponse } = useAuthSWR<CommonListResponse<BoardSummary>>({
     url: API_ROUTES.boards.summary(),
+    query: {
+      slug,
+    },
   });
-  const branchSummary = postsResponse?.filter((board) => board.slug === slug)?.at(0)?.posts;
+  const boardSummary = postsResponse?.at(0)?.posts;
 
   return (
     <Card
@@ -25,9 +28,9 @@ function BranchCard({ slug }: Props) {
       extra={<Link to={`/${slug}`}>더보기</Link>}
     >
       <div className="flex flex-col gap-4">
-        {branchSummary?.map((post) => <BranchCardElement key={post.id} post={post} slug={slug} />)}
+        {boardSummary?.map((post) => <BranchCardElement key={post.id} post={post} slug={slug} />)}
       </div>
-      {!branchSummary?.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+      {!boardSummary?.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
     </Card>
   );
 }
