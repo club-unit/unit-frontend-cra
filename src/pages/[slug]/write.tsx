@@ -29,9 +29,11 @@ function PostWritePage() {
     label: category.name,
   }));
   const [content, setContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { api } = useNotification();
   const navigate = useNavigate();
   const onFinish = async (values: FormValues) => {
+    setIsSubmitting(true);
     const post = { ...values, author: user?.id, content };
     try {
       const { data: newPost } = await clientAxios.post<PostDetail>(
@@ -42,6 +44,8 @@ function PostWritePage() {
       navigate(`/${slug}/${newPost.id}`);
     } catch (e) {
       api.error({ message: "게시글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -76,7 +80,7 @@ function PostWritePage() {
         </Form.Item>
         <ContentEditor setContent={setContent} />
         <Form.Item className="flex mt-6 justify-end">
-          <Button type="primary" htmlType="submit" className="bg-blue-600">
+          <Button type="primary" htmlType="submit" className="bg-blue-600" disabled={isSubmitting}>
             저장하기
           </Button>
         </Form.Item>
