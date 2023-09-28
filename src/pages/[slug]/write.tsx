@@ -4,13 +4,13 @@ import { CommonListResponse } from "src/types/api/common";
 import { Category } from "src/types/api/category";
 import { API_ROUTES } from "src/constants/routes";
 import useAuth from "src/contexts/auth/useAuth";
-import { Editor } from "@tinymce/tinymce-react";
 import { useState } from "react";
 import { PostDetail } from "src/types/api/post";
 import useNotification from "src/contexts/notification/useNotfication";
 import { clientAxios } from "src/utils/clientAxios";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import useAuthSWR from "src/hooks/useAuthSWR";
+import ContentEditor from "src/components/common/ContentEditor";
 
 interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned"> {}
 
@@ -41,21 +41,6 @@ function PostWritePage() {
       api.error({ message: "게시글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
     }
   };
-  const handleImage = (blobInfo: {
-    id: () => string;
-    name: () => string;
-    filename: () => string;
-    blob: () => Blob;
-    base64: () => string;
-    blobUri: () => string;
-    uri: () => string | undefined;
-  }) => {
-    const formData = new FormData();
-    formData.append("image", blobInfo.blob());
-    return clientAxios
-      .post<{ url: string }>(API_ROUTES.posts.uploadImage(slug ? slug : ""), formData)
-      .then((res) => res.data.url);
-  };
 
   return (
     <>
@@ -77,38 +62,7 @@ function PostWritePage() {
         >
           <Input />
         </Form.Item>
-        <Editor
-          apiKey={process.env.REACT_APP_EDITOR_API_KEY}
-          onEditorChange={setContent}
-          init={{
-            height: 400,
-            menubar: false,
-            plugins: [
-              "lists",
-              "link",
-              "image",
-              "charmap",
-              "preview",
-              "searchreplace",
-              "fullscreen",
-              "media",
-              "table",
-              "code",
-              "help",
-              "emoticons",
-              "codesample",
-              "quickbars",
-            ],
-            toolbar:
-              "undo redo | blocks | " +
-              "bold italic forecolor backcolor | alignleft aligncenter " +
-              "alignright alignjustify | bullist numlist outdent indent | " +
-              "lists table link charmap searchreplace | " +
-              "image fullscreen preview | " +
-              "removeformat | help ",
-            images_upload_handler: handleImage,
-          }}
-        />
+        <ContentEditor setContent={setContent} />
         <Form.Item className="flex mt-6 justify-end">
           <Button type="primary" htmlType="submit" className="bg-blue-600">
             저장하기
