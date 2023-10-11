@@ -9,6 +9,7 @@ import {
 import BadgeSet from "src/components/common/BadgeSet";
 import dayjs from "dayjs";
 import { Link, useParams } from "react-router-dom";
+import formatDateString from "src/utils/dateToString";
 
 interface Props {
   posts: Post[];
@@ -46,14 +47,10 @@ function PostListMobileSection({ posts }: Props) {
                 <ClockCircleOutlined />
                 <Typography.Text
                   className={
-                    dayjs().day() === dayjs(post.created).day() ? "text-red-600" : undefined
+                    dayjs().date() === dayjs(post.created).date() ? "text-red-600" : undefined
                   }
                 >
-                  {dayjs().year() === dayjs(post.created).year()
-                    ? dayjs().day() === dayjs(post.created).day()
-                      ? `${dayjs().hour() - dayjs(post.created).hour()} 시간전`
-                      : dayjs(post.created).format("MM.DD")
-                    : dayjs(post.created).format("YYYY.MM.DD")}
+                  {formatDateString(post.created)}
                 </Typography.Text>
               </div>
             </div>

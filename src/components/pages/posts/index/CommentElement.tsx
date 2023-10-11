@@ -1,7 +1,6 @@
 import { Button, Modal, Typography } from "antd";
 import { Comment } from "src/types/api/comment";
 import { ClockCircleOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
 import { Dispatch, useState } from "react";
 import CommentInput from "src/components/pages/posts/index/CommentInput";
 import { clientAxios } from "src/utils/clientAxios";
@@ -10,6 +9,7 @@ import { useParams } from "react-router-dom";
 import useNotification from "src/contexts/notification/useNotfication";
 import useAuth from "src/contexts/auth/useAuth";
 import BadgeSet from "src/components/common/BadgeSet";
+import formatDateString from "src/utils/dateToString";
 
 interface Props {
   comment: Comment;
@@ -46,10 +46,10 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
             <Typography.Text className="whitespace-nowrap">
               {comment.author.profile.name}
             </Typography.Text>
-            <div className="flex gap-2">
+            <div className="flex gap-1 ml-2">
               <ClockCircleOutlined />
               <Typography.Text className="whitespace-nowrap">
-                {dayjs(comment.created).format("MM/DD hh:mm")}
+                {formatDateString(comment.created)}
               </Typography.Text>
             </div>
           </div>
