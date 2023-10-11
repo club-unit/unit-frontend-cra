@@ -29,9 +29,11 @@ function PostWritePage() {
     label: category.name,
   }));
   const [content, setContent] = useState("");
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { api } = useNotification();
   const navigate = useNavigate();
+
   const onFinish = async (values: FormValues) => {
     setIsSubmitting(true);
     const post = { ...values, author: user?.id, content };
