@@ -27,6 +27,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingCookie, setIsLoadingCookie] = useState(false);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
+  const [token, setToken] = useState<undefined | null | string>();
   const { api } = useNotification();
 
   const fetchAndSetUser = useCallback(
@@ -38,7 +39,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
         });
         setUser(data);
       } catch (error) {
-        //@TODO: 에러 핸들링
         api.error({ message: "인증 오류", description: "알 수 없는 인증 오류 입니다" });
       } finally {
         setIsLoadingUser(false);
@@ -46,14 +46,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
     },
     [api]
   );
-
-  useEffect(() => {
-    const storedValue = Cookies.get(ACCESS_COOKIE_NAME);
-    if (storedValue) {
-      clientAxios.defaults.headers["Authorization"] = `Bearer ${storedValue}`;
-      fetchAndSetUser(storedValue);
-    }
-  }, [fetchAndSetUser]);
 
   const login = (access: string, refresh: string, remember: boolean) => {
     setIsLoadingCookie(true);
@@ -65,16 +57,17 @@ function AuthProvider({ children }: { children: ReactNode }) {
     });
     fetchAndSetUser(access);
     setIsLoadingCookie(false);
+    setToken(Cookies.get(ACCESS_COOKIE_NAME));
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setIsLoadingCookie(true);
     setUser(null);
     Cookies.remove(ACCESS_COOKIE_NAME);
     Cookies.remove(REFRESH_COOKIE_NAME);
     setIsLoadingCookie(false);
     window.location.replace("/");
-  };
+  }, []);
 
   const refresh = useCallback(async () => {
     try {
@@ -102,6 +95,19 @@ function AuthProvider({ children }: { children: ReactNode }) {
   }, [api, logout]);
 
   useEffect(() => {
+    const storedAccess = Cookies.get(ACCESS_COOKIE_NAME);
+    const storedRefresh = Cookies.get(REFRESH_COOKIE_NAME);
+    if (storedAccess) {
+      clientAxios.defaults.headers["Authorization"] = `Bearer ${storedAccess}`;
+      fetchAndSetUser(storedAccess);
+      setToken(storedAccess);
+    } else if (storedRefresh) {
+      refresh();
+      setToken(storedAccess);
+    }
+  }, [fetchAndSetUser, refresh]);
+
+  useEffect(() => {
     setIsLoadingCookie(true);
     const refreshInterval = setInterval(() => {
       refresh();
@@ -117,7 +123,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
         login,
         logout,
         refresh,
-        isLoggedIn: !!Cookies.get(ACCESS_COOKIE_NAME),
+        isLoggedIn: !!token,
         isLoading: isLoadingCookie || isLoadingUser,
       }}
     >
