@@ -3,24 +3,27 @@ import { useParams } from "react-router-dom";
 import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
-import { useState } from "react";
+import { Dispatch, useState } from "react";
+import { Comment } from "src/types/api/comment";
 
 interface Props {
   parentId?: number;
   mutate: () => void;
+  initialComment?: Comment;
+  setIsOnEdit?: Dispatch<boolean>;
 }
 
 interface FormValues {
   content: string;
 }
 
-function CommentInput({ parentId, mutate }: Props) {
+function CommentInput({ parentId, mutate, initialComment, setIsOnEdit }: Props) {
   const { slug, id } = useParams();
   const { api } = useNotification();
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onFinish = async (values: FormValues) => {
+  const onPostFinish = async (values: FormValues) => {
     setIsSubmitting(true);
     const comment = { content: values.content, parentComment: parentId, post: id };
     try {
@@ -38,11 +41,41 @@ function CommentInput({ parentId, mutate }: Props) {
     }
   };
 
+  const onEditFinish = async (values: FormValues) => {
+    setIsSubmitting(true);
+    const comment = { content: values.content, parentComment: parentId, post: id };
+    try {
+      await clientAxios.patch(
+        API_ROUTES.comments.bySlugAndPostIdAndId(
+          String(slug),
+          Number(id),
+          Number(initialComment?.id)
+        ),
+        comment
+      );
+      mutate();
+      form.resetFields();
+      api.success({ message: "댓글이 수정되었습니다." });
+      if (setIsOnEdit) {
+        setIsOnEdit(false);
+      }
+    } catch (e) {
+      api.error({ message: "댓글 수정에 실패하였습니다.", description: "다시 시도해주세요." });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <Form form={form} onFinish={onFinish} className="flex flex-col">
+    <Form
+      form={form}
+      onFinish={initialComment ? onEditFinish : onPostFinish}
+      className="flex flex-col"
+    >
       <Form.Item
         name="content"
         rules={[{ required: true, message: "댓글을 입력하세요!" }]}
+        initialValue={initialComment?.content}
         className="w-full"
       >
         <Input.TextArea rows={4} placeholder="댓글을 입력하세요" />

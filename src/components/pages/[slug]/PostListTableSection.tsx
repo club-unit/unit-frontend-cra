@@ -6,6 +6,7 @@ import { Author } from "src/types/api/author";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import BadgeSet from "src/components/common/BadgeSet";
+import formatDateString from "src/utils/dateToString";
 
 interface Props {
   posts: Post[];
@@ -55,16 +56,10 @@ function PostListTableSection({ posts }: Props) {
       render: (created: string) => (
         <Typography.Text
           className={`text-xs md:text-sm ${
-            dayjs(created).day() === dayjs().day() && "text-red-600"
+            dayjs(created).date() === dayjs().date() && "text-red-600"
           }`}
         >
-          {dayjs(created).format(
-            dayjs(created).year() === dayjs().year()
-              ? dayjs(created).day() === dayjs().day()
-                ? `${dayjs().hour() - dayjs(created).hour()} 시간전`
-                : "MM.DD"
-              : "YYYY.MM.DD"
-          )}
+          {formatDateString(created)}
         </Typography.Text>
       ),
       width: 100,
