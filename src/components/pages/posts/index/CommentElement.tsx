@@ -1,7 +1,6 @@
 import { Button, Modal, Typography } from "antd";
 import { Comment } from "src/types/api/comment";
 import { ClockCircleOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
 import { Dispatch, useState } from "react";
 import CommentInput from "src/components/pages/posts/index/CommentInput";
 import { clientAxios } from "src/utils/clientAxios";
@@ -10,6 +9,7 @@ import { useParams } from "react-router-dom";
 import useNotification from "src/contexts/notification/useNotfication";
 import useAuth from "src/contexts/auth/useAuth";
 import BadgeSet from "src/components/common/BadgeSet";
+import formatDateString from "src/utils/dateToString";
 
 interface Props {
   comment: Comment;
@@ -24,6 +24,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
   const { api } = useNotification();
   const { user } = useAuth();
   const [isOnDelete, setIsOnDelete] = useState(false);
+  const [isOnEdit, setIsOnEdit] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -46,10 +47,10 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
             <Typography.Text className="whitespace-nowrap">
               {comment.author.profile.name}
             </Typography.Text>
-            <div className="flex gap-2">
+            <div className="flex gap-1 ml-2">
               <ClockCircleOutlined />
               <Typography.Text className="whitespace-nowrap">
-                {dayjs(comment.created).format("MM/DD hh:mm")}
+                {formatDateString(comment.created)}
               </Typography.Text>
             </div>
           </div>
@@ -65,7 +66,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
             </Button>
             {comment.author.id === user?.id && (
               <>
-                <Button size="small" type="text">
+                <Button size="small" type="text" onClick={() => setIsOnEdit(true)}>
                   수정
                 </Button>
                 <Button size="small" type="text" onClick={() => setIsOnDelete(true)}>
@@ -75,7 +76,11 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
             )}
           </div>
         </div>
-        <Typography.Text>{comment.content}</Typography.Text>
+        {isOnEdit ? (
+          <CommentInput initialComment={comment} setIsOnEdit={setIsOnEdit} mutate={mutate} />
+        ) : (
+          <Typography.Text>{comment.content}</Typography.Text>
+        )}
         {replyingParent === comment.id ? (
           <CommentInput parentId={comment.id} mutate={mutate} />
         ) : null}

@@ -50,9 +50,13 @@ function ContentEditor({ initialValue, setContent }: Props) {
           "emoticons",
           "codesample",
           "quickbars",
+          "autosave",
         ],
+        autosave_interval: "1s",
+        autosave_restore_when_empty: true,
+        autosave_prefix: "content-autosave-{path}{query}-",
         toolbar:
-          "undo redo | fontsizeinput | " +
+          "restoredraft undo redo | fontsizeinput | " +
           "bold italic forecolor backcolor | alignleft aligncenter " +
           "alignright alignjustify | bullist numlist outdent indent | " +
           "lists table link charmap searchreplace | " +
