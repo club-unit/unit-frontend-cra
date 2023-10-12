@@ -24,6 +24,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
   const { api } = useNotification();
   const { user } = useAuth();
   const [isOnDelete, setIsOnDelete] = useState(false);
+  const [isOnEdit, setIsOnEdit] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -65,7 +66,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
             </Button>
             {comment.author.id === user?.id && (
               <>
-                <Button size="small" type="text">
+                <Button size="small" type="text" onClick={() => setIsOnEdit(true)}>
                   수정
                 </Button>
                 <Button size="small" type="text" onClick={() => setIsOnDelete(true)}>
@@ -75,7 +76,11 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
             )}
           </div>
         </div>
-        <Typography.Text>{comment.content}</Typography.Text>
+        {isOnEdit ? (
+          <CommentInput initialComment={comment} setIsOnEdit={setIsOnEdit} mutate={mutate} />
+        ) : (
+          <Typography.Text>{comment.content}</Typography.Text>
+        )}
         {replyingParent === comment.id ? (
           <CommentInput parentId={comment.id} mutate={mutate} />
         ) : null}
