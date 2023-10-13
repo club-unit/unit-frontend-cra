@@ -56,9 +56,9 @@ function ContentEditor({ initialValue, setContent }: Props) {
         autosave_restore_when_empty: true,
         autosave_prefix: "content-autosave-{path}{query}-",
         toolbar:
-          "restoredraft undo redo | fontsizeinput | " +
-          "bold italic forecolor backcolor | alignleft aligncenter " +
-          "alignright alignjustify | bullist numlist outdent indent | " +
+          "restoredraft undo | fontsizeinput | " +
+          "bold italic underline strikethrough forecolor backcolor alignleft aligncenter " +
+          "alignright | bullist numlist outdent indent | " +
           "lists table link charmap searchreplace | " +
           "image fullscreen preview | " +
           "removeformat | help ",
