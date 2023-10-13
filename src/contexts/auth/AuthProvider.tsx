@@ -84,6 +84,10 @@ function AuthProvider({ children }: { children: ReactNode }) {
           "max-age":
             localStorage.getItem("remember") === "true" ? String(REFRESH_MAX_AGE) : undefined,
         });
+        setToken(newAccessToken);
+        if (token) {
+          fetchAndSetUser(token);
+        }
       }
     } catch (error) {
       api.error({
