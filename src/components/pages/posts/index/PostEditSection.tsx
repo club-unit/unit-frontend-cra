@@ -10,6 +10,7 @@ import useNotification from "src/contexts/notification/useNotfication";
 import { clientAxios } from "src/utils/clientAxios";
 import useAuthSWR from "src/hooks/useAuthSWR";
 import ContentEditor from "src/components/common/ContentEditor";
+import extractFirstImage from "src/utils/extractFirstImage";
 
 interface Props {
   post: PostDetail;
@@ -38,7 +39,8 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
   const { api } = useNotification();
   const onFinish = async (values: FormValues) => {
     setIsSubmitting(true);
-    const post = { ...values, author: user?.id, content };
+    const thumbnail = extractFirstImage(content);
+    const post = { ...values, author: user?.id, content, thumbnail };
     try {
       await clientAxios.patch(API_ROUTES.posts.bySlugAndId(String(slug), Number(id)), post);
       mutate();
