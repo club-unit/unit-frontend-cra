@@ -11,6 +11,7 @@ export interface Post {
   views: number;
   numComments: number;
   created: string;
+  thumbnail: string;
 }
 
 export interface PostSummary {
@@ -21,6 +22,7 @@ export interface PostSummary {
   views: number;
   created: string;
   numComments: number;
+  thumbnail: string;
 }
 
 export interface PostDetail extends Post {

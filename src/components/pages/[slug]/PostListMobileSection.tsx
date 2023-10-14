@@ -1,5 +1,5 @@
 import { Post } from "src/types/api/post";
-import { List, Typography } from "antd";
+import { Image, List, Typography } from "antd";
 import {
   ClockCircleOutlined,
   CommentOutlined,
@@ -10,6 +10,7 @@ import BadgeSet from "src/components/common/BadgeSet";
 import dayjs from "dayjs";
 import { Link, useParams } from "react-router-dom";
 import formatDateString from "src/utils/dateToString";
+import React from "react";
 
 interface Props {
   posts: Post[];
@@ -24,36 +25,52 @@ function PostListMobileSection({ posts }: Props) {
       dataSource={posts}
       renderItem={(post) => (
         <List.Item className="cursor-pointer focus:bg-gray-200">
-          <Link to={`/${slug}/${post.id}`} className="flex flex-col items-start gap-1 w-full">
-            <div className="flex gap-2">
-              <PushpinFilled className={post.isPinned ? undefined : "text-white"} />
-              <Typography.Text strong>{post.title}</Typography.Text>
+          <Link
+            to={`/${slug}/${post.id}`}
+            className="flex items-center justify-between gap-1 w-full"
+          >
+            <div>
+              <div className="flex gap-2 w-full">
+                <PushpinFilled className={post.isPinned ? undefined : "text-white"} />
+                <Typography.Text strong>{post.title}</Typography.Text>
+              </div>
+              <div className="flex gap-2">
+                <PushpinFilled className="text-white" />
+                <div className="flex gap-1 items-center">
+                  <BadgeSet user={post.author} height={20} />
+                  <Typography.Text>{post.author.profile.name}</Typography.Text>
+                </div>
+                <div className="flex gap-1 items-center">
+                  <EyeOutlined />
+                  {post.views}
+                </div>
+                <div className="flex gap-1 items-center">
+                  <CommentOutlined />
+                  {post.numComments}
+                </div>
+                <div className="flex gap-1 items-center">
+                  <ClockCircleOutlined />
+                  <Typography.Text
+                    className={
+                      dayjs().date() === dayjs(post.created).date() ? "text-red-600" : undefined
+                    }
+                  >
+                    {formatDateString(post.created)}
+                  </Typography.Text>
+                </div>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <PushpinFilled className="text-white" />
-              <div className="flex gap-1 items-center">
-                <BadgeSet user={post.author} height={20} />
-                <Typography.Text>{post.author.profile.name}</Typography.Text>
+            {post.thumbnail && (
+              <div>
+                <Image
+                  src={post.thumbnail}
+                  width={50}
+                  height={50}
+                  className="shrink-0"
+                  preview={false}
+                />
               </div>
-              <div className="flex gap-1 items-center">
-                <EyeOutlined />
-                {post.views}
-              </div>
-              <div className="flex gap-1 items-center">
-                <CommentOutlined />
-                {post.numComments}
-              </div>
-              <div className="flex gap-1 items-center">
-                <ClockCircleOutlined />
-                <Typography.Text
-                  className={
-                    dayjs().date() === dayjs(post.created).date() ? "text-red-600" : undefined
-                  }
-                >
-                  {formatDateString(post.created)}
-                </Typography.Text>
-              </div>
-            </div>
+            )}
           </Link>
         </List.Item>
       )}

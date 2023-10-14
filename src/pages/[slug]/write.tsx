@@ -7,10 +7,11 @@ import useAuth from "src/contexts/auth/useAuth";
 import { useState } from "react";
 import { PostDetail } from "src/types/api/post";
 import useNotification from "src/contexts/notification/useNotfication";
-import { clientAxios } from "src/utils/clientAxios";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import useAuthSWR from "src/hooks/useAuthSWR";
 import ContentEditor from "src/components/common/ContentEditor";
+import { clientAxios } from "src/utils/clientAxios";
+import extractFirstImage from "src/utils/extractFirstImage";
 
 interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned"> {}
 
@@ -36,7 +37,8 @@ function PostWritePage() {
 
   const onFinish = async (values: FormValues) => {
     setIsSubmitting(true);
-    const post = { ...values, author: user?.id, content };
+    const thumbnail = extractFirstImage(content);
+    const post = { ...values, author: user?.id, content, thumbnail };
     try {
       const { data: newPost } = await clientAxios.post<PostDetail>(
         API_ROUTES.posts.bySlug(String(slug)),
