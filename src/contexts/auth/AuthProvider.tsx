@@ -86,6 +86,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
         });
         setToken(newAccessToken);
         if (token) {
+          console.log("user fetch");
           fetchAndSetUser(token);
         }
       }
@@ -96,7 +97,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
       });
       logout();
     }
-  }, [api, logout]);
+  }, [api, fetchAndSetUser, logout, token]);
 
   useEffect(() => {
     const storedAccess = Cookies.get(ACCESS_COOKIE_NAME);
