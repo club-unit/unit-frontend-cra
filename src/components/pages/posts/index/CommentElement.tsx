@@ -79,7 +79,11 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
         {isOnEdit ? (
           <CommentInput initialComment={comment} setIsOnEdit={setIsOnEdit} mutate={mutate} />
         ) : (
-          <Typography.Text>{comment.content}</Typography.Text>
+          <div className="flex flex-col">
+            {comment.content.split("\n").map((line) => (
+              <Typography.Text className="my-0">{line}</Typography.Text>
+            ))}
+          </div>
         )}
         {replyingParent === comment.id ? (
           <CommentInput parentId={comment.id} mutate={mutate} />

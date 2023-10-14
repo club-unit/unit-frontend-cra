@@ -1,4 +1,4 @@
-import { Table, Typography } from "antd";
+import { Image, Table, Typography } from "antd";
 import React from "react";
 import { PushpinFilled } from "@ant-design/icons";
 import { Post } from "src/types/api/post";
@@ -26,12 +26,26 @@ function PostListTableSection({ posts }: Props) {
     },
     {
       title: "제목",
-      dataIndex: "title",
       key: "title",
-      render: (title: string) => (
-        <Typography.Text className="whitespace-nowrap text-ellipsis text-sm">
-          {title}
-        </Typography.Text>
+      render: (post: Post) => (
+        <div className="flex items-center gap-2">
+          {post.thumbnail ? (
+            <div>
+              <Image
+                src={post.thumbnail}
+                height={70}
+                width={70}
+                className="shrink-0"
+                preview={false}
+              />
+            </div>
+          ) : (
+            <div className="w-[70px]" />
+          )}
+          <Typography.Text className="whitespace-nowrap text-ellipsis text-sm shrink">
+            {post.title}
+          </Typography.Text>
+        </div>
       ),
       ellipsis: true,
     },

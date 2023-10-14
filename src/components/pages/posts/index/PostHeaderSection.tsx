@@ -21,7 +21,7 @@ function PostHeaderSection({ post }: Props) {
           </div>
           <div className="flex gap-2">
             <IconWithText icon={<TagFilled />} text={post.category} />
-            <IconWithText icon={<CommentOutlined />} text={post.comments.length} />
+            <IconWithText icon={<CommentOutlined />} text={post.numComments} />
             <IconWithText icon={<EyeOutlined />} text={post.views} />
           </div>
         </div>
