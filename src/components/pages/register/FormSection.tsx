@@ -111,7 +111,7 @@ function FormSection({ setCurrentStep }: Props) {
         </Form.Item>
       </Card>
       <Form.Item className="flex w-full gap-2 justify-end mt-2">
-        <Button type="primary" className="bg-blue-600" htmlType="submit">
+        <Button type="primary" htmlType="submit">
           가입하기
         </Button>
       </Form.Item>

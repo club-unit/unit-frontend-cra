@@ -81,7 +81,7 @@ function CommentInput({ parentId, mutate, initialComment, setIsOnEdit }: Props) 
         <Input.TextArea rows={4} placeholder="댓글을 입력하세요" />
       </Form.Item>
       <Form.Item className="flex justify-end">
-        <Button type="primary" htmlType="submit" className="bg-blue-600" disabled={isSubmitting}>
+        <Button type="primary" htmlType="submit" disabled={isSubmitting}>
           등록
         </Button>
       </Form.Item>

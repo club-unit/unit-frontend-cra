@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, FloatButton, Layout } from "antd";
+import { Drawer, FloatButton, Layout, Typography } from "antd";
 import Navbar from "src/components/common/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Index from "src/pages";
@@ -44,9 +44,12 @@ function App() {
             <FloatButton
               onClick={() => setOpen(true)}
               icon={isLoggedIn ? <UserOutlined /> : <LoginOutlined />}
-              className="bg-blue-600"
               type="primary"
-              description={isLoggedIn ? "내정보" : "로그인"}
+              description={
+                <Typography.Text className="text-white text-xs">
+                  {isLoggedIn ? "내정보" : "로그인"}
+                </Typography.Text>
+              }
               shape="square"
             />
             <Drawer placement="right" onClose={() => setOpen(false)} open={open}>
