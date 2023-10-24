@@ -6,9 +6,10 @@ import { useParams } from "react-router-dom";
 interface Props {
   initialValue?: string;
   setContent: (value: string) => void;
+  content: string;
 }
 
-function ContentEditor({ initialValue, setContent }: Props) {
+function ContentEditor({ initialValue, setContent, content }: Props) {
   const { slug } = useParams();
 
   const handleImage = (blobInfo: {
@@ -31,7 +32,8 @@ function ContentEditor({ initialValue, setContent }: Props) {
     <Editor
       apiKey={process.env.REACT_APP_EDITOR_API_KEY}
       onEditorChange={setContent}
-      initialValue={initialValue}
+      initialValue={initialValue || ""}
+      value={content}
       init={{
         height: 400,
         menubar: false,
@@ -54,7 +56,7 @@ function ContentEditor({ initialValue, setContent }: Props) {
         ],
         autosave_interval: "1s",
         autosave_restore_when_empty: true,
-        autosave_prefix: "content-autosave-{path}{query}-",
+        autosave_prefix: "content-autosave-",
         toolbar:
           "restoredraft undo | fontsizeinput | " +
           "bold italic underline strikethrough forecolor backcolor alignleft aligncenter " +

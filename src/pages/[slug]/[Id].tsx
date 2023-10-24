@@ -45,7 +45,11 @@ function PostPage() {
       ) : (
         <Card title={<PostHeaderSection post={post} />}>
           <PostContentSection post={post} />
-          <PostFooterSection setIsEditing={setIsEditing} isMine={post?.author?.id === user?.id} />
+          <PostFooterSection
+            setIsEditing={setIsEditing}
+            isMine={post?.author?.id === user?.id}
+            content={post.content}
+          />
         </Card>
       )}
       <PostCommentSection comments={post.comments} mutate={mutate} />

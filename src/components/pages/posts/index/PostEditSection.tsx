@@ -45,6 +45,8 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
       await clientAxios.patch(API_ROUTES.posts.bySlugAndId(String(slug), Number(id)), post);
       mutate();
       setIsEditing(false);
+      localStorage.removeItem("content-autosave-draft");
+      localStorage.removeItem("content-autosave-time");
       api.success({ message: "게시글이 수정되었습니다." });
     } catch (e) {
       api.error({ message: "게시글 수정에 실패하였습니다.", description: "다시 시도해주세요." });
@@ -77,9 +79,9 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
       >
         <Input />
       </Form.Item>
-      <ContentEditor setContent={setContent} initialValue={post.content} />
+      <ContentEditor setContent={setContent} initialValue={post.content} content={content} />
       <Form.Item className="flex mt-6 justify-end">
-        <Button type="primary" htmlType="submit" className="bg-blue-600" disabled={isSubmitting}>
+        <Button type="primary" htmlType="submit" disabled={isSubmitting}>
           저장하기
         </Button>
       </Form.Item>
