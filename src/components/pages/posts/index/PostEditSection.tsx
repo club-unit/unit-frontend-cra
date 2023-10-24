@@ -81,7 +81,7 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
       </Form.Item>
       <ContentEditor setContent={setContent} initialValue={post.content} content={content} />
       <Form.Item className="flex mt-6 justify-end">
-        <Button type="primary" htmlType="submit" className="bg-blue-600" disabled={isSubmitting}>
+        <Button type="primary" htmlType="submit" disabled={isSubmitting}>
           저장하기
         </Button>
       </Form.Item>

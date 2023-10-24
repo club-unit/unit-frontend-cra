@@ -316,12 +316,7 @@ function AgreeSection({ next }: Props) {
         </Checkbox>
       </Card>
       <div className="flex w-full gap-2 justify-end mt-2">
-        <Button
-          type="primary"
-          className="bg-blue-600"
-          disabled={!(ruleChecked && infoChecked)}
-          onClick={() => next()}
-        >
+        <Button type="primary" disabled={!(ruleChecked && infoChecked)} onClick={() => next()}>
           다음 단계로
         </Button>
       </div>

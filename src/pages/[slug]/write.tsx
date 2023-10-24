@@ -104,7 +104,7 @@ function PostWritePage() {
         </Form.Item>
         <ContentEditor setContent={setContent} content={content} />
         <Form.Item className="flex mt-6 justify-end">
-          <Button type="primary" htmlType="submit" className="bg-blue-600" disabled={isSubmitting}>
+          <Button type="primary" htmlType="submit" disabled={isSubmitting}>
             저장하기
           </Button>
         </Form.Item>

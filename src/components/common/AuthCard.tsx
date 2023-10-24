@@ -77,7 +77,7 @@ function AuthCard({ setOpen }: Props) {
           </Link>
         </div>
         <Form.Item className="mt-2 mb-2">
-          <Button type="primary" htmlType="submit" className="bg-blue-600 w-full">
+          <Button type="primary" htmlType="submit" className="w-full">
             로그인
           </Button>
         </Form.Item>

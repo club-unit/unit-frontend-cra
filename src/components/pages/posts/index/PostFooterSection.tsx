@@ -35,9 +35,7 @@ function PostFooterSection({ setIsEditing, isMine, content }: Props) {
     <div className="flex justify-between">
       <div className="flex gap-2 justify-end">
         <Link to={`/${slug}`}>
-          <Button type="primary" className="bg-blue-600">
-            목록으로
-          </Button>
+          <Button type="primary">목록으로</Button>
         </Link>
       </div>
       <div className="flex gap-2 justify-end">
