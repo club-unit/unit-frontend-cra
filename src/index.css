@@ -259,3 +259,7 @@ body {
     margin: 1em 0;
   }
 }
+
+.ant-btn-primary {
+  @apply bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-200;
+}

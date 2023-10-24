@@ -7,10 +7,11 @@ import useNotification from "src/contexts/notification/useNotfication";
 
 interface Props {
   setIsEditing: Dispatch<boolean>;
+  content: string;
   isMine: boolean;
 }
 
-function PostFooterSection({ setIsEditing, isMine }: Props) {
+function PostFooterSection({ setIsEditing, isMine, content }: Props) {
   const { slug, id } = useParams();
   const { api } = useNotification();
   const [isOnDelete, setIsOnDelete] = useState(false);
@@ -21,8 +22,13 @@ function PostFooterSection({ setIsEditing, isMine }: Props) {
       api.success({ message: "게시글이 삭제되었습니다." });
       navigate(`/${slug}`);
     } catch (error) {
-      api.success({ message: "게시글이 삭제에 실패했습니다.", description: "다시 시도해주세요" });
+      api.success({ message: "게시글 삭제에 실패했습니다.", description: "다시 시도해주세요" });
     }
+  };
+
+  const copyPost = () => {
+    localStorage.setItem("copiedPost", content);
+    api.success({ message: "게시글이 복사되었습니다." });
   };
 
   return (
@@ -34,14 +40,17 @@ function PostFooterSection({ setIsEditing, isMine }: Props) {
           </Button>
         </Link>
       </div>
-      {isMine && (
-        <div className="flex gap-2 justify-end">
-          <Button onClick={() => setIsEditing(true)}>수정</Button>
-          <Button type="primary" danger onClick={() => setIsOnDelete(true)}>
-            삭제
-          </Button>
-        </div>
-      )}
+      <div className="flex gap-2 justify-end">
+        <Button onClick={() => copyPost()}>글 복사</Button>
+        {isMine && (
+          <>
+            <Button onClick={() => setIsEditing(true)}>수정</Button>
+            <Button type="primary" danger onClick={() => setIsOnDelete(true)}>
+              삭제
+            </Button>
+          </>
+        )}
+      </div>
       <Modal
         open={isOnDelete}
         title="게시글 삭제 확인"
