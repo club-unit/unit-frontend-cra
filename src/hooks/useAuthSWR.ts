@@ -17,6 +17,7 @@ function useAuthSWR<T>(params: Params | null) {
     navigate("/");
   } else if (error?.response?.status === 401) {
     api.error({ message: "로그인이 필요합니다." });
+    navigate("/");
   }
 
   return {
