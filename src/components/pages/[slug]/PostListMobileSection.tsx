@@ -52,7 +52,7 @@ function PostListMobileSection({ posts }: Props) {
                   <ClockCircleOutlined />
                   <Typography.Text
                     className={
-                      dayjs().date() === dayjs(post.created).date() ? "text-red-600" : undefined
+                      dayjs().diff(dayjs(post.created), "hour") < 24 ? "text-red-600" : undefined
                     }
                   >
                     {formatDateString(post.created)}
