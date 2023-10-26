@@ -70,7 +70,7 @@ function PostListTableSection({ posts }: Props) {
       render: (created: string) => (
         <Typography.Text
           className={`text-xs md:text-sm ${
-            dayjs().diff(dayjs(created), "hour") < 24 && "text-red-600"
+            dayjs(created).date() === dayjs().date() && "text-red-600"
           }`}
         >
           {formatDateString(created)}
