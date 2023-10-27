@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import {
   ACCESS_COOKIE_NAME,
@@ -16,10 +16,6 @@ axios.interceptors.request.use((config) => {
   if (!config.headers) return config;
 
   const token: string | undefined = Cookies.get(ACCESS_COOKIE_NAME);
-
-  // if (token) {
-  //   console.log("!!!");
-  // }
 
   config.headers.Authorization = token ? `Bearer ${token}` : "asfd";
 
@@ -85,8 +81,12 @@ clientAxios.interceptors.response.use(
             resolve(clientAxios(originalRequest));
           })
           .catch((err) => {
-            processQueue(err, null);
-            reject(error);
+            if (err instanceof AxiosError) {
+              Cookies.remove(ACCESS_COOKIE_NAME);
+              Cookies.remove(REFRESH_COOKIE_NAME);
+              processQueue(err, null);
+              reject(err);
+            }
           })
           .finally(() => {
             isRefreshing = false;

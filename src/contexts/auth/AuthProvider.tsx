@@ -11,6 +11,8 @@ import {
 } from "src/constants/jwt";
 import useNotification from "src/contexts/notification/useNotfication";
 import checkLoginState from "src/utils/checkLoginState";
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextValue {
   user: User | null;
@@ -27,6 +29,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoadingCookie, setIsLoadingCookie] = useState(false);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const { api } = useNotification();
+  const navigate = useNavigate();
 
   const fetchAndSetUser = useCallback(
     async (token: string) => {
@@ -36,8 +39,15 @@ function AuthProvider({ children }: { children: ReactNode }) {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(data);
-      } catch (error) {
-        api.error({ message: "인증 오류", description: "알 수 없는 인증 오류 입니다" });
+      } catch (e) {
+        if (e instanceof AxiosError) {
+          if (e.response?.data?.code === "token_not_valid") {
+            api.error({ message: "로그인이 만료되었습니다.", description: "다시 로그인해주세요." });
+            logout();
+          }
+        } else {
+          api.error({ message: "인증 오류", description: "알 수 없는 인증 오류 입니다" });
+        }
       } finally {
         setIsLoadingUser(false);
       }
@@ -63,8 +73,8 @@ function AuthProvider({ children }: { children: ReactNode }) {
     Cookies.remove(ACCESS_COOKIE_NAME);
     Cookies.remove(REFRESH_COOKIE_NAME);
     setIsLoadingCookie(false);
-    window.location.replace("/");
-  }, []);
+    navigate("/");
+  }, [navigate]);
 
   // const refresh = useCallback(async () => {
   //   try {
