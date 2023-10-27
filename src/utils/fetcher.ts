@@ -1,20 +1,17 @@
 import { clientAxios } from "src/utils/clientAxios";
-import Cookies from "js-cookie";
-import { ACCESS_COOKIE_NAME } from "src/constants/jwt";
 
 export interface FetcherArgs {
   url: string;
   query?: Record<string, unknown>;
+  token?: string | null;
 }
 
-export async function fetcher({ url, query }: FetcherArgs) {
+export async function fetcher({ url, query, token }: FetcherArgs) {
   return (
     await clientAxios.get(url, {
       params: query,
       headers: {
-        Authorization: Cookies.get(ACCESS_COOKIE_NAME)
-          ? `Bearer ${Cookies.get(ACCESS_COOKIE_NAME)}`
-          : undefined,
+        Authorization: token ? `Bearer ${token}` : undefined,
       },
     })
   ).data;
