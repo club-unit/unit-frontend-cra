@@ -46,7 +46,7 @@ clientAxios.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -84,8 +84,13 @@ clientAxios.interceptors.response.use(
             if (err instanceof AxiosError) {
               Cookies.remove(ACCESS_COOKIE_NAME);
               Cookies.remove(REFRESH_COOKIE_NAME);
-              processQueue(err, null);
-              reject(err);
+              if (err.response?.status === 400) {
+                processQueue(error, null);
+                reject(error);
+              } else {
+                processQueue(err, null);
+                reject(err);
+              }
             }
           })
           .finally(() => {
