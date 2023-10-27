@@ -18,6 +18,7 @@ import { clientAxios } from "src/utils/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
 import { withAuth } from "src/components/common/withAuth";
+import { AxiosError } from "axios";
 
 interface PWInput {
   currentPassword: string;
@@ -25,7 +26,7 @@ interface PWInput {
 }
 
 function MyPage() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [isPWEdit, setIsPWEdit] = useState(false);
   const { api } = useNotification();
   const onPWFinish = async (values: PWInput) => {
@@ -34,7 +35,17 @@ function MyPage() {
       setIsPWEdit(false);
       api.success({ message: "비밀번호가 변경되었습니다." });
     } catch (e) {
-      api.error({ message: "비밀번호 변경에 실패했습니다.", description: "다시 시도해주세요." });
+      if (e instanceof AxiosError) {
+        if (e.response?.data?.code === "token_not_valid") {
+          api.error({
+            message: "비밀번호 변경에 실패했습니다.",
+            description: "로그인이 만료되었습니다.",
+          });
+          logout();
+        }
+      } else {
+        api.error({ message: "비밀번호 변경에 실패했습니다.", description: "다시 시도해주세요." });
+      }
     }
   };
   const personalItems: DescriptionsProps["items"] = [

@@ -5,9 +5,12 @@ import { API_ROUTES } from "src/constants/routes";
 import { Link } from "react-router-dom";
 import useAuthSWR from "src/hooks/useAuthSWR";
 import { useEffect, useState } from "react";
+import useAuth from "src/contexts/auth/useAuth";
 
 function Navbar() {
-  const { data: boardsResponse } = useAuthSWR<CommonListResponse<Board>>({
+  const { user } = useAuth();
+
+  const { data: boardsResponse, mutate } = useAuthSWR<CommonListResponse<Board>>({
     url: API_ROUTES.boards.root(),
   });
 
@@ -41,6 +44,12 @@ function Navbar() {
       setCurrent("");
     }
   }, [current]);
+
+  useEffect(() => {
+    if (user) {
+      mutate();
+    }
+  }, [user, mutate]);
 
   return (
     <Menu

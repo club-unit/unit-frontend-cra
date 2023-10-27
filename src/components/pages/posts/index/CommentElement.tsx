@@ -10,6 +10,7 @@ import useNotification from "src/contexts/notification/useNotfication";
 import useAuth from "src/contexts/auth/useAuth";
 import BadgeSet from "src/components/common/BadgeSet";
 import formatDateString from "src/utils/dateToString";
+import { AxiosError } from "axios";
 
 interface Props {
   comment: Comment;
@@ -22,7 +23,7 @@ interface Props {
 function CommentElement({ comment, isChildren, replyingParent, setReplyingParent, mutate }: Props) {
   const { slug, id } = useParams();
   const { api } = useNotification();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [isOnDelete, setIsOnDelete] = useState(false);
   const [isOnEdit, setIsOnEdit] = useState(false);
 
@@ -34,7 +35,17 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
       mutate();
       api.success({ message: "댓글이 삭제되었습니다." });
     } catch (e) {
-      api.error({ message: "댓글 삭제에 실패했습니다.", description: "다시 시도해주세요." });
+      if (e instanceof AxiosError) {
+        if (e.response?.data?.code === "token_not_valid") {
+          api.error({
+            message: "댓글 삭제에 실패했습니다.",
+            description: "로그인이 만료되었습니다.",
+          });
+          logout();
+        }
+      } else {
+        api.error({ message: "댓글 삭제에 실패했습니다.", description: "다시 시도해주세요." });
+      }
     }
   };
 
@@ -80,8 +91,10 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
           <CommentInput initialComment={comment} setIsOnEdit={setIsOnEdit} mutate={mutate} />
         ) : (
           <div className="flex flex-col">
-            {comment.content.split("\n").map((line) => (
-              <Typography.Text className="my-0">{line}</Typography.Text>
+            {comment.content.split("\n").map((line, index) => (
+              <Typography.Text className="my-0" key={index}>
+                {line}
+              </Typography.Text>
             ))}
           </div>
         )}
