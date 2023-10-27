@@ -12,12 +12,13 @@ import useAuthSWR from "src/hooks/useAuthSWR";
 import ContentEditor from "src/components/common/ContentEditor";
 import { clientAxios } from "src/utils/clientAxios";
 import extractFirstImage from "src/utils/extractFirstImage";
+import { AxiosError } from "axios";
 
 interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned"> {}
 
 function PostWritePage() {
   const { slug } = useParams();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { data: categories } = useAuthSWR<CommonListResponse<Category>>(
     slug
       ? {
@@ -50,7 +51,17 @@ function PostWritePage() {
       localStorage.removeItem("content-autosave-time");
       navigate(`/${slug}/${newPost.id}`);
     } catch (e) {
-      api.error({ message: "게시글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
+      if (e instanceof AxiosError) {
+        if (e.response?.data?.code === "token_not_valid") {
+          api.error({
+            message: "게시글 등록에 실패하였습니다.",
+            description: "로그인이 만료되었습니다.",
+          });
+        }
+        logout();
+      } else {
+        api.error({ message: "게시글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
+      }
     } finally {
       setIsSubmitting(false);
     }

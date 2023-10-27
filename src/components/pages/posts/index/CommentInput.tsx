@@ -5,6 +5,8 @@ import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
 import { Dispatch, useState } from "react";
 import { Comment } from "src/types/api/comment";
+import { AxiosError } from "axios";
+import useAuth from "src/contexts/auth/useAuth";
 
 interface Props {
   parentId?: number;
@@ -18,6 +20,7 @@ interface FormValues {
 }
 
 function CommentInput({ parentId, mutate, initialComment, setIsOnEdit }: Props) {
+  const { logout } = useAuth();
   const { slug, id } = useParams();
   const { api } = useNotification();
   const [form] = Form.useForm();
@@ -35,7 +38,17 @@ function CommentInput({ parentId, mutate, initialComment, setIsOnEdit }: Props) 
       form.resetFields();
       api.success({ message: "댓글이 등록되었습니다." });
     } catch (e) {
-      api.error({ message: "댓글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
+      if (e instanceof AxiosError) {
+        if (e.response?.data?.code === "token_not_valid") {
+          api.error({
+            message: "댓글 등록에 실패하였습니다.",
+            description: "로그인이 만료되었습니다.",
+          });
+          logout();
+        }
+      } else {
+        api.error({ message: "댓글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -60,7 +73,17 @@ function CommentInput({ parentId, mutate, initialComment, setIsOnEdit }: Props) 
         setIsOnEdit(false);
       }
     } catch (e) {
-      api.error({ message: "댓글 수정에 실패하였습니다.", description: "다시 시도해주세요." });
+      if (e instanceof AxiosError) {
+        if (e.response?.data?.code === "token_not_valid") {
+          api.error({
+            message: "댓글 수정에 실패하였습니다.",
+            description: "로그인이 만료되었습니다.",
+          });
+          logout();
+        }
+      } else {
+        api.error({ message: "댓글 수정에 실패하였습니다.", description: "다시 시도해주세요." });
+      }
     } finally {
       setIsSubmitting(false);
     }

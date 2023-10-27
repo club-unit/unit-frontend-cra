@@ -11,7 +11,7 @@ function BranchSection() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
       {user?.profile.branch && <BranchCard slug={user?.profile.branch.toLowerCase()} myBranch />}
       {restBranches.map((slug) => (
-        <BranchCard slug={slug} />
+        <BranchCard slug={slug} key={slug} />
       ))}
     </div>
   );
