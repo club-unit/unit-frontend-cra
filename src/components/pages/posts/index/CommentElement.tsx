@@ -91,8 +91,10 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
           <CommentInput initialComment={comment} setIsOnEdit={setIsOnEdit} mutate={mutate} />
         ) : (
           <div className="flex flex-col">
-            {comment.content.split("\n").map((line) => (
-              <Typography.Text className="my-0">{line}</Typography.Text>
+            {comment.content.split("\n").map((line, index) => (
+              <Typography.Text className="my-0" key={index}>
+                {line}
+              </Typography.Text>
             ))}
           </div>
         )}
