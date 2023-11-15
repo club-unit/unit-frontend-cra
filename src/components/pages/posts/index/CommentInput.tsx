@@ -13,13 +13,14 @@ interface Props {
   mutate: () => void;
   initialComment?: Comment;
   setIsOnEdit?: Dispatch<boolean>;
+  setReplyingParent?: Dispatch<number | null>;
 }
 
 interface FormValues {
   content: string;
 }
 
-function CommentInput({ parentId, mutate, initialComment, setIsOnEdit }: Props) {
+function CommentInput({ parentId, mutate, initialComment, setIsOnEdit, setReplyingParent }: Props) {
   const { logout } = useAuth();
   const { slug, id } = useParams();
   const { api } = useNotification();
@@ -37,6 +38,7 @@ function CommentInput({ parentId, mutate, initialComment, setIsOnEdit }: Props) 
       mutate();
       form.resetFields();
       api.success({ message: "댓글이 등록되었습니다." });
+      setReplyingParent && setReplyingParent(null);
     } catch (e) {
       if (e instanceof AxiosError) {
         if (e.response?.data?.code === "token_not_valid") {
