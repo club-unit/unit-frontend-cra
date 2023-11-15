@@ -65,6 +65,7 @@ function ContentEditor({ initialValue, setContent, content }: Props) {
           "image fullscreen preview | " +
           "removeformat | help ",
         images_upload_handler: handleImage,
+        paste_as_text: true,
       }}
     />
   );
