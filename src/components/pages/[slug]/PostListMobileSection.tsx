@@ -29,34 +29,39 @@ function PostListMobileSection({ posts }: Props) {
             to={`/${slug}/${post.id}`}
             className="flex items-center justify-between gap-1 w-full"
           >
-            <div>
+            <div className="flex flex-col gap-1">
               <div className="flex gap-2 w-full">
                 <PushpinFilled className={post.isPinned ? undefined : "text-white"} />
                 <Typography.Text strong>{post.title}</Typography.Text>
               </div>
-              <div className="flex gap-2">
-                <PushpinFilled className="text-white" />
-                <div className="flex gap-1 items-center">
-                  <BadgeSet user={post.author} height={20} />
-                  <Typography.Text>{post.author.profile.name}</Typography.Text>
+              <div className="flex flex-col gap-1">
+                <div className="flex gap-1">
+                  <PushpinFilled className="text-white" />
+                  <div className="flex gap-1 items-center">
+                    <EyeOutlined />
+                    {post.views}
+                  </div>
+                  <div className="flex gap-1 items-center">
+                    <CommentOutlined />
+                    {post.numComments}
+                  </div>
+                  <div className="flex gap-1 items-center">
+                    <ClockCircleOutlined />
+                    <Typography.Text
+                      className={
+                        dayjs().diff(dayjs(post.created), "hour") < 24 ? "text-red-600" : undefined
+                      }
+                    >
+                      {formatDateString(post.created)}
+                    </Typography.Text>
+                  </div>
                 </div>
-                <div className="flex gap-1 items-center">
-                  <EyeOutlined />
-                  {post.views}
-                </div>
-                <div className="flex gap-1 items-center">
-                  <CommentOutlined />
-                  {post.numComments}
-                </div>
-                <div className="flex gap-1 items-center">
-                  <ClockCircleOutlined />
-                  <Typography.Text
-                    className={
-                      dayjs().diff(dayjs(post.created), "hour") < 24 ? "text-red-600" : undefined
-                    }
-                  >
-                    {formatDateString(post.created)}
-                  </Typography.Text>
+                <div className="flex gap-1">
+                  <PushpinFilled className="text-white" />
+                  <div className="flex gap-1 items-center">
+                    <BadgeSet user={post.author} height={20} />
+                    <Typography.Text>{post.author.profile.name}</Typography.Text>
+                  </div>
                 </div>
               </div>
             </div>
