@@ -11,6 +11,7 @@ export interface ProfileDetail extends Profile {
   activityTerm: number;
   sex: number;
   generation: number;
+  profilePhoto: string;
 }
 
 export type Branch = "GREEN" | "DONGA" | "CITY" | "UNION" | "JAMSIL" | "JUNGSAN";
