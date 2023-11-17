@@ -1,6 +1,6 @@
-import { Button, Modal, Typography } from "antd";
+import { Avatar, Button, Modal, Typography } from "antd";
 import { Comment } from "src/types/api/comment";
-import { ClockCircleOutlined } from "@ant-design/icons";
+import { ClockCircleOutlined, UserOutlined } from "@ant-design/icons";
 import { Dispatch, useState } from "react";
 import CommentInput from "src/components/pages/posts/index/CommentInput";
 import { clientAxios } from "src/utils/clientAxios";
@@ -53,16 +53,19 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
     <div className={`${isChildren ? "w-[98%]" : "w-full"} items-end border-t-2 ml-auto`}>
       <div className="flex flex-col py-2 px-4 w-full gap-2">
         <div className="flex justify-between w-full flex-wrap">
-          <div className="flex gap-1 items-center">
-            <BadgeSet user={comment.author} height={20} />
-            <Typography.Text className="whitespace-nowrap">
-              {comment.author.profile.name}
-            </Typography.Text>
-            <div className="flex gap-1 ml-2">
-              <ClockCircleOutlined />
+          <div className="flex gap-2">
+            <Avatar icon={<UserOutlined />} src={comment.author.profile.profilePhoto} />
+            <div className="flex gap-1 items-center">
+              <BadgeSet user={comment.author} height={20} />
               <Typography.Text className="whitespace-nowrap">
-                {formatDateString(comment.created)}
+                {comment.author.profile.name}
               </Typography.Text>
+              <div className="flex gap-1 ml-2">
+                <ClockCircleOutlined />
+                <Typography.Text className="whitespace-nowrap">
+                  {formatDateString(comment.created)}
+                </Typography.Text>
+              </div>
             </div>
           </div>
           <div>

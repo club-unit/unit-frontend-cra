@@ -1,5 +1,11 @@
-import { Typography } from "antd";
-import { ClockCircleOutlined, CommentOutlined, EyeOutlined, TagFilled } from "@ant-design/icons";
+import { Avatar, Typography } from "antd";
+import {
+  ClockCircleOutlined,
+  CommentOutlined,
+  EyeOutlined,
+  TagFilled,
+  UserOutlined,
+} from "@ant-design/icons";
 import { PostDetail } from "src/types/api/post";
 import IconWithText from "src/components/common/IconWithText";
 import dayjs from "dayjs";
@@ -15,6 +21,7 @@ function PostHeaderSection({ post }: Props) {
       <Typography.Paragraph>{post.title}</Typography.Paragraph>
       <div className="flex w-full h-fit p-2 justify-between flex-wrap gap-2 font-medium">
         <div className="flex gap-2 flex-wrap">
+          <Avatar icon={<UserOutlined />} src={post.author.profile.profilePhoto} />
           <div className="flex gap-1 items-center">
             <BadgeSet user={post.author} height={20} />
             <Typography.Text>{post.author.profile.name}</Typography.Text>

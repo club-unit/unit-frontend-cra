@@ -3,6 +3,7 @@ export interface Profile {
   branch: Branch;
   rank: string;
   responsibility: string;
+  profilePhoto: string;
 }
 
 export interface ProfileDetail extends Profile {
