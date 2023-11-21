@@ -163,6 +163,14 @@ function MyPage() {
     const formData = new FormData();
     formData.append("profile_photo", file);
 
+    if (file.size > 2 * 1024 * 1024) {
+      api.error({
+        message: "이미지 크기가 너무 큽니다.",
+        description: "2MB 이하의 이미지를 선택해주세요",
+      });
+      return;
+    }
+
     try {
       const response = await clientAxios.put(API_ROUTES.users.changeProfilePhoto(), formData, {
         headers: {
