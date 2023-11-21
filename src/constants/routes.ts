@@ -4,6 +4,7 @@ export const API_ROUTES = {
     my: () => "/users/my/",
     signUp: () => "/users/sign-up/",
     changePassword: () => "/users/my/change-password/",
+    changeProfilePhoto: () => "/users/my/change-profile-photo/",
   },
   boards: {
     root: () => "/boards/",

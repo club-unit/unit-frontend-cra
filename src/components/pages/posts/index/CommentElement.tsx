@@ -102,7 +102,11 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
           </div>
         )}
         {replyingParent === comment.id ? (
-          <CommentInput parentId={comment.id} mutate={mutate} />
+          <CommentInput
+            parentId={comment.id}
+            mutate={mutate}
+            setReplyingParent={setReplyingParent}
+          />
         ) : null}
         <Modal
           open={isOnDelete}
