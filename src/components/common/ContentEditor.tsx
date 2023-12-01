@@ -23,8 +23,8 @@ function ContentEditor({ initialValue, setContent, content }: Props) {
     blobUri: () => string;
     uri: () => string | undefined;
   }) => {
-    if (blobInfo.blob().size > 2 * 1024 * 1024) {
-      return Promise.reject({ message: "2MB 이하의 이미지만 업로드 가능합니다.", remove: true });
+    if (blobInfo.blob().size > 15 * 1024 * 1024) {
+      return Promise.reject({ message: "15MB 이하의 이미지만 업로드 가능합니다.", remove: true });
     }
     const formData = new FormData();
     formData.append("image", blobInfo.blob());
