@@ -62,7 +62,7 @@ function UserCard() {
             <Typography.Text
               className="text-blue-500 hover:cursor-pointer"
               underline
-              onClick={() => navigate("/my-page")}
+              onClick={() => navigate("/users/me")}
             >
               내 정보 보기
             </Typography.Text>
