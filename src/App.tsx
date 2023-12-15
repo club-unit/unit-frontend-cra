@@ -3,7 +3,7 @@ import { Drawer, FloatButton, Layout, Typography } from "antd";
 import Navbar from "src/components/common/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Index from "src/pages";
-import MyWithAuth from "src/pages/my-page";
+import MyWithAuth from "src/pages/users/me";
 import PasswordResetWithAuth from "src/pages/pw-reset";
 import RegisterWithAuth from "src/pages/register";
 import PostListPage from "src/pages/[slug]";
