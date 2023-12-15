@@ -14,6 +14,7 @@ import { LoginOutlined, UserOutlined } from "@ant-design/icons";
 import useAuth from "src/contexts/auth/useAuth";
 import NotFoundPage from "src/pages/404";
 import ProfileWithAuth from "src/pages/users/[id]";
+import Footer from "src/components/common/Footer";
 
 function App() {
   const location = useLocation();
@@ -67,7 +68,9 @@ function App() {
           )}
         </div>
       </Layout.Content>
-      <Layout.Footer></Layout.Footer>
+      <Layout.Footer className="p-0">
+        <Footer />
+      </Layout.Footer>
     </Layout>
   );
 }
