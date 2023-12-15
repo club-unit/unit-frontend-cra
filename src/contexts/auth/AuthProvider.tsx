@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import { User } from "src/types/api/user";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import {
   ACCESS_COOKIE_NAME,
@@ -10,7 +10,7 @@ import {
   REFRESH_MAX_AGE,
 } from "src/constants/jwt";
 import useNotification from "src/contexts/notification/useNotfication";
-import checkLoginState from "src/utils/checkLoginState";
+import checkLoginState from "src/utils/common/checkLoginState";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 

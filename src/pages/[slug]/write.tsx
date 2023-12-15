@@ -10,7 +10,7 @@ import useNotification from "src/contexts/notification/useNotfication";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import useAuthSWR from "src/hooks/useAuthSWR";
 import ContentEditor from "src/components/common/ContentEditor";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { AxiosError } from "axios";
 import extractFirstImage from "src/utils/[slug]/extractFirstImage";
 

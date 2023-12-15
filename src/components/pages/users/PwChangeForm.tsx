@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Form, Input } from "antd";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useAuth from "src/contexts/auth/useAuth";
 import useNotification from "src/contexts/notification/useNotfication";

@@ -1,6 +1,6 @@
 import { Button, Form, Input } from "antd";
 import { useParams } from "react-router-dom";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
 import { Dispatch, useState } from "react";

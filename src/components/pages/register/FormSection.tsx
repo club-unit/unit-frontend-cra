@@ -1,6 +1,6 @@
 import { Button, Card, DatePicker, Form, Input, Select } from "antd";
 import { Dispatch } from "react";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
 import dayjs from "dayjs";

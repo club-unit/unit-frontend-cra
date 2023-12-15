@@ -1,6 +1,6 @@
 import { Dispatch, useState } from "react";
 import { Button, Modal } from "antd";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useNotification from "src/contexts/notification/useNotfication";

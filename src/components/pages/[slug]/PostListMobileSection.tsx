@@ -9,7 +9,7 @@ import {
 import BadgeSet from "src/components/common/BadgeSet";
 import dayjs from "dayjs";
 import { Link, useParams } from "react-router-dom";
-import formatDateString from "src/utils/dateToString";
+import formatDateString from "src/utils/common/dateToString";
 import React from "react";
 
 interface Props {

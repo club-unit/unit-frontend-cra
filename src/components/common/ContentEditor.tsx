@@ -1,5 +1,5 @@
 import { Editor } from "@tinymce/tinymce-react";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import { useParams } from "react-router-dom";
 import useNotification from "src/contexts/notification/useNotfication";

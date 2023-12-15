@@ -1,6 +1,6 @@
 import { Avatar, Button, Card, Descriptions, Typography, Upload } from "antd";
 import useAuth from "src/contexts/auth/useAuth";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import { withAuth } from "src/components/common/withAuth";
 import { UploadOutlined, UserOutlined } from "@ant-design/icons";
