@@ -1,13 +1,12 @@
-import { Avatar, Card, Descriptions, DescriptionsProps, Image, Typography } from "antd";
+import { Avatar, Card, Descriptions, DescriptionsProps, Typography } from "antd";
 import { SEX_LOOKUP_TABLE } from "src/constants/user";
-import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
-import { Branch } from "src/types/api/profile";
 import { withAuth } from "src/components/common/withAuth";
 import { UserOutlined } from "@ant-design/icons";
 import useAuthSWR from "src/hooks/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
 import { useParams } from "react-router-dom";
 import { OtherUser } from "src/types/api/user";
+import getActivityItems from "src/utils/users/getActivityItems";
 
 function ProfilePage() {
   const { id } = useParams();
@@ -19,7 +18,7 @@ function ProfilePage() {
       : null
   );
 
-  const personalItems: DescriptionsProps["items"] = [
+  const othersPersonalItems: DescriptionsProps["items"] = [
     {
       key: "1",
       label: "이름",
@@ -37,53 +36,7 @@ function ProfilePage() {
     },
   ];
 
-  const activityItems: DescriptionsProps["items"] = [
-    {
-      key: "1",
-      label: "지구대",
-      children: <p>{BRANCH_LOOKUP_TABLE[user?.profile.branch as Branch]}</p>,
-    },
-    {
-      key: "2",
-      label: "가입기수",
-      children: <p>{user?.profile.generation}기</p>,
-    },
-    {
-      key: "3",
-      label: "활동학기",
-      children: <p>{user?.profile.activityTerm}학기</p>,
-    },
-    {
-      key: "4",
-      label: "회원등급",
-      children: user && (
-        <Image
-          height={20}
-          width={35}
-          src={`/icons/rank/${user.profile.rank}.png`}
-          alt={String(user.profile.rank)}
-          preview={false}
-        />
-      ),
-    },
-    ...(user?.profile.responsibility !== "NORMAL"
-      ? [
-          {
-            key: "5",
-            label: "직책",
-            children: (
-              <Image
-                height={20}
-                width={35}
-                src={`/icons/responsibility/${user?.profile.responsibility}.png`}
-                alt={String(user?.profile.responsibility)}
-                preview={false}
-              />
-            ),
-          },
-        ]
-      : []),
-  ];
+  const activityItems = user ? getActivityItems(user) : undefined;
 
   return (
     <div className="flex flex-col gap-2">
@@ -93,7 +46,7 @@ function ProfilePage() {
       <Card title="기본 정보">
         <div className="flex flex-col gap-4 justify-end">
           <Avatar icon={<UserOutlined />} src={user?.profile.profilePhoto} size={200} />
-          <Descriptions items={personalItems} />
+          <Descriptions items={othersPersonalItems} />
         </div>
       </Card>
       <Card title="활동 정보">
