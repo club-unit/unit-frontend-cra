@@ -31,7 +31,9 @@ function App() {
           <div className="col-span-1 xl:col-span-3 pt-4">
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/my-page" element={<MyWithAuth />} />
+              <Route path="/users">
+                <Route path=":me" element={<MyWithAuth />} />
+              </Route>
               <Route path="/pw-reset" element={<PasswordResetWithAuth />} />
               <Route path="/register" element={<RegisterWithAuth />} />
               <Route path="/:slug">
