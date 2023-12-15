@@ -1,4 +1,4 @@
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import Cookies from "js-cookie";
 import { ACCESS_COOKIE_NAME } from "src/constants/jwt";
 

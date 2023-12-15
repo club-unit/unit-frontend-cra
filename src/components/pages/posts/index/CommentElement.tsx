@@ -3,12 +3,12 @@ import { Comment } from "src/types/api/comment";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { Dispatch, useState } from "react";
 import CommentInput from "src/components/pages/posts/index/CommentInput";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import { useParams } from "react-router-dom";
 import useNotification from "src/contexts/notification/useNotfication";
 import useAuth from "src/contexts/auth/useAuth";
-import formatDateString from "src/utils/dateToString";
+import formatDateString from "src/utils/common/dateToString";
 import { AxiosError } from "axios";
 import UserHeader from "src/components/common/UserHeader";
 

@@ -1,6 +1,6 @@
 import { Button, Card, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useAuth from "src/contexts/auth/useAuth";
 import useNotification from "src/contexts/notification/useNotfication";
