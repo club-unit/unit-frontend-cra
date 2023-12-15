@@ -11,8 +11,8 @@ import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import useAuthSWR from "src/hooks/useAuthSWR";
 import ContentEditor from "src/components/common/ContentEditor";
 import { clientAxios } from "src/utils/clientAxios";
-import extractFirstImage from "src/utils/extractFirstImage";
 import { AxiosError } from "axios";
+import extractFirstImage from "src/utils/[slug]/extractFirstImage";
 
 interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned"> {}
 
@@ -32,7 +32,6 @@ function PostWritePage() {
   }));
   const [content, setContent] = useState("");
   const [isOnPaste, setIsOnPaste] = useState(false);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { api } = useNotification();
   const navigate = useNavigate();
