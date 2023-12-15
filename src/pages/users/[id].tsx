@@ -4,12 +4,16 @@ import { withAuth } from "src/components/common/withAuth";
 import { UserOutlined } from "@ant-design/icons";
 import useAuthSWR from "src/hooks/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { OtherUser } from "src/types/api/user";
 import getActivityItems from "src/utils/users/getActivityItems";
+import useAuth from "src/contexts/auth/useAuth";
+import { useEffect } from "react";
 
 function ProfilePage() {
   const { id } = useParams();
+  const { user: me } = useAuth();
+  const navigate = useNavigate();
   const { data: user } = useAuthSWR<OtherUser>(
     id
       ? {
@@ -37,6 +41,12 @@ function ProfilePage() {
   ];
 
   const activityItems = user ? getActivityItems(user) : undefined;
+
+  useEffect(() => {
+    if (user?.id === me?.id) {
+      navigate("/users/me");
+    }
+  }, [user, me, navigate]);
 
   return (
     <div className="flex flex-col gap-2">
