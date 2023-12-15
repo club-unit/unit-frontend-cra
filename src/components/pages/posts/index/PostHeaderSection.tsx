@@ -13,7 +13,7 @@ function PostHeaderSection({ post }: Props) {
   return (
     <div className="w-full py-4">
       <Typography.Paragraph>{post.title}</Typography.Paragraph>
-      <div className="flex w-full h-fit p-2 justify-between flex-wrap gap-2 font-medium">
+      <div className="flex w-full h-fit justify-between flex-wrap gap-2 font-medium">
         <div className="flex gap-2 flex-wrap">
           <UserHeader user={post.author} />
           <div className="flex gap-2">
