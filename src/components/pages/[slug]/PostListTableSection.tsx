@@ -6,7 +6,7 @@ import { Author } from "src/types/api/author";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import BadgeSet from "src/components/common/BadgeSet";
-import formatDateString from "src/utils/dateToString";
+import formatDateString from "src/utils/common/dateToString";
 
 interface Props {
   posts: Post[];

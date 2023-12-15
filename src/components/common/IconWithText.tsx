@@ -8,7 +8,7 @@ interface Props {
 
 function IconWithText({ icon, text }: Props) {
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-1 items-center">
       {icon}
       <Typography.Text>{text}</Typography.Text>
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { fetcher } from "./utils/fetcher";
+import { fetcher } from "src/utils/common/fetcher";
 import { SWRConfig } from "swr";
 import NotificationProvider from "src/contexts/notification/NotificationProvider";
 import AuthProvider from "src/contexts/auth/AuthProvider";

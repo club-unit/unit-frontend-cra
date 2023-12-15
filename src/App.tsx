@@ -3,7 +3,7 @@ import { Drawer, FloatButton, Layout, Typography } from "antd";
 import Navbar from "src/components/common/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Index from "src/pages";
-import MyWithAuth from "src/pages/my-page";
+import MyWithAuth from "src/pages/users/me";
 import PasswordResetWithAuth from "src/pages/pw-reset";
 import RegisterWithAuth from "src/pages/register";
 import PostListPage from "src/pages/[slug]";
@@ -13,6 +13,8 @@ import AuthOrUserCard from "src/components/common/AuthOrUserCard";
 import { LoginOutlined, UserOutlined } from "@ant-design/icons";
 import useAuth from "src/contexts/auth/useAuth";
 import NotFoundPage from "src/pages/404";
+import ProfileWithAuth from "src/pages/users/[id]";
+import Footer from "src/components/common/Footer";
 
 function App() {
   const location = useLocation();
@@ -31,7 +33,10 @@ function App() {
           <div className="col-span-1 xl:col-span-3 pt-4">
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/my-page" element={<MyWithAuth />} />
+              <Route path="/users">
+                <Route path="me" element={<MyWithAuth />} />
+                <Route path=":id" element={<ProfileWithAuth />} />
+              </Route>
               <Route path="/pw-reset" element={<PasswordResetWithAuth />} />
               <Route path="/register" element={<RegisterWithAuth />} />
               <Route path="/:slug">
@@ -63,7 +68,9 @@ function App() {
           )}
         </div>
       </Layout.Content>
-      <Layout.Footer></Layout.Footer>
+      <Layout.Footer className="p-0">
+        <Footer />
+      </Layout.Footer>
     </Layout>
   );
 }

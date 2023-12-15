@@ -1,16 +1,16 @@
-import { Avatar, Button, Modal, Typography } from "antd";
+import { Button, Modal, Typography } from "antd";
 import { Comment } from "src/types/api/comment";
-import { ClockCircleOutlined, UserOutlined } from "@ant-design/icons";
+import { ClockCircleOutlined } from "@ant-design/icons";
 import { Dispatch, useState } from "react";
 import CommentInput from "src/components/pages/posts/index/CommentInput";
-import { clientAxios } from "src/utils/clientAxios";
+import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import { useParams } from "react-router-dom";
 import useNotification from "src/contexts/notification/useNotfication";
 import useAuth from "src/contexts/auth/useAuth";
-import BadgeSet from "src/components/common/BadgeSet";
-import formatDateString from "src/utils/dateToString";
+import formatDateString from "src/utils/common/dateToString";
 import { AxiosError } from "axios";
+import UserHeader from "src/components/common/UserHeader";
 
 interface Props {
   comment: Comment;
@@ -53,13 +53,9 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
     <div className={`${isChildren ? "w-[98%]" : "w-full"} items-end border-t-2 ml-auto`}>
       <div className="flex flex-col py-2 px-4 w-full gap-2">
         <div className="flex justify-between w-full flex-wrap">
-          <div className="flex gap-2">
-            <Avatar icon={<UserOutlined />} src={comment.author.profile.profilePhoto} />
+          <div className="flex gap-2 flex-wrap">
+            <UserHeader user={comment.author} />
             <div className="flex gap-1 items-center">
-              <BadgeSet user={comment.author} height={20} />
-              <Typography.Text className="whitespace-nowrap">
-                {comment.author.profile.name}
-              </Typography.Text>
               <div className="flex gap-1 ml-2">
                 <ClockCircleOutlined />
                 <Typography.Text className="whitespace-nowrap">
