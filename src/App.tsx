@@ -13,6 +13,7 @@ import AuthOrUserCard from "src/components/common/AuthOrUserCard";
 import { LoginOutlined, UserOutlined } from "@ant-design/icons";
 import useAuth from "src/contexts/auth/useAuth";
 import NotFoundPage from "src/pages/404";
+import ProfileWithAuth from "src/pages/users/[id]";
 
 function App() {
   const location = useLocation();
@@ -32,7 +33,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/users">
-                <Route path=":me" element={<MyWithAuth />} />
+                <Route path="me" element={<MyWithAuth />} />
+                <Route path=":id" element={<ProfileWithAuth />} />
               </Route>
               <Route path="/pw-reset" element={<PasswordResetWithAuth />} />
               <Route path="/register" element={<RegisterWithAuth />} />

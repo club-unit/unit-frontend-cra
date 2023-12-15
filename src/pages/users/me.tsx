@@ -142,19 +142,23 @@ function MyPage() {
         />
       ),
     },
-    {
-      key: "5",
-      label: "직책",
-      children: (
-        <Image
-          height={20}
-          width={35}
-          src={`/icons/responsibility/${user?.profile.responsibility}.png`}
-          alt={String(user?.profile.responsibility)}
-          preview={false}
-        />
-      ),
-    },
+    ...(user?.profile.responsibility !== "NORMAL"
+      ? [
+          {
+            key: "5",
+            label: "직책",
+            children: (
+              <Image
+                height={20}
+                width={35}
+                src={`/icons/responsibility/${user?.profile.responsibility}.png`}
+                alt={String(user?.profile.responsibility)}
+                preview={false}
+              />
+            ),
+          },
+        ]
+      : []),
   ];
 
   const customRequest = async (options: any) => {

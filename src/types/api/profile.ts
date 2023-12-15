@@ -6,6 +6,12 @@ export interface Profile {
   profilePhoto: string;
 }
 
+export interface OtherProfile extends Profile {
+  activityTerm: number;
+  sex: number;
+  generation: number;
+}
+
 export interface ProfileDetail extends Profile {
   phoneNumber: string;
   birthDate: string;
