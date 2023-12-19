@@ -43,7 +43,7 @@ function ProfilePage() {
   const activityItems = user ? getActivityItems(user) : undefined;
 
   useEffect(() => {
-    if (user?.id === me?.id) {
+    if (user && me && user?.id === me?.id) {
       navigate("/users/me");
     }
   }, [user, me, navigate]);
