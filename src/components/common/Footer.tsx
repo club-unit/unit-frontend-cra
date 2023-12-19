@@ -3,7 +3,7 @@ import { InstagramOutlined } from "@ant-design/icons";
 
 function Footer() {
   return (
-    <div className="flex flex-col justify-center bg-gray-300 p-8 pr-16 gap-20">
+    <div className="flex flex-col justify-center bg-gray-300 p-8 gap-20">
       <div className="flex justify-between">
         <div className="flex flex-col">
           <Typography.Text style={{ fontSize: 25, fontWeight: 800 }}>UNIT</Typography.Text>

@@ -25,10 +25,10 @@ function App() {
 
   return (
     <Layout>
-      <Layout.Header>
+      <Layout.Header className="px-8">
         <Navbar />
       </Layout.Header>
-      <Layout.Content className="flex justify-center">
+      <Layout.Content className="flex justify-center pb-32">
         <div className="grid grid-cols-1 xl:grid-cols-4 w-[90vw] md:w-[80vw] 2xl:w-5/6 min-h-screen mx-0 gap-4">
           <div className="col-span-1 xl:col-span-3 pt-4">
             <Routes>
