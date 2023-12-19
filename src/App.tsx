@@ -15,6 +15,7 @@ import useAuth from "src/contexts/auth/useAuth";
 import NotFoundPage from "src/pages/404";
 import ProfileWithAuth from "src/pages/users/[id]";
 import Footer from "src/components/common/Footer";
+import PrivacyPolicy from "src/pages/privacy";
 
 function App() {
   const location = useLocation();
@@ -25,10 +26,10 @@ function App() {
 
   return (
     <Layout>
-      <Layout.Header>
+      <Layout.Header className="px-8">
         <Navbar />
       </Layout.Header>
-      <Layout.Content className="flex justify-center">
+      <Layout.Content className="flex justify-center pb-32">
         <div className="grid grid-cols-1 xl:grid-cols-4 w-[90vw] md:w-[80vw] 2xl:w-5/6 min-h-screen mx-0 gap-4">
           <div className="col-span-1 xl:col-span-3 pt-4">
             <Routes>
@@ -39,6 +40,7 @@ function App() {
               </Route>
               <Route path="/pw-reset" element={<PasswordResetWithAuth />} />
               <Route path="/register" element={<RegisterWithAuth />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/:slug">
                 <Route path="" element={<PostListPage />} />
                 <Route path="write" element={<PostWritePage />} />
