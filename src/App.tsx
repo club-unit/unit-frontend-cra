@@ -15,6 +15,7 @@ import useAuth from "src/contexts/auth/useAuth";
 import NotFoundPage from "src/pages/404";
 import ProfileWithAuth from "src/pages/users/[id]";
 import Footer from "src/components/common/Footer";
+import PrivacyPolicy from "src/pages/privacy";
 
 function App() {
   const location = useLocation();
@@ -39,6 +40,7 @@ function App() {
               </Route>
               <Route path="/pw-reset" element={<PasswordResetWithAuth />} />
               <Route path="/register" element={<RegisterWithAuth />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/:slug">
                 <Route path="" element={<PostListPage />} />
                 <Route path="write" element={<PostWritePage />} />
