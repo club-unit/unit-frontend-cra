@@ -22,7 +22,10 @@ function App() {
   const [open, setOpen] = useState(false);
   const { isLoggedIn } = useAuth();
 
-  useEffect(() => setOpen(false), [location.pathname]);
+  useEffect(() => {
+    setOpen(false);
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <Layout>
