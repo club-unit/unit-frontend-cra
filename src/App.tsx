@@ -16,6 +16,7 @@ import NotFoundPage from "src/pages/404";
 import ProfileWithAuth from "src/pages/users/[id]";
 import Footer from "src/components/common/Footer";
 import PrivacyPolicy from "src/pages/privacy";
+import InfoSection from "src/components/common/InfoSection";
 
 function App() {
   const location = useLocation();
@@ -67,8 +68,9 @@ function App() {
             </Drawer>
           </div>
           {!["/register", "/pw-reset"].includes(location.pathname) && (
-            <div className="hidden xl:block pt-4">
+            <div className="xl:flex xl:flex-col xl:gap-5 hidden xl:block pt-4">
               <AuthOrUserCard />
+              <InfoSection position="side" />
             </div>
           )}
         </div>
