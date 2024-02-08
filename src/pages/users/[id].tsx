@@ -8,6 +8,7 @@ import useAuth from "src/contexts/auth/useAuth";
 import { useEffect } from "react";
 import ActivityInfoCard from "src/components/pages/users/ActivityInfoCard";
 import BasicInfoCard from "src/components/pages/users/BasicInfoCard";
+import BadgeCard from "src/components/pages/users/BadgeCard";
 
 function ProfilePage() {
   const { id } = useParams();
@@ -34,6 +35,7 @@ function ProfilePage() {
       </Typography.Title>
       <BasicInfoCard otherUser={user} />
       <ActivityInfoCard otherUser={user} />
+      <BadgeCard otherUser={user} />
     </div>
   );
 }

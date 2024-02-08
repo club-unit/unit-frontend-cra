@@ -4,6 +4,7 @@ import { withAuth } from "src/components/common/withAuth";
 import BasicInfoCard from "src/components/pages/users/BasicInfoCard";
 import LoginInfoCard from "src/components/pages/users/LoginInfoCard";
 import ActivityInfoCard from "src/components/pages/users/ActivityInfoCard";
+import BadgeCard from "src/components/pages/users/BadgeCard";
 
 function MyPage() {
   const { user } = useAuth();
@@ -14,6 +15,7 @@ function MyPage() {
       <BasicInfoCard />
       <LoginInfoCard />
       <ActivityInfoCard />
+      <BadgeCard />
     </div>
   );
 }
