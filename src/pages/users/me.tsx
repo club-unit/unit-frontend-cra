@@ -13,7 +13,7 @@ function MyPage() {
   const { user } = useAuth();
   const { api } = useNotification();
 
-  const personalItems = user ? getPersonalItems(user) : undefined;
+  const personalItems = user ? getPersonalItems(user, true) : undefined;
   const loginItems = user ? getLoginItems(user) : undefined;
   const activityItems = user ? getActivityItems(user) : undefined;
 
