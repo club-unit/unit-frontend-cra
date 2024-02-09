@@ -1,17 +1,20 @@
 import InfoBanner from "src/components/common/InfoBanner";
-import { MOCKUP_INFO_LIST } from "src/mockups/info";
+import useAuthSWR from "src/hooks/useAuthSWR";
+import { CommonListResponse } from "src/types/api/common";
+import { Notice } from "src/types/api/notice";
+import { API_ROUTES } from "src/constants/routes";
 
 interface Props {
   position: "top" | "side";
 }
 
 function InfoSection({ position }: Props) {
-  const data = MOCKUP_INFO_LIST;
+  const { data } = useAuthSWR<CommonListResponse<Notice>>({ url: API_ROUTES.boards.notices() });
 
   return (
     <div className={position === "top" ? "flex flex-col xl:hidden" : "xl:flex xl:flex-col hidden"}>
-      {data.contents.map((info) => (
-        <InfoBanner link={info.link} title={info.title} />
+      {data?.map((info) => (
+        <InfoBanner link={info.url} title={info.title} content={info.content} />
       ))}
     </div>
   );
