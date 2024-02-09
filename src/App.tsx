@@ -68,7 +68,7 @@ function App() {
             </Drawer>
           </div>
           {!["/register", "/pw-reset"].includes(location.pathname) && (
-            <div className="xl:flex xl:flex-col xl:gap-5 hidden xl:block pt-4">
+            <div className="xl:flex xl:flex-col xl:gap-2 hidden xl:block pt-4">
               <AuthOrUserCard />
               <InfoSection position="side" />
             </div>

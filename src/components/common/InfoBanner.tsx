@@ -1,6 +1,6 @@
 import { Card, Typography } from "antd";
 import { Link } from "react-router-dom";
-import Marquee from "react-fast-marquee";
+import { BellFilled } from "@ant-design/icons";
 
 interface Props {
   link: string;
@@ -10,14 +10,17 @@ interface Props {
 
 function InfoBanner({ link, title, content }: Props) {
   return (
-    <Card size="small" className="bg-gray-300">
+    <Card size="small" className="hover:bg-gray-200">
       <Link to={link}>
-        <Typography.Text strong>{title}</Typography.Text>
-        <Typography.Text>
-          <Marquee pauseOnHover gradient={false}>
-            {content}
-          </Marquee>
-        </Typography.Text>
+        <div className="flex flex-col gap-1">
+          <div className="flex flex-nowrap gap-2 justify-between">
+            <Typography.Text strong>{title}</Typography.Text>
+            <BellFilled className="text-blue-500" />
+          </div>
+          <div className="flex flex-nowrap gap-2 w-11/12">
+            <Typography.Text>{content}</Typography.Text>
+          </div>
+        </div>
       </Link>
     </Card>
   );
