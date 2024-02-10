@@ -23,10 +23,14 @@ function FormWrapperSection({ sections }: Props) {
     <>
       <Steps current={currentSectionNumber} items={sectionItems} />
       <Form>
-        <FormSectionStep
-          section={sectionsTransformed[currentSectionNumber]}
-          isDone={currentSectionNumber === sectionsTransformed.length - 1}
-        />
+        {sectionsTransformed.map((section, index) => (
+          <FormSectionStep
+            section={section}
+            isRevealed={index === currentSectionNumber}
+            isDone={currentSectionNumber === sectionsTransformed.length - 1}
+          />
+        ))}
+
         <div className="flex flex-row-reverse justify-between mt-5">
           {currentSectionNumber < sectionsTransformed.length - 2 ? (
             <Button
