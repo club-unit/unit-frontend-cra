@@ -47,7 +47,7 @@ function App() {
               <Route path="/register" element={<RegisterWithAuth />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/forms">
-                <Route path="/:id" element={<FormWithAuth />} />
+                <Route path=":id" element={<FormWithAuth />} />
               </Route>
               <Route path="/:slug">
                 <Route path="" element={<PostListPage />} />
