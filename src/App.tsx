@@ -17,7 +17,7 @@ import ProfileWithAuth from "src/pages/users/[id]";
 import Footer from "src/components/common/Footer";
 import PrivacyPolicy from "src/pages/privacy";
 import InfoSection from "src/components/common/InfoSection";
-import ApplyPage from "src/pages/apply";
+import FormWithAuth from "src/pages/forms/[id]";
 
 function App() {
   const location = useLocation();
@@ -46,7 +46,9 @@ function App() {
               <Route path="/pw-reset" element={<PasswordResetWithAuth />} />
               <Route path="/register" element={<RegisterWithAuth />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/apply" element={<ApplyPage />} />
+              <Route path="/forms">
+                <Route path="/:id" element={<FormWithAuth />} />
+              </Route>
               <Route path="/:slug">
                 <Route path="" element={<PostListPage />} />
                 <Route path="write" element={<PostWritePage />} />
