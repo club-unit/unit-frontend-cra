@@ -1,13 +1,13 @@
-import { Typography } from "antd";
+import { Spin, Typography } from "antd";
 
 interface Props {
-  title: string;
+  title?: string;
 }
 
 function ContentHeaderSection({ title }: Props) {
   return (
     <div className="w-full">
-      <Typography.Title level={2}>{title}</Typography.Title>
+      {title ? <Typography.Title level={2}>{title}</Typography.Title> : <Spin />}
     </div>
   );
 }
