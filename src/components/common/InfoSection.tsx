@@ -9,7 +9,7 @@ interface Props {
 }
 
 function InfoSection({ position }: Props) {
-  const { data } = useAuthSWR<CommonListResponse<Notice>>({ url: API_ROUTES.boards.notices() });
+  const { data } = useAuthSWR<CommonListResponse<Notice>>({ url: API_ROUTES.notices.root() });
 
   return (
     <div
