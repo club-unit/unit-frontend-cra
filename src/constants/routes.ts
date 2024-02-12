@@ -26,6 +26,7 @@ export const API_ROUTES = {
     bySlug: (slug: string) => `/boards/${slug}/categories/`,
   },
   forms: {
-    byId: (id: number) => `/forms/${id}`,
+    byId: (id: number) => `/forms/${id}/`,
+    answerById: (id: number) => `/forms/${id}/answer/`,
   },
 };
