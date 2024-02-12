@@ -4,13 +4,12 @@ import FormQuestionCard from "src/components/pages/forms/FormQuestionCard";
 
 interface Props {
   section: FormSection;
-  isRevealed: boolean;
   isDone: boolean;
 }
 
-function FormSectionStep({ section, isRevealed, isDone }: Props) {
+function FormSectionStep({ section, isDone }: Props) {
   return (
-    <div className={`mt-5 ${isRevealed ? "" : "hidden"}`}>
+    <div className="mt-5">
       {isDone && <Typography.Text>{section.description}</Typography.Text>}
       <div className="flex flex-col gap-4">
         {section.questions.map((question) => (
