@@ -10,7 +10,7 @@ function ContentHeaderSection({ title, description }: Props) {
     <div className="w-full">
       {title ? <Typography.Title level={2}>{title}</Typography.Title> : <Spin />}
       {description ? (
-        <div className="flex flex-col mb-4">
+        <div className="flex flex-col">
           {description.split("\n").map((line, index) => (
             <Typography.Text key={index}>{line}</Typography.Text>
           ))}

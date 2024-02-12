@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { Form } from "src/types/api/form";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import FormWrapperSection from "src/components/pages/forms/FormWrapperSection";
-import { Spin } from "antd";
+import { Card, Spin } from "antd";
 
 function FormPage() {
   const { id } = useParams();
@@ -13,7 +13,10 @@ function FormPage() {
 
   return (
     <>
-      <ContentHeaderSection title={data?.title} description={data?.description} />
+      <Card>
+        <ContentHeaderSection title={data?.title} description={data?.description} />
+      </Card>
+
       {data ? <FormWrapperSection sections={data.sections} /> : <Spin />}
     </>
   );
