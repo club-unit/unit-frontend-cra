@@ -1,13 +1,21 @@
-import { Typography } from "antd";
+import { Spin, Typography } from "antd";
 
 interface Props {
-  title: string;
+  title?: string;
+  description?: string;
 }
 
-function ContentHeaderSection({ title }: Props) {
+function ContentHeaderSection({ title, description }: Props) {
   return (
     <div className="w-full">
-      <Typography.Title level={2}>{title}</Typography.Title>
+      {title ? <Typography.Title level={2}>{title}</Typography.Title> : <Spin />}
+      {description ? (
+        <div className="flex flex-col mb-4">
+          {description.split("\n").map((line, index) => (
+            <Typography.Text key={index}>{line}</Typography.Text>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
