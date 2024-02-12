@@ -1,4 +1,4 @@
-import { Card, Form, Input, Typography } from "antd";
+import { Card, Form, Input, Radio, Typography } from "antd";
 import { FormQuestion } from "src/types/api/form";
 
 interface Props {
@@ -23,7 +23,15 @@ function FormQuestionCard({ question }: Props) {
           name={question.id}
           rules={[{ required: question.isRequired, message: "항목을 입력해주세요." }]}
         >
-          {question.type === "SHORT_ANSWER" ? <Input /> : <Input />}
+          {question.type === "SHORT_ANSWER" ? (
+            <Input />
+          ) : (
+            <Radio.Group>
+              {question.options.map((option) => (
+                <Radio value={option.content}>{option.content}</Radio>
+              ))}
+            </Radio.Group>
+          )}
         </Form.Item>
       </div>
     </Card>

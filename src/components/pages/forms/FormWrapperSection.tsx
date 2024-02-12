@@ -47,7 +47,7 @@ function FormWrapperSection({ sections }: Props) {
       try {
         await clientAxios.post(API_ROUTES.forms.answerById(Number(id)), body);
         form.resetFields();
-        api.success({ message: "댓글이 등록되었습니다." });
+        setCurrentSectionNumber(currentSectionNumber + 1);
       } catch (e) {
         if (e instanceof AxiosError) {
           if (e.response?.data?.code === "token_not_valid") {
@@ -58,10 +58,9 @@ function FormWrapperSection({ sections }: Props) {
             logout();
           }
         } else {
-          api.error({ message: "댓글 등록에 실패하였습니다.", description: "다시 시도해주세요." });
+          api.error({ message: "폼 응답에 실패하였습니다.", description: "다시 시도해주세요." });
         }
       }
-      setCurrentSectionNumber(currentSectionNumber + 1);
     } else {
       setCurrentSectionNumber(currentSectionNumber + 1);
     }
