@@ -13,7 +13,7 @@ function FormPage() {
 
   return (
     <>
-      <ContentHeaderSection title={data?.title} />
+      <ContentHeaderSection title={data?.title} description={data?.description} />
       {data ? <FormWrapperSection sections={data.sections} /> : <Spin />}
     </>
   );
