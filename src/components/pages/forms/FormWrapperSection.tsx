@@ -1,4 +1,4 @@
-import { Button, Form, Steps } from "antd";
+import { Button, Card, Form, Steps } from "antd";
 import { FormSection } from "src/types/api/form";
 import FormSectionStep from "src/components/pages/forms/FormSectionStep";
 import { useEffect, useState } from "react";
@@ -39,11 +39,9 @@ function FormWrapperSection({ sections }: Props) {
     const newFormAnswer = { ...formAnswer, ...value };
     setFormAnswer(newFormAnswer);
     if (currentSectionNumber === sectionsTransformed.length - 2) {
-      const body = Object.keys(newFormAnswer)
-        .filter((key) => newFormAnswer[key])
-        .map((key) => {
-          return { question: Number(key), content: newFormAnswer[key] };
-        });
+      const body = Object.keys(newFormAnswer).map((key) => {
+        return { question: Number(key), content: newFormAnswer[key] || "" };
+      });
       try {
         await clientAxios.post(API_ROUTES.forms.answerById(Number(id)), body);
         form.resetFields();
@@ -68,7 +66,9 @@ function FormWrapperSection({ sections }: Props) {
 
   return (
     <>
-      <Steps current={currentSectionNumber} items={sectionItems} />
+      <Card className="mt-3">
+        <Steps current={currentSectionNumber} items={sectionItems} />
+      </Card>
       <Form onFinish={onFinish} form={form}>
         <FormSectionStep
           section={sectionsTransformed[currentSectionNumber]}

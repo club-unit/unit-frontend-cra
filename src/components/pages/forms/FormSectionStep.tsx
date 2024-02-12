@@ -1,5 +1,5 @@
 import { FormSection } from "src/types/api/form";
-import { Button, Result, Typography } from "antd";
+import { Button, Card, Result, Typography } from "antd";
 import FormQuestionCard from "src/components/pages/forms/FormQuestionCard";
 import { useNavigate } from "react-router-dom";
 
@@ -9,13 +9,17 @@ interface Props {
 }
 
 function FormSectionStep({ section, isDone }: Props) {
-  const navgate = useNavigate();
+  const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col mt-5 gap-2">
+    <div className="flex flex-col mt-2 gap-2">
       {!isDone ? (
         <>
-          <Typography.Text>{section.description}</Typography.Text>
+          {section.description.length > 0 && (
+            <Card>
+              <Typography.Text>{section.description}</Typography.Text>
+            </Card>
+          )}
           <div className="flex flex-col gap-4">
             {section.questions.map((question) => (
               <FormQuestionCard question={question} />
@@ -27,7 +31,7 @@ function FormSectionStep({ section, isDone }: Props) {
           status="success"
           title="폼 응답이 등록되었습니다!"
           extra={[
-            <Button type="primary" onClick={() => navgate("/")}>
+            <Button type="primary" onClick={() => navigate("/")}>
               홈으로
             </Button>,
           ]}
