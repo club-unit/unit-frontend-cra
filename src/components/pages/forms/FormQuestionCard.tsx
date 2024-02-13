@@ -9,7 +9,7 @@ function FormQuestionCard({ question }: Props) {
   return (
     <Card
       title={
-        <div>
+        <div className="whitespace-break-spaces">
           {question.content}
           {question.isRequired && <Typography.Text className="text-red-500"> *</Typography.Text>}
         </div>
