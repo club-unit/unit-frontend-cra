@@ -9,14 +9,13 @@ import { Card, Spin } from "antd";
 
 function FormPage() {
   const { id } = useParams();
-  const { data } = useAuthSWR<Form>(id ? { url: API_ROUTES.forms.byId(Number(id)) } : null);
+  const { data } = useAuthSWR<Form>({ url: API_ROUTES.forms.byId(Number(id)) });
 
   return (
     <>
       <Card>
         <ContentHeaderSection title={data?.title} description={data?.description} />
       </Card>
-
       {data ? <FormWrapperSection sections={data.sections} /> : <Spin />}
     </>
   );
