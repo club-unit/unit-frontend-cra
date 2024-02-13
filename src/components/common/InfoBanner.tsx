@@ -18,7 +18,13 @@ function InfoBanner({ link, title, content }: Props) {
             <BellFilled className="text-blue-500" />
           </div>
           <div className="flex flex-nowrap gap-2 w-11/12">
-            <Typography.Text>{content}</Typography.Text>
+            <div className="flex flex-col">
+              {content.split("\n").map((line, index) => (
+                <Typography.Text className="my-0" key={index}>
+                  {line}
+                </Typography.Text>
+              ))}
+            </div>
           </div>
         </div>
       </Link>
