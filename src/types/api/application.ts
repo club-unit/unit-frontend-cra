@@ -17,7 +17,7 @@ export interface Application {
 
 export interface Applicant {
   name: string;
-  sex: number;
+  sex: string;
   phoneNumber: string;
   yearAge: string;
 }
