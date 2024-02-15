@@ -11,7 +11,10 @@ interface Props {
 
 function ApplicationBranchSection({ branches, currentBranch, setCurrentBranch }: Props) {
   const branchList = [
-    ...branches.map((branch) => BRANCH_LOOKUP_TABLE[branch.toUpperCase() as Branch] || "전체"),
+    ...branches.map((branch) => ({
+      value: branch,
+      label: BRANCH_LOOKUP_TABLE[branch as Branch] || "전체",
+    })),
   ];
 
   return (
