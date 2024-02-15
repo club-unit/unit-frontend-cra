@@ -17,8 +17,8 @@ function InfoSection({ position }: Props) {
         position === "top" ? "flex flex-col xl:hidden gap-1" : "xl:flex xl:flex-col hidden gap-1"
       }
     >
-      {data?.map((info) => (
-        <InfoBanner link={info.url} title={info.title} content={info.content} />
+      {data?.map((info, index) => (
+        <InfoBanner link={info.url} title={info.title} content={info.content} key={index} />
       ))}
     </div>
   );
