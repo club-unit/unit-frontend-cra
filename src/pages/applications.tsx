@@ -8,9 +8,13 @@ import ApplicationsTableSection from "src/components/pages/applications/Applicat
 import { Application } from "src/types/api/application";
 import { CommonListResponse } from "src/types/api/common";
 import { Spin } from "antd";
+import useAuth from "src/contexts/auth/useAuth";
 
 function ApplicationsPage() {
-  const [currentBranch, setCurrentBranch] = useState<string | number>("ALL");
+  const { user } = useAuth();
+  const [currentBranch, setCurrentBranch] = useState<string | number>(
+    user?.profile.branch || "ALL"
+  );
   const { data, mutate } = useAuthSWR<CommonListResponse<Application>>({
     url: API_ROUTES.applications.root(),
     query: { branch: currentBranch !== "ALL" ? currentBranch : undefined },

@@ -5,6 +5,6 @@ export const APPLICATION_STATUS_LOOKUP_TABLE: Record<ApplicationStatus, string> 
   SECOND_CHOICE_WAITING: "2지망 대기",
   FIRST_CHOICE_JOIN: "1지망 합격",
   SECOND_CHOICE_JOIN: "2지망 합격",
-  FIRST_CHOICE_FAIL: "1지망 탈락",
-  SECOND_CHOICE_FAIL: "2지망 탈락",
+  FIRST_CHOICE_FAIL: "1지망 불합격",
+  SECOND_CHOICE_FAIL: "2지망 불합격",
 };
