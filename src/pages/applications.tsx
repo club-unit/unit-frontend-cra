@@ -11,7 +11,7 @@ import { Spin } from "antd";
 
 function ApplicationsPage() {
   const [currentBranch, setCurrentBranch] = useState<string | number>("ALL");
-  const { data } = useAuthSWR<CommonListResponse<Application>>({
+  const { data, mutate } = useAuthSWR<CommonListResponse<Application>>({
     url: API_ROUTES.applications.root(),
     query: { branch: currentBranch !== "ALL" ? currentBranch : undefined },
   });
@@ -24,7 +24,7 @@ function ApplicationsPage() {
         currentBranch={currentBranch}
         setCurrentBranch={setCurrentBranch}
       />
-      {data ? <ApplicationsTableSection applications={data} /> : <Spin />}
+      {data ? <ApplicationsTableSection applications={data} mutate={mutate} /> : <Spin />}
     </>
   );
 }

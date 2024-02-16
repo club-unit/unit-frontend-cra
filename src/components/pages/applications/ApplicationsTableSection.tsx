@@ -1,15 +1,23 @@
 import { Application, ApplicationStatus, ExtraQuestion } from "src/types/api/application";
-import { Button, Modal, Table, Typography } from "antd";
+import { Button, Modal, Select, Table, Typography } from "antd";
 import React, { useState } from "react";
 import { APPLICATION_STATUS_LOOKUP_TABLE } from "src/constants/application";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
+import { clientAxios } from "src/utils/common/clientAxios";
+import { API_ROUTES } from "src/constants/routes";
+import { AxiosError } from "axios";
+import useNotification from "src/contexts/notification/useNotfication";
+import useAuth from "src/contexts/auth/useAuth";
 
 interface Props {
   applications: Application[];
+  mutate: () => void;
 }
 
-function ApplicationsTableSection({ applications }: Props) {
+function ApplicationsTableSection({ applications, mutate }: Props) {
   const [modalContent, setModalContent] = useState<null | ExtraQuestion[]>(null);
+  const { api } = useNotification();
+  const { logout } = useAuth();
   const applicationList = applications.map((application) => ({
     ...application,
     name: application.applicant.name,
@@ -22,6 +30,29 @@ function ApplicationsTableSection({ applications }: Props) {
     secondChoice: BRANCH_LOOKUP_TABLE[application.secondChoice],
     key: application.id,
   }));
+
+  const handleStatusChange = async (value: ApplicationStatus, id: number) => {
+    try {
+      await clientAxios.patch(API_ROUTES.applications.byId(id), { status: value });
+      mutate();
+      api.success({ message: "신청서 상태가 수정되었습니다." });
+    } catch (e) {
+      if (e instanceof AxiosError) {
+        if (e.response?.data?.code === "token_not_valid") {
+          api.error({
+            message: "신청서 상태 수정에 실패하였습니다.",
+            description: "로그인이 만료되었습니다.",
+          });
+          logout();
+        }
+      } else {
+        api.error({
+          message: "신청서 상태 수정에 실패하였습니다.",
+          description: "다시 시도해주세요.",
+        });
+      }
+    }
+  };
 
   const columns = [
     {
@@ -46,10 +77,22 @@ function ApplicationsTableSection({ applications }: Props) {
     },
     {
       title: "상태",
-      dataIndex: "statusEnum",
-      render: (status: ApplicationStatus) => {
-        console.log(status);
-        return <div></div>;
+      render: ({ id, status }: any) => {
+        return (
+          <Select
+            defaultValue={status}
+            onClick={(e) => e.stopPropagation()}
+            onChange={(e) => handleStatusChange(e, id)}
+          >
+            {Object.keys(APPLICATION_STATUS_LOOKUP_TABLE).map((statusOption) => {
+              return (
+                <Select.Option value={statusOption} key={statusOption}>
+                  {APPLICATION_STATUS_LOOKUP_TABLE[statusOption as ApplicationStatus]}
+                </Select.Option>
+              );
+            })}
+          </Select>
+        );
       },
       key: "status",
     },
@@ -95,7 +138,7 @@ function ApplicationsTableSection({ applications }: Props) {
       <Modal
         title="지원 상세 정보"
         open={!!modalContent}
-        footer={[<Button onClick={() => setModalContent(null)}>닫기</Button>]}
+        footer={<Button onClick={() => setModalContent(null)}>닫기</Button>}
         onCancel={() => setModalContent(null)}
         onOk={() => setModalContent(null)}
       >
@@ -121,14 +164,15 @@ function ApplicationsTableSection({ applications }: Props) {
             className: `hover:cursor-pointer ${
               application.statusEnum === "FIRST_CHOICE_JOIN" ||
               application.statusEnum === "SECOND_CHOICE_JOIN"
-                ? "bg-green-200"
+                ? "text-green-500"
                 : application.statusEnum === "FIRST_CHOICE_FAIL" ||
                   application.statusEnum === "SECOND_CHOICE_FAIL"
-                ? "bg-red-200"
+                ? "text-red-500"
                 : ""
             }`,
           };
         }}
+        bordered
       />
     </>
   );
