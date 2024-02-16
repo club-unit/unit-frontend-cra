@@ -18,6 +18,8 @@ import Footer from "src/components/common/Footer";
 import PrivacyPolicy from "src/pages/privacy";
 import InfoSection from "src/components/common/InfoSection";
 import FormWithAuth from "src/pages/forms/[id]";
+import ApplicationWithAuth from "src/pages/applications";
+import ApplicationsWithAuth from "src/pages/applications";
 
 function App() {
   const location = useLocation();
@@ -49,6 +51,7 @@ function App() {
               <Route path="/forms">
                 <Route path=":id" element={<FormWithAuth />} />
               </Route>
+              <Route path="/applications" element={<ApplicationsWithAuth />} />
               <Route path="/:slug">
                 <Route path="" element={<PostListPage />} />
                 <Route path="write" element={<PostWritePage />} />
