@@ -4,10 +4,14 @@ import { BRANCH_SLUGS } from "src/constants/branches";
 import { useState } from "react";
 import useAuthSWR from "src/hooks/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
+import ApplicationsTableSection from "src/components/pages/applications/ApplicationsTableSection";
+import { Application } from "src/types/api/application";
+import { CommonListResponse } from "src/types/api/common";
+import { Spin } from "antd";
 
 function ApplicationsPage() {
   const [currentBranch, setCurrentBranch] = useState<string | number>("ALL");
-  const { data } = useAuthSWR({
+  const { data } = useAuthSWR<CommonListResponse<Application>>({
     url: API_ROUTES.applications.root(),
     query: { branch: currentBranch !== "ALL" ? currentBranch : undefined },
   });
@@ -20,6 +24,7 @@ function ApplicationsPage() {
         currentBranch={currentBranch}
         setCurrentBranch={setCurrentBranch}
       />
+      {data ? <ApplicationsTableSection applications={data} /> : <Spin />}
     </>
   );
 }
