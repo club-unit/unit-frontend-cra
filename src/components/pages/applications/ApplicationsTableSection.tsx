@@ -8,6 +8,7 @@ import { API_ROUTES } from "src/constants/routes";
 import { AxiosError } from "axios";
 import useNotification from "src/contexts/notification/useNotfication";
 import useAuth from "src/contexts/auth/useAuth";
+import dayjs from "dayjs";
 
 interface Props {
   applications: Application[];
@@ -55,6 +56,14 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
   };
 
   const columns = [
+    {
+      title: "작성일",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (createdAt: string) => {
+        return <Typography.Text>{dayjs(createdAt).format("YYYY/MM/DD hh:mm:ss")}</Typography.Text>;
+      },
+    },
     {
       title: "이름",
       dataIndex: "name",
