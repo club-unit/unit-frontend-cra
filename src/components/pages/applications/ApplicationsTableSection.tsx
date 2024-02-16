@@ -86,14 +86,31 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
     },
     {
       title: "상태",
-      render: ({ id, status }: any) => {
+      render: ({ id, statusEnum }: any) => {
+        const statusEnumList =
+          statusEnum === "FIRST_CHOICE_WAITING"
+            ? [
+                "FIRST_CHOICE_WAITING",
+                "FIRST_CHOICE_JOIN",
+                "FIRST_CHOICE_FAIL",
+                "SECOND_CHOICE_WAITING",
+              ]
+            : statusEnum === "SECOND_CHOICE_WAITING"
+            ? ["SECOND_CHOICE_WAITING", "SECOND_CHOICE_JOIN", "SECOND_CHOICE_FAIL"]
+            : Object.keys(APPLICATION_STATUS_LOOKUP_TABLE);
         return (
           <Select
-            defaultValue={status}
+            defaultValue={statusEnum}
             onClick={(e) => e.stopPropagation()}
             onChange={(e) => handleStatusChange(e, id)}
+            disabled={
+              statusEnum === "FIRST_CHOICE_JOIN" ||
+              statusEnum === "SECOND_CHOICE_JOIN" ||
+              statusEnum === "FIRST_CHOICE_FAIL" ||
+              statusEnum === "SECOND_CHOICE_FAIL"
+            }
           >
-            {Object.keys(APPLICATION_STATUS_LOOKUP_TABLE).map((statusOption) => {
+            {statusEnumList.map((statusOption) => {
               return (
                 <Select.Option value={statusOption} key={statusOption}>
                   {APPLICATION_STATUS_LOOKUP_TABLE[statusOption as ApplicationStatus]}
