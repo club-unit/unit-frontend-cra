@@ -5,7 +5,7 @@ export const API_ROUTES = {
     signUp: () => "/users/sign-up/",
     changePassword: () => "/users/my/change-password/",
     changeProfilePhoto: () => "/users/my/change-profile-photo/",
-    byId: (id: number) => `/users/${id}`,
+    byId: (id: number) => `/users/${id}/`,
   },
   boards: {
     root: () => "/boards/",
@@ -30,5 +30,9 @@ export const API_ROUTES = {
   },
   notices: {
     root: () => "/notices/",
+  },
+  applications: {
+    root: () => "/applications/",
+    byId: (id: number) => `/applications/${id}/`,
   },
 };
