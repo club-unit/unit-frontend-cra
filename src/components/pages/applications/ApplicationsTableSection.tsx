@@ -19,8 +19,9 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
   const [modalContent, setModalContent] = useState<null | ExtraQuestion[]>(null);
   const { api } = useNotification();
   const { logout } = useAuth();
-  const applicationList = applications.map((application) => ({
+  const applicationList = applications.map((application, index) => ({
     ...application,
+    index: index,
     name: application.applicant.name,
     sex: application.applicant.sex === "1" ? "남" : "여",
     phoneNumber: application.applicant.phoneNumber,
@@ -57,11 +58,19 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
 
   const columns = [
     {
+      title: "",
+      dataIndex: "index",
+      key: "index",
+      render: (index: number) => {
+        return <Typography.Text strong>{index}</Typography.Text>;
+      },
+    },
+    {
       title: "작성일",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (createdAt: string) => {
-        return <Typography.Text>{dayjs(createdAt).format("YYYY/MM/DD hh:mm:ss")}</Typography.Text>;
+      dataIndex: "created",
+      key: "created",
+      render: (created: string) => {
+        return <Typography.Text>{dayjs(created).format("YYYY/MM/DD hh:mm:ss")}</Typography.Text>;
       },
     },
     {
@@ -103,6 +112,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
             defaultValue={statusEnum}
             onClick={(e) => e.stopPropagation()}
             onChange={(e) => handleStatusChange(e, id)}
+            popupMatchSelectWidth={false}
             disabled={
               statusEnum === "FIRST_CHOICE_JOIN" ||
               statusEnum === "SECOND_CHOICE_JOIN" ||
@@ -121,6 +131,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
         );
       },
       key: "status",
+      width: "100",
     },
     {
       title: "가입경로",
