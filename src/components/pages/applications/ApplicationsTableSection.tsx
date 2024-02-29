@@ -21,7 +21,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
   const { logout } = useAuth();
   const applicationList = applications.map((application, index) => ({
     ...application,
-    index: index,
+    index: index + 1,
     name: application.applicant.name,
     sex: application.applicant.sex === "1" ? "남" : "여",
     phoneNumber: application.applicant.phoneNumber,
@@ -70,7 +70,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
       dataIndex: "created",
       key: "created",
       render: (created: string) => {
-        return <Typography.Text>{dayjs(created).format("YYYY/MM/DD hh:mm:ss")}</Typography.Text>;
+        return <Typography.Text>{dayjs(created).format("YYYY/MM/DD HH:mm:ss")}</Typography.Text>;
       },
     },
     {
@@ -109,7 +109,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
             : Object.keys(APPLICATION_STATUS_LOOKUP_TABLE);
         return (
           <Select
-            defaultValue={statusEnum}
+            value={statusEnum}
             onClick={(e) => e.stopPropagation()}
             onChange={(e) => handleStatusChange(e, id)}
             popupMatchSelectWidth={false}
