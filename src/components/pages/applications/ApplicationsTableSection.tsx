@@ -109,7 +109,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
             : Object.keys(APPLICATION_STATUS_LOOKUP_TABLE);
         return (
           <Select
-            defaultValue={statusEnum}
+            value={statusEnum}
             onClick={(e) => e.stopPropagation()}
             onChange={(e) => handleStatusChange(e, id)}
             popupMatchSelectWidth={false}
