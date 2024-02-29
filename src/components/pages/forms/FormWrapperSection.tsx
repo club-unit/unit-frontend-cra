@@ -16,6 +16,7 @@ interface Props {
 function FormWrapperSection({ sections }: Props) {
   const [currentSectionNumber, setCurrentSectionNumber] = useState(0);
   const [formAnswer, setFormAnswer] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const { api } = useNotification();
   const { logout } = useAuth();
@@ -36,6 +37,7 @@ function FormWrapperSection({ sections }: Props) {
   }, [currentSectionNumber]);
 
   const onFinish = async (value: Record<string, string>) => {
+    setIsLoading(true);
     const newFormAnswer = { ...formAnswer, ...value };
     setFormAnswer(newFormAnswer);
     if (currentSectionNumber === sectionsTransformed.length - 2) {
@@ -62,6 +64,7 @@ function FormWrapperSection({ sections }: Props) {
     } else {
       setCurrentSectionNumber(currentSectionNumber + 1);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -81,7 +84,7 @@ function FormWrapperSection({ sections }: Props) {
             </Button>
           ) : (
             currentSectionNumber < sectionsTransformed.length - 1 && (
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" disabled={isLoading}>
                 답변 완료하기
               </Button>
             )
