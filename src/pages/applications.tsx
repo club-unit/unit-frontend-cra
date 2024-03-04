@@ -24,6 +24,18 @@ function ApplicationsPage() {
     query: { branch: currentBranch !== "ALL" ? currentBranch : undefined },
   });
   const branchList = ["ALL", ...BRANCH_SLUGS.map((slug) => slug.toUpperCase())];
+  const sortedApplications = data?.sort((a, b) => {
+    if (order === "TIME_ASC") {
+      return new Date(a.created) > new Date(b.created) ? 1 : -1;
+    } else if (order === "TIME_DESC") {
+      return new Date(b.created) > new Date(a.created) ? 1 : -1;
+    } else if (order === "NAME_ASC") {
+      return a.applicant.name.toUpperCase() > b.applicant.name.toUpperCase() ? 1 : -1;
+    } else if (order === "STATUS") {
+      return a.status > b.status ? 1 : -1;
+    }
+    return 0;
+  });
 
   return (
     <>

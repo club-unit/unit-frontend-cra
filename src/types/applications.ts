@@ -1,1 +1,1 @@
-export type ApplicationsSortOrder = "TIME_ASC" | "TIME_DESC" | "NAME_ASC" | "NAME_DESC" | "STATUS";
+export type ApplicationsSortOrder = "TIME_DESC" | "TIME_ASC" | "NAME_ASC" | "STATUS";

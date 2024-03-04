@@ -11,9 +11,8 @@ export const APPLICATION_STATUS_LOOKUP_TABLE: Record<ApplicationStatus, string> 
 };
 
 export const APPLICATION_ORDER_LOOKUP_TABLE: Record<ApplicationsSortOrder, string> = {
-  TIME_ASC: "신청 빠른 순",
   TIME_DESC: "신청 늦은 순",
+  TIME_ASC: "신청 빠른 순",
   NAME_ASC: "가나다순",
-  NAME_DESC: "가나다역순",
   STATUS: "상태별",
 };
