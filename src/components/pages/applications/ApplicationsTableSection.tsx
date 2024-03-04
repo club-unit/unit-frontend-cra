@@ -204,7 +204,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
         open={!!statusModalContent}
         footer={
           <div>
-            <Button key="back" onClick={() => setDetailModalContent(null)}>
+            <Button key="back" onClick={() => setStatusModalContent(null)}>
               취소
             </Button>
             <Button
