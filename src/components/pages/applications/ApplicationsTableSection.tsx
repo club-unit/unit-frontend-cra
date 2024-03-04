@@ -9,14 +9,23 @@ import { AxiosError } from "axios";
 import useNotification from "src/contexts/notification/useNotfication";
 import useAuth from "src/contexts/auth/useAuth";
 import dayjs from "dayjs";
+import { ArrowRightOutlined } from "@ant-design/icons";
 
 interface Props {
   applications: Application[];
   mutate: () => void;
 }
 
+interface StatusModalContentType {
+  e: any;
+  id: number;
+  statusEnum: ApplicationStatus;
+  name: string;
+}
+
 function ApplicationsTableSection({ applications, mutate }: Props) {
-  const [modalContent, setModalContent] = useState<null | ExtraQuestion[]>(null);
+  const [detailModalContent, setDetailModalContent] = useState<null | ExtraQuestion[]>(null);
+  const [statusModalContent, setStatusModalContent] = useState<null | StatusModalContentType>(null);
   const { api } = useNotification();
   const { logout } = useAuth();
   const applicationList = applications.map((application, index) => ({
@@ -53,6 +62,8 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
           description: "다시 시도해주세요.",
         });
       }
+    } finally {
+      setStatusModalContent(null);
     }
   };
 
@@ -95,7 +106,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
     },
     {
       title: "상태",
-      render: ({ id, statusEnum }: any) => {
+      render: ({ id, statusEnum, name }: any) => {
         const statusEnumList =
           statusEnum === "FIRST_CHOICE_WAITING"
             ? [
@@ -111,7 +122,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
           <Select
             value={statusEnum}
             onClick={(e) => e.stopPropagation()}
-            onChange={(e) => handleStatusChange(e, id)}
+            onChange={(e) => setStatusModalContent({ e, id, statusEnum, name })}
             popupMatchSelectWidth={false}
             disabled={
               statusEnum === "FIRST_CHOICE_JOIN" ||
@@ -174,13 +185,13 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
     <>
       <Modal
         title="지원 상세 정보"
-        open={!!modalContent}
-        footer={<Button onClick={() => setModalContent(null)}>닫기</Button>}
-        onCancel={() => setModalContent(null)}
-        onOk={() => setModalContent(null)}
+        open={!!detailModalContent}
+        footer={<Button onClick={() => setDetailModalContent(null)}>닫기</Button>}
+        onCancel={() => setDetailModalContent(null)}
+        onOk={() => setDetailModalContent(null)}
       >
         <div className="flex flex-col gap-4">
-          {modalContent?.map((qna, index) => (
+          {detailModalContent?.map((qna, index) => (
             <div className="flex flex-col" key={index}>
               <Typography.Text strong>{qna.question}</Typography.Text>
               <Typography.Text>{qna.answer}</Typography.Text>
@@ -188,16 +199,81 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
           ))}
         </div>
       </Modal>
+      <Modal
+        title="지원자 상태 변경 확인"
+        open={!!statusModalContent}
+        footer={
+          <div>
+            <Button key="back" onClick={() => setStatusModalContent(null)}>
+              취소
+            </Button>
+            <Button
+              key="submit"
+              type="primary"
+              onClick={() =>
+                statusModalContent &&
+                handleStatusChange(statusModalContent?.e, statusModalContent?.id)
+              }
+            >
+              확인
+            </Button>
+          </div>
+        }
+        onCancel={() => setStatusModalContent(null)}
+        onOk={() =>
+          statusModalContent && handleStatusChange(statusModalContent?.e, statusModalContent?.id)
+        }
+      >
+        <div className="flex flex-col gap-2 items-center">
+          <div className="flex flex-nowrap gap-4">
+            <Typography.Text strong>{statusModalContent?.name}</Typography.Text>
+            <Typography.Text>지원자의 지원서 상태를</Typography.Text>
+          </div>
+          <div className="flex flex-nowrap gap-4">
+            <Typography.Text
+              className={`${
+                statusModalContent?.statusEnum === "FIRST_CHOICE_JOIN" ||
+                statusModalContent?.statusEnum === "SECOND_CHOICE_JOIN"
+                  ? "text-green-500"
+                  : statusModalContent?.statusEnum === "FIRST_CHOICE_FAIL" ||
+                    statusModalContent?.statusEnum === "SECOND_CHOICE_FAIL"
+                  ? "text-red-500"
+                  : ""
+              }`}
+              strong
+            >
+              {APPLICATION_STATUS_LOOKUP_TABLE[statusModalContent?.statusEnum as ApplicationStatus]}
+            </Typography.Text>
+            <ArrowRightOutlined />
+            <Typography.Text
+              className={`${
+                statusModalContent?.e === "FIRST_CHOICE_JOIN" ||
+                statusModalContent?.e === "SECOND_CHOICE_JOIN"
+                  ? "text-green-500"
+                  : statusModalContent?.e === "FIRST_CHOICE_FAIL" ||
+                    statusModalContent?.e === "SECOND_CHOICE_FAIL"
+                  ? "text-red-500"
+                  : ""
+              }`}
+              strong
+            >
+              {APPLICATION_STATUS_LOOKUP_TABLE[statusModalContent?.e as ApplicationStatus]}
+            </Typography.Text>
+          </div>
+          <div className="flex flex-nowrap gap-4">
+            <Typography.Text>로 변경하시겠습니까?</Typography.Text>
+          </div>
+        </div>
+      </Modal>
       <Table
-        className="mt-4"
         dataSource={applicationList}
         columns={columns}
         pagination={false}
         size="small"
-        scroll={{ x: 1300 }}
+        scroll={{ x: 1500 }}
         onRow={(application) => {
           return {
-            onClick: () => setModalContent(application.extra),
+            onClick: () => setDetailModalContent(application.extra),
             className: `hover:cursor-pointer ${
               application.statusEnum === "FIRST_CHOICE_JOIN" ||
               application.statusEnum === "SECOND_CHOICE_JOIN"
