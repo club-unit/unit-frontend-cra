@@ -194,7 +194,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
         columns={columns}
         pagination={false}
         size="small"
-        scroll={{ x: 1300 }}
+        scroll={{ x: 1800 }}
         onRow={(application) => {
           return {
             onClick: () => setModalContent(application.extra),
