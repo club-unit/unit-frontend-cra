@@ -10,9 +10,12 @@ import { CommonListResponse } from "src/types/api/common";
 import { Spin } from "antd";
 import useAuth from "src/contexts/auth/useAuth";
 import ApplicationsStatisticsSection from "src/components/pages/applications/ApplicationsStatisticsSection";
+import ApplicationOrderSection from "src/components/pages/applications/ApplicationOrderSection";
+import { ApplicationsSortOrder } from "src/types/applications";
 
 function ApplicationsPage() {
   const { user } = useAuth();
+  const [order, setOrder] = useState<ApplicationsSortOrder>("TIME_DESC");
   const [currentBranch, setCurrentBranch] = useState<string | number>(
     user?.profile.branch || "ALL"
   );
@@ -30,8 +33,9 @@ function ApplicationsPage() {
         setCurrentBranch={setCurrentBranch}
       />
       {data ? (
-        <div className="mt-2">
+        <div className="flex flex-col gap-2 mt-2">
           <ApplicationsStatisticsSection applications={data} isOverall={currentBranch === "ALL"} />
+          <ApplicationOrderSection orderOption={order} setOrderOption={setOrder} />
           <ApplicationsTableSection applications={data} mutate={mutate} />
         </div>
       ) : (

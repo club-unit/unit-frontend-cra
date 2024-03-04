@@ -189,12 +189,11 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
         </div>
       </Modal>
       <Table
-        className="mt-4"
         dataSource={applicationList}
         columns={columns}
         pagination={false}
         size="small"
-        scroll={{ x: 1800 }}
+        scroll={{ x: 1500 }}
         onRow={(application) => {
           return {
             onClick: () => setModalContent(application.extra),
