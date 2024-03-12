@@ -59,6 +59,26 @@ function FormSection({ setCurrentStep }: Props) {
         >
           <Input.Password />
         </Form.Item>
+        <Form.Item
+          label="비밀번호 확인"
+          name="passwordConfirm"
+          dependencies={["password"]}
+          rules={[
+            { required: true, message: "비밀번호 확인을 입력하세요!" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("비밀번호 확인이 일치하지 않습니다!"));
+              },
+            }),
+          ]}
+          className="w-80"
+          hasFeedback
+        >
+          <Input.Password />
+        </Form.Item>
       </Card>
       <Card title="회원 개인정보">
         <Form.Item
