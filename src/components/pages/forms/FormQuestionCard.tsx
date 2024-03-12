@@ -21,7 +21,10 @@ function FormQuestionCard({ question }: Props) {
         </div>
         <Form.Item
           name={question.id}
-          rules={[{ required: question.isRequired, message: "항목을 입력해주세요." }]}
+          rules={[
+            { required: question.isRequired, message: "항목을 입력해주세요." },
+            { max: 1000, message: "공백 포함 1000자 이내로 입력해주세요" },
+          ]}
         >
           {question.type === "SHORT_ANSWER" ? (
             <Input />
