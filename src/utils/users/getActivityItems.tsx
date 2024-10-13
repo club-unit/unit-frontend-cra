@@ -13,7 +13,7 @@ function getActivityItems(user: User | OtherUser): DescriptionsProps["items"] {
     {
       key: "2",
       label: "가입기수",
-      children: <p>{user?.profile.generation}기</p>,
+      children: <p>{user?.profile.generation.number}기</p>,
     },
     {
       key: "3",

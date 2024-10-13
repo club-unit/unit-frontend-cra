@@ -31,7 +31,7 @@ function ProfilePage() {
     {
       key: "2",
       label: "성별",
-      children: <p>{SEX_LOOKUP_TABLE[user?.profile.sex as number]}</p>,
+      children: <p>{user?.profile.sex && SEX_LOOKUP_TABLE[user?.profile.sex]}</p>,
     },
     {
       key: "3",

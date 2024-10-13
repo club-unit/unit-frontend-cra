@@ -55,7 +55,7 @@ function UserCard() {
               <Typography.Text className="text-gray-500">{`${user.profile.activityTerm}학기${
                 user.profile.rank === "OB" ? " 이상" : "째"
               } `}</Typography.Text>
-              <Typography.Text className="text-gray-500">{` 활동 중! (${user.profile.generation}기)`}</Typography.Text>
+              <Typography.Text className="text-gray-500">{` 활동 중! (${user.profile.generation.number}기)`}</Typography.Text>
             </div>
           )}
           <div className="flex justify-end">
