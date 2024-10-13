@@ -28,7 +28,7 @@ function BasicInfoCard({ otherUser }: Props) {
       return;
     }
     try {
-      const response = await clientAxios.put(API_ROUTES.users.changeProfilePhoto(), formData, {
+      const response = await clientAxios.patch(API_ROUTES.users.updateProfilePhoto(), formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

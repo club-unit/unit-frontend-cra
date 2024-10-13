@@ -2,9 +2,9 @@ export const API_ROUTES = {
   token: { root: () => "/token/", refresh: () => "/token/refresh/" },
   users: {
     my: () => "/v2/users/my/",
-    signUp: () => "/users/sign-up/",
-    changePassword: () => "/users/my/change-password/",
-    changeProfilePhoto: () => "/users/my/change-profile-photo/",
+    signUp: () => "/v2/users/sign-up/",
+    changePassword: () => "/v2/users/my/change-password/",
+    updateProfilePhoto: () => "/v2/users/my/update-profile-photo/",
     byId: (id: number) => `/v2/users/${id}/`,
   },
   boards: {
