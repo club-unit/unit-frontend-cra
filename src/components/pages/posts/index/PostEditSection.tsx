@@ -1,5 +1,5 @@
 import { PostDetail } from "src/types/api/post";
-import { Dispatch, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { Button, Checkbox, Form, Input, Select } from "antd";
 import { useParams } from "react-router-dom";
 import useAuth from "src/contexts/auth/useAuth";
@@ -66,6 +66,10 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
     }
   };
 
+  useEffect(() => {
+    setContent(post.content);
+  }, [post.content]);
+
   return (
     <Form onFinish={onFinish}>
       <div className="flex gap-4 flex-wrap">
@@ -90,7 +94,7 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
       >
         <Input />
       </Form.Item>
-      <ContentEditor setContent={setContent} initialValue={post.content} content={content} />
+      <ContentEditor setContent={setContent} content={content} />
       <Form.Item className="flex mt-6 justify-end">
         <Button type="primary" htmlType="submit" disabled={isSubmitting}>
           저장하기

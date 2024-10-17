@@ -10,7 +10,7 @@ interface Props {
   content: string;
 }
 
-function ContentEditor({ initialValue, setContent, content }: Props) {
+function ContentEditor({ setContent, content }: Props) {
   const { slug } = useParams();
   const { api } = useNotification();
 
@@ -37,7 +37,6 @@ function ContentEditor({ initialValue, setContent, content }: Props) {
     <Editor
       apiKey={process.env.REACT_APP_EDITOR_API_KEY}
       onEditorChange={setContent}
-      initialValue={initialValue || ""}
       value={content}
       init={{
         height: 400,
