@@ -2,6 +2,7 @@ import { Avatar, Card, Popover } from "antd";
 import { OtherUser } from "src/types/api/user";
 import { TrophyOutlined } from "@ant-design/icons";
 import useAuth from "src/contexts/auth/useAuth";
+import BadgeText from "src/components/pages/users/BadgeText";
 
 interface Props {
   otherUser?: OtherUser;
@@ -16,7 +17,7 @@ function BadgeCard({ otherUser }: Props) {
       <div className="flex gap-5 flex-wrap">
         {badges?.length ? (
           badges?.map((badge) => (
-            <Popover content={badge.name}>
+            <Popover content={<BadgeText name={badge.name} description={badge.description} />}>
               <Avatar icon={<TrophyOutlined />} src={badge.image} size={70} />
             </Popover>
           ))
