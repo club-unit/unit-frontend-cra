@@ -25,6 +25,14 @@ export interface PostSummary {
   thumbnail: string;
 }
 
+export interface PostWritten {
+  title: string;
+  content: string;
+  categoryId: number;
+  isPinned: boolean;
+  thumbnail: string;
+}
+
 export interface PostDetail extends Post {
   comments: Comment[];
 }

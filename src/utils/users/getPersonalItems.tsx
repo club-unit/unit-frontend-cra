@@ -1,9 +1,17 @@
 import { SEX_LOOKUP_TABLE } from "src/constants/user";
 import dayjs from "dayjs";
 import { DescriptionsProps } from "antd";
-import { User } from "src/types/api/user";
+import { OtherUser, User } from "src/types/api/user";
+import { OtherProfile, ProfileDetail } from "src/types/api/profile";
 
-function getPersonalItems(user: User, isMine?: boolean): DescriptionsProps["items"] {
+function isProfileDetail(profile: ProfileDetail | OtherProfile): profile is ProfileDetail {
+  return (profile as ProfileDetail).birthDate !== undefined;
+}
+
+function getPersonalItems<T extends boolean>(
+  user: T extends true ? User : OtherUser,
+  isMine?: boolean
+): DescriptionsProps["items"] {
   return [
     {
       key: "1",
@@ -13,26 +21,27 @@ function getPersonalItems(user: User, isMine?: boolean): DescriptionsProps["item
     {
       key: "2",
       label: "성별",
-      children: <p>{SEX_LOOKUP_TABLE[user?.profile.sex as number]}</p>,
+      children: <p>{user?.profile.sex && SEX_LOOKUP_TABLE[user?.profile.sex]}</p>,
     },
-    ...(isMine
+    { key: "3", label: "이메일", children: <p>{user?.profile.email}</p> },
+    ...(isMine && isProfileDetail(user.profile)
       ? [
           {
-            key: "3",
+            key: "4",
             label: "전화번호",
             children: <p>{user?.profile.phoneNumber}</p>,
           },
           {
-            key: "4",
+            key: "5",
             label: "생년월일",
             children: <p>{dayjs(user?.profile.birthDate).format("YYYY년 MM월 DD일")}</p>,
           },
         ]
       : [
           {
-            key: "3",
-            label: "성별",
-            children: <p>{SEX_LOOKUP_TABLE[user?.profile.sex as number]}</p>,
+            key: "4",
+            label: "아이디",
+            children: <p>{user.username}</p>,
           },
         ]),
   ];

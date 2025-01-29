@@ -4,7 +4,6 @@ import { FormQuestion } from "src/types/api/form";
 interface Props {
   question: FormQuestion;
 }
-
 function FormQuestionCard({ question }: Props) {
   return (
     <Card

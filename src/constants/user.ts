@@ -1,1 +1,1 @@
-export const SEX_LOOKUP_TABLE = ["모름", "남", "여"];
+export const SEX_LOOKUP_TABLE = { M: "남", F: "여" };

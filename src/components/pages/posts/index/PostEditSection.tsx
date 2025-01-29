@@ -1,5 +1,5 @@
-import { PostDetail } from "src/types/api/post";
-import { Dispatch, useState } from "react";
+import { PostDetail, PostWritten } from "src/types/api/post";
+import { Dispatch, useEffect, useState } from "react";
 import { Button, Checkbox, Form, Input, Select } from "antd";
 import { useParams } from "react-router-dom";
 import useAuth from "src/contexts/auth/useAuth";
@@ -19,11 +19,11 @@ interface Props {
   mutate: () => void;
 }
 
-interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned"> {}
+interface FormValues extends PostWritten {}
 
 function PostEditSection({ post, setIsEditing, mutate }: Props) {
   const { slug, id } = useParams();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const { data: categories } = useAuthSWR<CommonListResponse<Category>>(
     slug
       ? {
@@ -32,7 +32,7 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
       : null
   );
   const categoryOptions = categories?.map((category) => ({
-    value: category.name,
+    value: category.id,
     label: category.name,
   }));
   const [content, setContent] = useState(post.content);
@@ -41,7 +41,7 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
   const onFinish = async (values: FormValues) => {
     setIsSubmitting(true);
     const thumbnail = extractFirstImage(content);
-    const post = { ...values, author: user?.id, content, thumbnail };
+    const post = { ...values, content, thumbnail };
     try {
       await clientAxios.patch(API_ROUTES.posts.bySlugAndId(String(slug), Number(id)), post);
       mutate();
@@ -66,10 +66,19 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
     }
   };
 
+  useEffect(() => {
+    setContent(post.content);
+  }, [post.content]);
+
   return (
     <Form onFinish={onFinish}>
       <div className="flex gap-4 flex-wrap">
-        <Form.Item label="카테고리" name="category" initialValue={post.category} className="w-1/4">
+        <Form.Item
+          label="카테고리"
+          name="categoryId"
+          initialValue={post.category}
+          className="w-1/4"
+        >
           <Select options={categoryOptions} />
         </Form.Item>
         <Form.Item
@@ -90,7 +99,7 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
       >
         <Input />
       </Form.Item>
-      <ContentEditor setContent={setContent} initialValue={post.content} content={content} />
+      <ContentEditor setContent={setContent} content={content} />
       <Form.Item className="flex mt-6 justify-end">
         <Button type="primary" htmlType="submit" disabled={isSubmitting}>
           저장하기
