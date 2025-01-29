@@ -29,7 +29,7 @@ function CommentInput({ parentId, mutate, initialComment, setIsOnEdit, setReplyi
 
   const onPostFinish = async (values: FormValues) => {
     setIsSubmitting(true);
-    const comment = { content: values.content, parentComment: parentId, post: id };
+    const comment = { content: values.content, parentCommentId: parentId };
     try {
       await clientAxios.post(
         API_ROUTES.comments.bySlugAndPostId(String(slug), Number(id)),

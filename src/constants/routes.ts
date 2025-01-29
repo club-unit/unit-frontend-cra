@@ -13,13 +13,14 @@ export const API_ROUTES = {
   posts: {
     bySlug: (slug: string) => `/v2/boards/${slug}/posts/`,
     summary: (slug: string) => `/v2/boards/${slug}/posts/summary/`,
-    bySlugAndId: (slug: string, id: number) => `/boards/${slug}/posts/${id}/`,
+    bySlugAndId: (slug: string, id: number) => `/v2/boards/${slug}/posts/${id}/`,
     uploadImage: (slug: string) => `/boards/${slug}/posts/upload-image/`,
   },
   comments: {
-    bySlugAndPostId: (slug: string, postId: number) => `/boards/${slug}/posts/${postId}/comments/`,
+    bySlugAndPostId: (slug: string, postId: number) =>
+      `/v2/boards/${slug}/posts/${postId}/comments/`,
     bySlugAndPostIdAndId: (slug: string, postId: number, id: number) =>
-      `/boards/${slug}/posts/${postId}/comments/${id}/`,
+      `/v2/boards/${slug}/posts/${postId}/comments/${id}/`,
   },
   categories: {
     bySlug: (slug: string) => `/v2/boards/${slug}/categories/`,
@@ -29,7 +30,7 @@ export const API_ROUTES = {
     answerById: (id: number) => `/forms/${id}/answer/`,
   },
   notices: {
-    root: () => "/notices/",
+    root: () => "/v2/notices/",
   },
   applications: {
     root: () => "/applications/",

@@ -122,8 +122,8 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
           <p>댓글을 삭제하시겠습니까?</p>
         </Modal>
       </div>
-      {comment.children.length
-        ? comment.children.map((child) => (
+      {comment.replies
+        ? comment.replies.map((child) => (
             <CommentElement
               key={child.id}
               comment={child}
