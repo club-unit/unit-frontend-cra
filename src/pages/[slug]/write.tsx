@@ -5,7 +5,7 @@ import { Category } from "src/types/api/category";
 import { API_ROUTES } from "src/constants/routes";
 import useAuth from "src/contexts/auth/useAuth";
 import { useEffect, useState } from "react";
-import { PostDetail } from "src/types/api/post";
+import { PostDetail, PostWritten } from "src/types/api/post";
 import useNotification from "src/contexts/notification/useNotfication";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
 import useAuthSWR from "src/hooks/useAuthSWR";
@@ -14,11 +14,11 @@ import { clientAxios } from "src/utils/common/clientAxios";
 import { AxiosError } from "axios";
 import extractFirstImage from "src/utils/[slug]/extractFirstImage";
 
-interface FormValues extends Pick<PostDetail, "title" | "category" | "isPinned"> {}
+interface FormValues extends PostWritten {}
 
 function PostWritePage() {
   const { slug } = useParams();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const { data: categories } = useAuthSWR<CommonListResponse<Category>>(
     slug
       ? {
@@ -27,7 +27,7 @@ function PostWritePage() {
       : null
   );
   const categoryOptions = categories?.map((category) => ({
-    value: category.name,
+    value: category.id,
     label: category.name,
   }));
   const [content, setContent] = useState("");
@@ -39,7 +39,7 @@ function PostWritePage() {
   const onFinish = async (values: FormValues) => {
     setIsSubmitting(true);
     const thumbnail = extractFirstImage(content);
-    const post = { ...values, author: user?.id, content, thumbnail };
+    const post = { ...values, content, thumbnail };
     try {
       const { data: newPost } = await clientAxios.post<PostDetail>(
         API_ROUTES.posts.bySlug(String(slug)),
@@ -90,7 +90,7 @@ function PostWritePage() {
         <div className="flex gap-4 flex-wrap">
           <Form.Item
             label="카테고리"
-            name="category"
+            name="categoryId"
             className="w-1/2"
             rules={
               categoryOptions?.length

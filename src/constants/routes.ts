@@ -11,7 +11,7 @@ export const API_ROUTES = {
     root: () => "/v2/boards/",
   },
   posts: {
-    bySlug: (slug: string) => `/boards/${slug}/posts/`,
+    bySlug: (slug: string) => `/v2/boards/${slug}/posts/`,
     summary: (slug: string) => `/v2/boards/${slug}/posts/summary/`,
     bySlugAndId: (slug: string, id: number) => `/boards/${slug}/posts/${id}/`,
     uploadImage: (slug: string) => `/boards/${slug}/posts/upload-image/`,
