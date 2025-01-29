@@ -37,7 +37,9 @@ function PostListPage() {
         }
       : null
   );
-  const categoryList = categories ? [{ name: "전체" }, ...categories] : [{ name: "전체" }];
+  const categoryList = categories
+    ? [{ id: 0, name: "전체" }, ...categories]
+    : [{ id: 0, name: "전체" }];
 
   useEffect(() => {
     setPage(1);
