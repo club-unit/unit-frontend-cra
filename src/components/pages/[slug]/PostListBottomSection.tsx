@@ -1,12 +1,11 @@
 import { Button, Pagination } from "antd";
-import { Dispatch, SetStateAction } from "react";
 import { PAGE_SIZE } from "src/constants/pagination";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "src/contexts/auth/useAuth";
 
 interface Props {
   page: number;
-  setPage: Dispatch<SetStateAction<number>>;
+  setPage: (page: number) => void;
   total?: number;
 }
 
@@ -23,7 +22,13 @@ function PostListBottomSection({ page, setPage, total }: Props) {
         </Button>
       )}
       <div className="flex justify-center w-full">
-        <Pagination current={page} onChange={setPage} defaultPageSize={PAGE_SIZE} total={total} />
+        <Pagination
+          current={page}
+          onChange={setPage}
+          defaultPageSize={PAGE_SIZE}
+          total={total}
+          showSizeChanger={false}
+        />
       </div>
     </div>
   );

@@ -1,11 +1,10 @@
 import { Segmented } from "antd";
-import { Dispatch, SetStateAction } from "react";
 import { Category } from "src/types/api/category";
 
 interface Props {
   categories: Category[];
   currentCategory: string | number;
-  setCurrentCategory: Dispatch<SetStateAction<string | number>>;
+  setCurrentCategory: (category: string | number) => void;
 }
 
 function PostListCategorySection({ categories, currentCategory, setCurrentCategory }: Props) {
