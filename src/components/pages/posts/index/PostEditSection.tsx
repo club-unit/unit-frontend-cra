@@ -76,10 +76,15 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
         <Form.Item
           label="카테고리"
           name="categoryId"
-          initialValue={post.category}
+          initialValue={post.category?.id}
           className="w-1/4"
+          rules={
+            categoryOptions?.length
+              ? [{ required: true, message: "카테고리를 입력하세요!" }]
+              : undefined
+          }
         >
-          <Select options={categoryOptions} />
+          <Select options={categoryOptions} disabled={!categoryOptions?.length} />
         </Form.Item>
         <Form.Item
           label="고정글 여부"
