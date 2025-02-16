@@ -2,10 +2,10 @@ import { SEX_LOOKUP_TABLE } from "src/constants/user";
 import dayjs from "dayjs";
 import { DescriptionsProps } from "antd";
 import { OtherUser, User } from "src/types/api/user";
-import { OtherProfile, ProfileDetail } from "src/types/api/profile";
+import { MyProfile, ProfileDetail } from "src/types/api/profile";
 
-function isProfileDetail(profile: ProfileDetail | OtherProfile): profile is ProfileDetail {
-  return (profile as ProfileDetail).birthDate !== undefined;
+function isProfileDetail(profile: MyProfile | ProfileDetail): profile is MyProfile {
+  return (profile as MyProfile).birthDate !== undefined;
 }
 
 function getPersonalItems<T extends boolean>(

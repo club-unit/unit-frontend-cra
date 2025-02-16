@@ -4,6 +4,9 @@ export interface Profile {
   rank: string;
   responsibility: string;
   profilePhoto: string;
+}
+
+export interface ProfileDetail extends Profile {
   sex: Sex;
   generation: Generation;
   activityTerm: number;
@@ -13,9 +16,7 @@ export interface Profile {
   joinedDatetime: string;
 }
 
-export interface OtherProfile extends Profile {}
-
-export interface ProfileDetail extends Profile {
+export interface MyProfile extends ProfileDetail {
   phoneNumber: string;
   birthDate: string;
 }
