@@ -1,11 +1,12 @@
 import { Author } from "src/types/api/author";
 import { Comment } from "src/types/api/comment";
+import { Category } from "src/types/api/category";
 
 export interface Post {
   id: number;
   title: string;
   content: string;
-  category: string;
+  category: Category;
   author: Author;
   isPinned: boolean;
   views: number;
