@@ -3,6 +3,7 @@ import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import { useParams } from "react-router-dom";
 import useNotification from "src/contexts/notification/useNotfication";
+import Resizer from "react-image-file-resizer";
 
 interface Props {
   initialValue?: string;
@@ -14,7 +15,24 @@ function ContentEditor({ setContent, content }: Props) {
   const { slug } = useParams();
   const { api } = useNotification();
 
-  const handleImage = (blobInfo: {
+  const resizeImage = (file: Blob): Promise<Blob> => {
+    return new Promise((resolve, _) => {
+      Resizer.imageFileResizer(
+        file,
+        800,
+        800,
+        "JPEG",
+        90,
+        0,
+        (resizedFile) => {
+          resolve(resizedFile as Blob);
+        },
+        "blob"
+      );
+    });
+  };
+
+  const handleImage = async (blobInfo: {
     id: () => string;
     name: () => string;
     filename: () => string;
@@ -23,14 +41,31 @@ function ContentEditor({ setContent, content }: Props) {
     blobUri: () => string;
     uri: () => string | undefined;
   }) => {
-    if (blobInfo.blob().size > 15 * 1024 * 1024) {
+    const originalBlob = blobInfo.blob();
+
+    if (originalBlob.size > 15 * 1024 * 1024) {
       return Promise.reject({ message: "15MB 이하의 이미지만 업로드 가능합니다.", remove: true });
     }
-    const formData = new FormData();
-    formData.append("image", blobInfo.blob());
-    return clientAxios
-      .post<{ url: string }>(API_ROUTES.posts.uploadImage(slug ? slug : ""), formData)
-      .then((res) => res.data.url);
+
+    try {
+      const resizedBlob = await resizeImage(originalBlob);
+
+      const fileExtension = blobInfo.filename().split(".").pop() || "jpeg";
+      const fileName = `${blobInfo.filename()}.${fileExtension}`;
+
+      const formData = new FormData();
+      formData.append("image", resizedBlob, fileName);
+
+      const response = await clientAxios.post<{ url: string }>(
+        API_ROUTES.posts.uploadImage(slug ? slug : ""),
+        formData
+      );
+
+      return response.data.url;
+    } catch (error) {
+      // api.error("이미지 업로드 중 오류가 발생했습니다.");
+      return Promise.reject({ message: "이미지 업로드 실패", remove: true });
+    }
   };
 
   return (

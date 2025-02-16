@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
+import { createContext, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { User } from "src/types/api/user";
 import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
@@ -30,6 +30,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const { api } = useNotification();
   const navigate = useNavigate();
+  const hasShownExpirationNotification = useRef(false);
 
   const fetchAndSetUser = useCallback(
     async (token: string) => {
@@ -41,7 +42,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
         setUser(data);
       } catch (e) {
         if (e instanceof AxiosError) {
-          if (e.response?.data?.code === "token_not_valid") {
+          if (
+            e.response?.data?.code === "token_not_valid" &&
+            !hasShownExpirationNotification.current
+          ) {
+            hasShownExpirationNotification.current = true;
             api.error({ message: "로그인이 만료되었습니다.", description: "다시 로그인해주세요." });
             logout();
           }
@@ -56,6 +61,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const login = (access: string, refresh: string, remember: boolean) => {
+    hasShownExpirationNotification.current = false;
     setIsLoadingCookie(true);
     // clientAxios.defaults.headers["Authorization"] = `Bearer ${access}`;
     localStorage.setItem("remember", String(remember));
