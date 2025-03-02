@@ -11,7 +11,7 @@ export interface Post {
   isPinned: boolean;
   views: number;
   numComments: number;
-  created: string;
+  createdDatetime: string;
   thumbnail: string;
 }
 
@@ -24,6 +24,7 @@ export interface PostSummary {
   created: string;
   numComments: number;
   thumbnail: string;
+  isPinned: boolean;
 }
 
 export interface PostWritten {
