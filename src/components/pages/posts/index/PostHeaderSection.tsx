@@ -24,7 +24,7 @@ function PostHeaderSection({ post }: Props) {
         </div>
         <IconWithText
           icon={<ClockCircleOutlined />}
-          text={dayjs(post.created).format("YYYY/MM/DD HH:mm")}
+          text={dayjs(post.createdDatetime).format("YYYY/MM/DD HH:mm")}
         />
       </div>
     </div>

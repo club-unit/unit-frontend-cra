@@ -5,5 +5,5 @@ export interface Comment {
   content: string;
   author: Author;
   replies: Comment[];
-  created: string;
+  createdDatetime: string;
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Spin } from "antd";
-import { Post } from "src/types/api/post";
+import { PostSummary } from "src/types/api/post";
 import { CommonListResponse, CommonPagedResponse } from "src/types/api/common";
 import { API_ROUTES } from "src/constants/routes";
 import { Category } from "src/types/api/category";
@@ -25,7 +25,7 @@ function PostListPage() {
     data: posts,
     error,
     mutate,
-  } = useAuthSWR<CommonPagedResponse<Post>>(
+  } = useAuthSWR<CommonPagedResponse<PostSummary>>(
     slug
       ? {
           url: API_ROUTES.posts.bySlug(slug),

@@ -59,7 +59,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
               <div className="flex gap-1 ml-2">
                 <ClockCircleOutlined />
                 <Typography.Text className="whitespace-nowrap">
-                  {formatDateString(comment.created)}
+                  {formatDateString(comment.createdDatetime)}
                 </Typography.Text>
               </div>
             </div>
