@@ -20,7 +20,7 @@ function FormSectionStep({ section, isDone }: Props) {
           )}
           <div className="flex flex-col gap-4">
             {section.questions.map((question) => (
-              <FormQuestionCard question={question} />
+              <FormQuestionCard key={question.id} question={question} />
             ))}
           </div>
         </>
@@ -29,7 +29,7 @@ function FormSectionStep({ section, isDone }: Props) {
           status="success"
           title="폼 응답이 등록되었습니다!"
           extra={[
-            <Link to="/">
+            <Link key="/" to="/">
               <Button type="primary">홈으로</Button>
             </Link>,
           ]}
