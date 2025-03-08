@@ -17,7 +17,10 @@ function BadgeCard({ otherUser }: Props) {
       <div className="flex gap-5 flex-wrap">
         {badges?.length ? (
           badges?.map((badge) => (
-            <Popover content={<BadgeText name={badge.name} description={badge.description} />}>
+            <Popover
+              key={badge.id}
+              content={<BadgeText name={badge.name} description={badge.description} />}
+            >
               <Avatar icon={<TrophyOutlined />} src={badge.image} size={70} />
             </Popover>
           ))
