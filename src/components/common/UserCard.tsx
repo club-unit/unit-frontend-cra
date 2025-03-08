@@ -59,12 +59,8 @@ function UserCard() {
             </div>
           )}
           <div className="flex justify-end">
-            <Typography.Text
-              className="text-blue-500 hover:cursor-pointer"
-              underline
-              onClick={() => navigate("/users/me")}
-            >
-              내 정보 보기
+            <Typography.Text className="text-blue-500 hover:cursor-pointer" underline>
+              <Link to="/users/me">내 정보 보기</Link>
             </Typography.Text>
           </div>
           <Divider className="my-2" />
