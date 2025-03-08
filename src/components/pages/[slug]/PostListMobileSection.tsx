@@ -24,28 +24,28 @@ function PostListMobileSection({ posts }: Props) {
       size="small"
       dataSource={posts}
       renderItem={(post) => (
-        <List.Item className="cursor-pointer focus:bg-gray-200">
+        <List.Item className="cursor-pointer focus:bg-gray-200 hover:bg-gray-200">
           <Link
             to={`/${slug}/${post.id}`}
             className="flex items-center justify-between gap-1 w-full"
           >
             <div className="flex flex-col gap-1">
-              <div className="flex gap-2 w-full">
-                <PushpinFilled className={post.isPinned ? undefined : "text-white"} />
+              <Typography.Text className="flex gap-2 w-full">
+                <PushpinFilled className={post.isPinned ? undefined : "text-transparent"} />
                 <Typography.Text strong>{post.title}</Typography.Text>
-              </div>
+              </Typography.Text>
               <div className="flex flex-col gap-1">
                 <div className="flex gap-1">
-                  <PushpinFilled className="text-white" />
-                  <div className="flex gap-1 items-center">
+                  <PushpinFilled className="text-transparent" />
+                  <Typography.Text className="flex gap-1 items-center">
                     <EyeOutlined />
                     {post.views}
-                  </div>
-                  <div className="flex gap-1 items-center">
+                  </Typography.Text>
+                  <Typography.Text className="flex gap-1 items-center">
                     <CommentOutlined />
                     {post.numComments}
-                  </div>
-                  <div className="flex gap-1 items-center">
+                  </Typography.Text>
+                  <Typography.Text className="flex gap-1 items-center">
                     <ClockCircleOutlined />
                     <Typography.Text
                       className={
@@ -54,10 +54,10 @@ function PostListMobileSection({ posts }: Props) {
                     >
                       {formatDateString(post.created)}
                     </Typography.Text>
-                  </div>
+                  </Typography.Text>
                 </div>
                 <div className="flex gap-1">
-                  <PushpinFilled className="text-white" />
+                  <PushpinFilled className="text-transparent" />
                   <div className="flex gap-1 items-center">
                     <BadgeSet user={post.author} height={20} />
                     <Typography.Text>{post.author.profile.name}</Typography.Text>

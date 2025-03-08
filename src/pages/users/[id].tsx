@@ -5,10 +5,10 @@ import { API_ROUTES } from "src/constants/routes";
 import { useNavigate, useParams } from "react-router-dom";
 import { OtherUser } from "src/types/api/user";
 import useAuth from "src/contexts/auth/useAuth";
-import { useEffect } from "react";
 import ActivityInfoCard from "src/components/pages/users/ActivityInfoCard";
 import BasicInfoCard from "src/components/pages/users/BasicInfoCard";
 import BadgeCard from "src/components/pages/users/BadgeCard";
+import { useLayoutEffect } from "react";
 
 function ProfilePage() {
   const { id } = useParams();
@@ -22,7 +22,7 @@ function ProfilePage() {
       : null
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (user && me && user?.id === me?.id) {
       navigate("/users/me");
     }

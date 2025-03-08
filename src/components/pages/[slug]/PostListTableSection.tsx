@@ -101,12 +101,19 @@ function PostListTableSection({ posts }: Props) {
         columns={columns}
         pagination={false}
         size="small"
-        onRow={(post) => {
-          return {
-            onClick: () => navigate(`/${slug}/${post.id}`),
-            className: "hover:cursor-pointer",
-          };
-        }}
+        onRow={(post) => ({
+          onClick: (e) => {
+            if (e.button === 0 && !e.ctrlKey && !e.metaKey) {
+              navigate(`/${slug}/${post.id}`);
+            }
+          },
+          onAuxClick: (e) => {
+            if (e.button === 1) {
+              window.open(`/${slug}/${post.id}`, "_blank");
+            }
+          },
+          className: "hover:cursor-pointer",
+        })}
       />
     </div>
   );

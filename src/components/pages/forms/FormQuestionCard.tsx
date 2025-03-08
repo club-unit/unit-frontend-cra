@@ -30,7 +30,9 @@ function FormQuestionCard({ question }: Props) {
           ) : (
             <Radio.Group>
               {question.options.map((option) => (
-                <Radio value={option.content}>{option.content}</Radio>
+                <Radio key={option.id} value={option.content}>
+                  {option.content}
+                </Radio>
               ))}
             </Radio.Group>
           )}
