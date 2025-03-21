@@ -2,9 +2,9 @@ import { SEX_LOOKUP_TABLE } from "src/constants/user";
 import dayjs from "dayjs";
 import { DescriptionsProps } from "antd";
 import { MyUser, OtherUser } from "src/types/api/user";
-import { MyProfile, ProfileDetail } from "src/types/api/profile";
+import { MyProfile, OtherProfile } from "src/types/api/profile";
 
-function isProfileDetail(profile: MyProfile | ProfileDetail): profile is MyProfile {
+function isProfileDetail(profile: MyProfile | OtherProfile): profile is MyProfile {
   return (profile as MyProfile).birthDate !== undefined;
 }
 
