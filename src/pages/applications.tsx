@@ -2,7 +2,7 @@ import { withAuth } from "src/components/common/withAuth";
 import ApplicationBranchSection from "src/components/pages/applications/ApplicationBranchSection";
 import { BRANCH_SLUGS } from "src/constants/branches";
 import { useState } from "react";
-import useAuthSWR from "src/hooks/useAuthSWR";
+import useAuthSWR from "src/hooks/common/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
 import ApplicationsTableSection from "src/components/pages/applications/ApplicationsTableSection";
 import { Application } from "src/types/api/application";

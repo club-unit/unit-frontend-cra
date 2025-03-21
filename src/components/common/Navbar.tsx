@@ -3,7 +3,7 @@ import { CommonListResponse } from "src/types/api/common";
 import { Board } from "src/types/api/board";
 import { API_ROUTES } from "src/constants/routes";
 import { Link } from "react-router-dom";
-import useAuthSWR from "src/hooks/useAuthSWR";
+import useAuthSWR from "src/hooks/common/useAuthSWR";
 import { useEffect, useState } from "react";
 import useAuth from "src/contexts/auth/useAuth";
 

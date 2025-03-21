@@ -8,7 +8,7 @@ import PostListCategorySection from "src/components/pages/[slug]/PostListCategor
 import PostListTableSection from "src/components/pages/[slug]/PostListTableSection";
 import PostListBottomSection from "src/components/pages/[slug]/PostListBottomSection";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import useAuthSWR from "src/hooks/useAuthSWR";
+import useAuthSWR from "src/hooks/common/useAuthSWR";
 import useNotification from "src/contexts/notification/useNotfication";
 import PostListMobileSection from "src/components/pages/[slug]/PostListMobileSection";
 

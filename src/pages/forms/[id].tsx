@@ -1,5 +1,5 @@
 import { withAuth } from "src/components/common/withAuth";
-import useAuthSWR from "src/hooks/useAuthSWR";
+import useAuthSWR from "src/hooks/common/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
 import { useParams } from "react-router-dom";
 import { Form } from "src/types/api/form";
