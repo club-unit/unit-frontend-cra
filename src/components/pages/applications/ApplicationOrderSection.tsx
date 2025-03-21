@@ -1,7 +1,7 @@
 import { Select } from "antd";
 import { APPLICATION_ORDER_LOOKUP_TABLE } from "src/constants/application";
 import React from "react";
-import { ApplicationsSortOrder } from "src/types/applications";
+import { ApplicationsSortOrder } from "src/types/common";
 
 interface Props {
   orderOption: ApplicationsSortOrder;

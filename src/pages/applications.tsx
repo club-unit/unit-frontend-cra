@@ -11,7 +11,7 @@ import { Spin } from "antd";
 import useAuth from "src/contexts/auth/useAuth";
 import ApplicationsStatisticsSection from "src/components/pages/applications/ApplicationsStatisticsSection";
 import ApplicationOrderSection from "src/components/pages/applications/ApplicationOrderSection";
-import { ApplicationsSortOrder } from "src/types/applications";
+import { ApplicationsSortOrder } from "src/types/common";
 
 function ApplicationsPage() {
   const { user } = useAuth();
