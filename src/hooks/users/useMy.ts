@@ -3,7 +3,7 @@ import { API_ROUTES } from "src/constants/routes";
 import { MyUser } from "src/types/api/user";
 
 function useMy(isEnabled: boolean) {
-  const { data: user, isLoading } = useAuthSWR<MyUser>(
+  const { data, isLoading } = useAuthSWR<MyUser>(
     isEnabled
       ? {
           url: API_ROUTES.users.my(),
@@ -12,7 +12,7 @@ function useMy(isEnabled: boolean) {
   );
 
   return {
-    data: user,
+    data,
     isLoading,
   };
 }
