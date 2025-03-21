@@ -1,9 +1,9 @@
 import { Image } from "antd";
-import { User } from "src/types/api/user";
+import { MyUser } from "src/types/api/user";
 import { Author } from "src/types/api/author";
 
 interface Props {
-  user: User | Author;
+  user: MyUser | Author;
   height: number;
 }
 

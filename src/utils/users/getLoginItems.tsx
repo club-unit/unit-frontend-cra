@@ -1,8 +1,8 @@
 import { DescriptionsProps } from "antd";
-import { User } from "src/types/api/user";
+import { MyUser } from "src/types/api/user";
 import PwChangeForm from "src/components/pages/users/PwChangeForm";
 
-function getLoginItems(user: User): DescriptionsProps["items"] {
+function getLoginItems(user: MyUser): DescriptionsProps["items"] {
   return [
     {
       key: "1",

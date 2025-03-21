@@ -1,6 +1,6 @@
 import { MyProfile, ProfileDetail } from "src/types/api/profile";
 
-export interface User {
+export interface MyUser {
   id: number;
   username: string;
   profile: MyProfile;

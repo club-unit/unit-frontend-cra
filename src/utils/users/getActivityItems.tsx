@@ -1,9 +1,9 @@
 import { DescriptionsProps, Image } from "antd";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
 import { Branch } from "src/types/api/profile";
-import { OtherUser, User } from "src/types/api/user";
+import { MyUser, OtherUser } from "src/types/api/user";
 
-function getActivityItems(user: User | OtherUser): DescriptionsProps["items"] {
+function getActivityItems(user: MyUser | OtherUser): DescriptionsProps["items"] {
   return [
     ...(user?.profile.rank !== "NONE"
       ? [

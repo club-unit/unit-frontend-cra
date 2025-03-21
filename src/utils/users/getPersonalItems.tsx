@@ -1,7 +1,7 @@
 import { SEX_LOOKUP_TABLE } from "src/constants/user";
 import dayjs from "dayjs";
 import { DescriptionsProps } from "antd";
-import { OtherUser, User } from "src/types/api/user";
+import { MyUser, OtherUser } from "src/types/api/user";
 import { MyProfile, ProfileDetail } from "src/types/api/profile";
 
 function isProfileDetail(profile: MyProfile | ProfileDetail): profile is MyProfile {
@@ -9,7 +9,7 @@ function isProfileDetail(profile: MyProfile | ProfileDetail): profile is MyProfi
 }
 
 function getPersonalItems<T extends boolean>(
-  user: T extends true ? User : OtherUser,
+  user: T extends true ? MyUser : OtherUser,
   isMine?: boolean
 ): DescriptionsProps["items"] {
   return [
