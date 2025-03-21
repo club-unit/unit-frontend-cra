@@ -2,9 +2,7 @@ import { OtherUser } from "src/types/api/user";
 import useAuthSWR from "src/hooks/common/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
 
-interface Queries {}
-
-function useUser(id: number, isEnabled: boolean, queries?: Queries) {
+function useUser(id: number, isEnabled: boolean) {
   const { data: user, isLoading } = useAuthSWR<OtherUser>(
     isEnabled && id
       ? {
