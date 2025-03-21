@@ -1,18 +1,18 @@
 export interface Profile {
   id: number;
   name: string;
-  branch: Branch;
-  rank: string;
-  responsibility: string;
   profilePhoto: string;
+  branch: Branch;
+  responsibility: Responsibility;
+  rank: Rank;
 }
 
 export interface OtherProfile extends Profile {
-  sex: Sex;
   generation: Generation;
-  activityTerm: number;
   badges: Badge[];
+  sex: Sex;
   email: string;
+  activityTerm: number;
   isLeaved: boolean;
   joinedDatetime: string;
 }
@@ -27,6 +27,14 @@ export type Branch = "GREEN" | "DONGA" | "CITY" | "UNION" | "JAMSIL" | "JUNGSAN"
 export type Rank = "NONE" | "NEW" | "ASSOCIATED" | "REGULAR" | "OB";
 
 export type Sex = "M" | "F";
+
+export type Responsibility =
+  | "NONE"
+  | "NORMAL"
+  | "BRANCH_STAFF"
+  | "BRANCH_LEADER"
+  | "CLUB_STAFF"
+  | "CLUB_LEADER";
 
 export interface Generation {
   id: number;
