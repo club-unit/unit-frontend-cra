@@ -47,7 +47,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
             !hasShownExpirationNotification.current
           ) {
             hasShownExpirationNotification.current = true;
-            api.error({ message: "로그인이 만료되었습니다.", description: "다시 로그인해주세요." });
+            api.error({
+              message: "로그인이 만료되었습니다.",
+              description: "다시 로그인해주세요.",
+              key: "token-expire",
+            });
             logout();
           }
         } else {

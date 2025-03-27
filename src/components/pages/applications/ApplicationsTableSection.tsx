@@ -54,6 +54,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
           api.error({
             message: "신청서 상태 수정에 실패하였습니다.",
             description: "로그인이 만료되었습니다.",
+            key: "token-expire",
           });
           logout();
         }

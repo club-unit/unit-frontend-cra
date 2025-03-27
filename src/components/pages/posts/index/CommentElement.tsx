@@ -40,6 +40,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
           api.error({
             message: "댓글 삭제에 실패했습니다.",
             description: "로그인이 만료되었습니다.",
+            key: "token-expire",
           });
           logout();
         }

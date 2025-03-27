@@ -55,6 +55,7 @@ function FormWrapperSection({ sections }: Props) {
             api.error({
               message: "폼 응답에 실패하였습니다.",
               description: "로그인이 만료되었습니다.",
+              key: "token-expire",
             });
             logout();
           }

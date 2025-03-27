@@ -27,7 +27,11 @@ function useAuthSWR<T>(params: Params | null) {
         api.error({ message: "로그인이 필요합니다." });
         navigate("/");
       } else {
-        api.error({ message: "로그인이 만료되었습니다.", description: "다시 시도해주세요" });
+        api.error({
+          message: "로그인이 만료되었습니다.",
+          description: "다시 시도해주세요",
+          key: "token-expire",
+        });
         logout();
       }
     }

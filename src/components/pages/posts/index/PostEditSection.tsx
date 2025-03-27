@@ -55,6 +55,7 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
           api.error({
             message: "게시글 수정에 실패하였습니다.",
             description: "로그인이 만료되었습니다.",
+            key: "token-expire",
           });
           logout();
         }
