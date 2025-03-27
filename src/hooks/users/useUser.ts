@@ -3,7 +3,7 @@ import useAuthSWR from "src/hooks/common/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
 
 function useUser(id: number, isDisabled?: boolean) {
-  const { data, isLoading } = useAuthSWR<OtherUser>(
+  const { data, isLoading, mutate, error } = useAuthSWR<OtherUser>(
     !isDisabled && id
       ? {
           url: API_ROUTES.users.byId(id),
@@ -14,6 +14,8 @@ function useUser(id: number, isDisabled?: boolean) {
   return {
     data,
     isLoading,
+    mutate,
+    error,
   };
 }
 

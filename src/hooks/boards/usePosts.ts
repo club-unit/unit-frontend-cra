@@ -10,7 +10,7 @@ interface PostListQuery {
 }
 
 function usePosts(slug: string, query: PostListQuery, isDisabled: boolean) {
-  const { data, isLoading } = useAuthSWR<CommonPagedResponse<PostSummary>>(
+  const { data, isLoading, mutate, error } = useAuthSWR<CommonPagedResponse<PostSummary>>(
     !isDisabled && slug
       ? {
           url: API_ROUTES.posts.bySlug(slug),
@@ -22,7 +22,7 @@ function usePosts(slug: string, query: PostListQuery, isDisabled: boolean) {
         }
       : null
   );
-  return { data, isLoading };
+  return { data, isLoading, mutate, error };
 }
 
 export default usePosts;
