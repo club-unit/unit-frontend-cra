@@ -79,10 +79,12 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
     },
     {
       title: "작성일",
-      dataIndex: "created",
-      key: "created",
-      render: (created: string) => {
-        return <Typography.Text>{dayjs(created).format("YYYY/MM/DD HH:mm:ss")}</Typography.Text>;
+      dataIndex: "createdDatetime",
+      key: "createdDatetime",
+      render: (createdDatetime: string) => {
+        return (
+          <Typography.Text>{dayjs(createdDatetime).format("YYYY/MM/DD HH:mm:ss")}</Typography.Text>
+        );
       },
     },
     {
