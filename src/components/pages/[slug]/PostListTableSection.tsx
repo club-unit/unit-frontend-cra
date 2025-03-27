@@ -1,7 +1,7 @@
 import { Image, Table, Typography } from "antd";
 import React from "react";
 import { PushpinFilled } from "@ant-design/icons";
-import { Post, PostSummary } from "src/types/api/post";
+import { Post, PostPreview } from "src/types/api/post";
 import { Author } from "src/types/api/author";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
@@ -9,7 +9,7 @@ import BadgeSet from "src/components/common/BadgeSet";
 import formatDateString from "src/utils/common/dateToString";
 
 interface Props {
-  posts: PostSummary[];
+  posts: PostPreview[];
 }
 
 function PostListTableSection({ posts }: Props) {

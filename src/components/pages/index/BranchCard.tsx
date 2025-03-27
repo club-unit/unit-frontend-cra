@@ -6,7 +6,7 @@ import { API_ROUTES } from "src/constants/routes";
 import { Link } from "react-router-dom";
 import useAuthSWR from "src/hooks/common/useAuthSWR";
 import { Branch } from "src/types/api/profile";
-import { PostSummary } from "src/types/api/post";
+import { PostPreview } from "src/types/api/post";
 
 interface Props {
   slug: (typeof BRANCH_SLUGS)[number];
@@ -14,7 +14,7 @@ interface Props {
 }
 
 function BranchCard({ slug, myBranch }: Props) {
-  const { data: postsSummary } = useAuthSWR<CommonListResponse<PostSummary>>({
+  const { data: postsSummary } = useAuthSWR<CommonListResponse<PostPreview>>({
     url: API_ROUTES.posts.summary(slug),
   });
 

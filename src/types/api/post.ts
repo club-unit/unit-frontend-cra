@@ -15,7 +15,9 @@ export interface Post {
   thumbnail: string;
 }
 
-export interface PostSummary {
+export interface PostListElement {}
+
+export interface PostPreview {
   id: number;
   title: string;
   shortenContent: string;

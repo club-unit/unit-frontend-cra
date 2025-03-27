@@ -1,4 +1,4 @@
-import { PostSummary } from "src/types/api/post";
+import { PostPreview } from "src/types/api/post";
 import { Image, List, Typography } from "antd";
 import {
   ClockCircleOutlined,
@@ -13,7 +13,7 @@ import formatDateString from "src/utils/common/dateToString";
 import React from "react";
 
 interface Props {
-  posts: PostSummary[];
+  posts: PostPreview[];
 }
 
 function PostListMobileSection({ posts }: Props) {
