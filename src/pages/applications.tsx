@@ -2,16 +2,13 @@ import { withAuth } from "src/components/common/withAuth";
 import ApplicationBranchSection from "src/components/pages/applications/ApplicationBranchSection";
 import { BRANCH_SLUGS } from "src/constants/branches";
 import { useState } from "react";
-import useAuthSWR from "src/hooks/useAuthSWR";
-import { API_ROUTES } from "src/constants/routes";
 import ApplicationsTableSection from "src/components/pages/applications/ApplicationsTableSection";
-import { Application } from "src/types/api/application";
-import { CommonListResponse } from "src/types/api/common";
 import { Spin } from "antd";
 import useAuth from "src/contexts/auth/useAuth";
 import ApplicationsStatisticsSection from "src/components/pages/applications/ApplicationsStatisticsSection";
 import ApplicationOrderSection from "src/components/pages/applications/ApplicationOrderSection";
-import { ApplicationsSortOrder } from "src/types/applications";
+import { ApplicationsSortOrder } from "src/types/common";
+import useApplications from "src/hooks/api/applications/useApplications";
 
 function ApplicationsPage() {
   const { user } = useAuth();
@@ -19,16 +16,17 @@ function ApplicationsPage() {
   const [currentBranch, setCurrentBranch] = useState<string | number>(
     user?.profile.branch || "ALL"
   );
-  const { data, mutate } = useAuthSWR<CommonListResponse<Application>>({
-    url: API_ROUTES.applications.root(),
-    query: { branch: currentBranch !== "ALL" ? currentBranch : undefined },
+  const { data, mutate } = useApplications({
+    branch: currentBranch !== "ALL" ? String(currentBranch) : undefined,
   });
+
   const branchList = ["ALL", ...BRANCH_SLUGS.map((slug) => slug.toUpperCase())];
-  const sortedApplications = data?.sort((a, b) => {
+
+  data?.sort((a, b) => {
     if (order === "TIME_ASC") {
-      return new Date(a.created) > new Date(b.created) ? 1 : -1;
+      return new Date(a.createdDatetime) > new Date(b.createdDatetime) ? 1 : -1;
     } else if (order === "TIME_DESC") {
-      return new Date(b.created) > new Date(a.created) ? 1 : -1;
+      return new Date(b.createdDatetime) > new Date(a.createdDatetime) ? 1 : -1;
     } else if (order === "NAME_ASC") {
       return a.applicant.name.toUpperCase() > b.applicant.name.toUpperCase() ? 1 : -1;
     } else if (order === "STATUS") {

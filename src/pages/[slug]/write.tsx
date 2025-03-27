@@ -1,31 +1,23 @@
 import { Button, Card, Checkbox, Form, Input, Modal, Select, Typography } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import { CommonListResponse } from "src/types/api/common";
-import { Category } from "src/types/api/category";
 import { API_ROUTES } from "src/constants/routes";
 import useAuth from "src/contexts/auth/useAuth";
 import { useEffect, useState } from "react";
 import { PostDetail, PostWritten } from "src/types/api/post";
 import useNotification from "src/contexts/notification/useNotfication";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
-import useAuthSWR from "src/hooks/useAuthSWR";
 import ContentEditor from "src/components/common/ContentEditor";
 import { clientAxios } from "src/utils/common/clientAxios";
 import { AxiosError } from "axios";
 import extractFirstImage from "src/utils/[slug]/extractFirstImage";
+import useCategories from "src/hooks/api/[slug]/useCategories";
 
 interface FormValues extends PostWritten {}
 
 function PostWritePage() {
   const { slug } = useParams();
   const { logout } = useAuth();
-  const { data: categories } = useAuthSWR<CommonListResponse<Category>>(
-    slug
-      ? {
-          url: API_ROUTES.categories.bySlug(slug),
-        }
-      : null
-  );
+  const { data: categories } = useCategories(String(slug));
   const categoryOptions = categories?.map((category) => ({
     value: category.id,
     label: category.name,
@@ -55,6 +47,7 @@ function PostWritePage() {
           api.error({
             message: "게시글 등록에 실패하였습니다.",
             description: "로그인이 만료되었습니다.",
+            key: "token-expire",
           });
         }
         logout();

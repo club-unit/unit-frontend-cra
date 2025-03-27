@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { createContext, ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import { User } from "src/types/api/user";
+import { MyUser } from "src/types/api/user";
 import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import {
@@ -15,7 +15,7 @@ import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
 interface AuthContextValue {
-  user: User | null;
+  user: MyUser | null;
   login: (access: string, refresh: string, remember: boolean) => void;
   logout: () => void;
   isLoggedIn: boolean;
@@ -25,7 +25,7 @@ interface AuthContextValue {
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
 function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<MyUser | null>(null);
   const [isLoadingCookie, setIsLoadingCookie] = useState(false);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const { api } = useNotification();
@@ -36,7 +36,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
     async (token: string) => {
       setIsLoadingUser(true);
       try {
-        const { data } = await clientAxios.get<User>(API_ROUTES.users.my(), {
+        const { data } = await clientAxios.get<MyUser>(API_ROUTES.users.my(), {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(data);
@@ -47,7 +47,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
             !hasShownExpirationNotification.current
           ) {
             hasShownExpirationNotification.current = true;
-            api.error({ message: "로그인이 만료되었습니다.", description: "다시 로그인해주세요." });
+            api.error({
+              message: "로그인이 만료되었습니다.",
+              description: "다시 로그인해주세요.",
+              key: "token-expire",
+            });
             logout();
           }
         } else {

@@ -27,6 +27,7 @@ function PwChangeForm() {
           api.error({
             message: "비밀번호 변경에 실패했습니다.",
             description: "로그인이 만료되었습니다.",
+            key: "token-expire",
           });
           logout();
         }

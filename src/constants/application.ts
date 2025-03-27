@@ -1,5 +1,5 @@
 import { ApplicationStatus } from "src/types/api/application";
-import { ApplicationsSortOrder } from "src/types/applications";
+import { ApplicationsSortOrder } from "src/types/common";
 
 export const APPLICATION_STATUS_LOOKUP_TABLE: Record<ApplicationStatus, string> = {
   FIRST_CHOICE_WAITING: "1지망 대기",

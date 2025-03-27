@@ -6,25 +6,37 @@ export interface Post {
   id: number;
   title: string;
   content: string;
-  category: Category;
   author: Author;
-  isPinned: boolean;
-  views: number;
-  numComments: number;
-  createdDatetime: string;
   thumbnail: string;
+  isPinned: boolean;
+  numComments: number;
+  views: number;
+  category: Category;
+  comments: Comment[];
+  createdDatetime: string;
 }
 
 export interface PostSummary {
   id: number;
   title: string;
-  shortenContent: string;
+  category: Category;
   author: Author;
-  views: number;
-  created: string;
-  numComments: number;
   thumbnail: string;
+  numComments: number;
   isPinned: boolean;
+  views: number;
+  createdDatetime: string;
+}
+
+export interface PostPreview {
+  id: number;
+  title: string;
+  shortenContent: string;
+  thumbnail: string;
+  numComments: number;
+  views: number;
+  author: Author;
+  createdDatetime: string;
 }
 
 export interface PostWritten {

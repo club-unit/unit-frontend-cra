@@ -65,15 +65,15 @@ function PostListTableSection({ posts }: Props) {
     },
     {
       title: "작성일",
-      dataIndex: "created",
-      key: "created",
-      render: (created: string) => (
+      dataIndex: "createdDatetime",
+      key: "createdDatetime",
+      render: (createdDatetime: string) => (
         <Typography.Text
           className={`text-xs md:text-sm ${
-            dayjs().diff(dayjs(created), "hour") < 24 && "text-red-600"
+            dayjs().diff(dayjs(createdDatetime), "hour") < 24 && "text-red-600"
           }`}
         >
-          {formatDateString(created)}
+          {formatDateString(createdDatetime)}
         </Typography.Text>
       ),
       width: 100,

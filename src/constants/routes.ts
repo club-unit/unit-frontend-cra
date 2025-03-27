@@ -26,14 +26,14 @@ export const API_ROUTES = {
     bySlug: (slug: string) => `/v2/boards/${slug}/categories/`,
   },
   forms: {
-    byId: (id: number) => `/forms/${id}/`,
-    answerById: (id: number) => `/forms/${id}/answer/`,
+    byId: (id: number) => `/v2/forms/${id}/`,
+    answerById: (id: number) => `/v2/forms/${id}/answers/`,
   },
   notices: {
     root: () => "/v2/notices/",
   },
   applications: {
-    root: () => "/applications/",
-    byId: (id: number) => `/applications/${id}/`,
+    root: () => "/v2/applications/",
+    byId: (id: number) => `/v2/applications/${id}/`,
   },
 };

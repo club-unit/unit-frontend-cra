@@ -13,7 +13,7 @@ function useAuthSWR<T>(params: Params | null) {
   const { logout } = useAuth();
   const { api } = useNotification();
   const navigate = useNavigate();
-  const { data, mutate, error } = useSWR<T>({ ...params });
+  const { data, mutate, error, isLoading } = useSWR<T>({ ...params });
 
   useEffect(() => {
     if (error?.response?.status === 403) {
@@ -27,7 +27,11 @@ function useAuthSWR<T>(params: Params | null) {
         api.error({ message: "로그인이 필요합니다." });
         navigate("/");
       } else {
-        api.error({ message: "로그인이 만료되었습니다.", description: "다시 시도해주세요" });
+        api.error({
+          message: "로그인이 만료되었습니다.",
+          description: "다시 시도해주세요",
+          key: "token-expire",
+        });
         logout();
       }
     }
@@ -35,7 +39,7 @@ function useAuthSWR<T>(params: Params | null) {
 
   return {
     data,
-    isLoading: !error && !data,
+    isLoading,
     error,
     mutate,
   };

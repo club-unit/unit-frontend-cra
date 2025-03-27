@@ -3,15 +3,13 @@ import { Dispatch, useEffect, useState } from "react";
 import { Button, Checkbox, Form, Input, Select } from "antd";
 import { useParams } from "react-router-dom";
 import useAuth from "src/contexts/auth/useAuth";
-import { CommonListResponse } from "src/types/api/common";
-import { Category } from "src/types/api/category";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
 import { clientAxios } from "src/utils/common/clientAxios";
-import useAuthSWR from "src/hooks/useAuthSWR";
 import ContentEditor from "src/components/common/ContentEditor";
 import extractFirstImage from "src/utils/[slug]/extractFirstImage";
 import { AxiosError } from "axios";
+import useCategories from "src/hooks/api/[slug]/useCategories";
 
 interface Props {
   post: PostDetail;
@@ -24,13 +22,7 @@ interface FormValues extends PostWritten {}
 function PostEditSection({ post, setIsEditing, mutate }: Props) {
   const { slug, id } = useParams();
   const { logout } = useAuth();
-  const { data: categories } = useAuthSWR<CommonListResponse<Category>>(
-    slug
-      ? {
-          url: API_ROUTES.categories.bySlug(slug),
-        }
-      : null
-  );
+  const { data: categories } = useCategories(String(slug));
   const categoryOptions = categories?.map((category) => ({
     value: category.id,
     label: category.name,
@@ -55,6 +47,7 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
           api.error({
             message: "게시글 수정에 실패하였습니다.",
             description: "로그인이 만료되었습니다.",
+            key: "token-expire",
           });
           logout();
         }

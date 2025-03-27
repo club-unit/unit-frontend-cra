@@ -41,11 +41,12 @@ function FormWrapperSection({ sections }: Props) {
     const newFormAnswer = { ...formAnswer, ...value };
     setFormAnswer(newFormAnswer);
     if (currentSectionNumber === sectionsTransformed.length - 2) {
-      const body = Object.keys(newFormAnswer).map((key) => {
-        return { question: Number(key), content: newFormAnswer[key] || "" };
+      const answerList = Object.keys(newFormAnswer).map((key) => {
+        return { questionId: Number(key), content: newFormAnswer[key] || "" };
       });
+      const formBody = { answers: answerList };
       try {
-        await clientAxios.post(API_ROUTES.forms.answerById(Number(id)), body);
+        await clientAxios.post(API_ROUTES.forms.answerById(Number(id)), formBody);
         form.resetFields();
         setCurrentSectionNumber(currentSectionNumber + 1);
       } catch (e) {
@@ -54,6 +55,7 @@ function FormWrapperSection({ sections }: Props) {
             api.error({
               message: "폼 응답에 실패하였습니다.",
               description: "로그인이 만료되었습니다.",
+              key: "token-expire",
             });
             logout();
           }
