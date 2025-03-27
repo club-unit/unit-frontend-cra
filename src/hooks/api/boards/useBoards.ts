@@ -1,4 +1,4 @@
-import useAuthSWR from "src/hooks/common/useAuthSWR";
+import useAuthSWR from "src/hooks/api/common/useAuthSWR";
 import { CommonListResponse } from "src/types/api/common";
 import { Board } from "src/types/api/board";
 import { API_ROUTES } from "src/constants/routes";

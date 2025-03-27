@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PostEditSection from "src/components/pages/posts/index/PostEditSection";
 import ContentHeaderSection from "src/components/common/ContentHeaderSection";
-import useAuthSWR from "src/hooks/common/useAuthSWR";
+import useAuthSWR from "src/hooks/api/common/useAuthSWR";
 import useAuth from "src/contexts/auth/useAuth";
 import PostHeaderSection from "src/components/pages/posts/index/PostHeaderSection";
 import useNotification from "src/contexts/notification/useNotfication";

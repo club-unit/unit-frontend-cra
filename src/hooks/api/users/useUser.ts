@@ -1,5 +1,5 @@
 import { OtherUser } from "src/types/api/user";
-import useAuthSWR from "src/hooks/common/useAuthSWR";
+import useAuthSWR from "src/hooks/api/common/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
 
 function useUser(id: number, isDisabled?: boolean) {

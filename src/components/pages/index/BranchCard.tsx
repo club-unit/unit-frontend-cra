@@ -4,7 +4,7 @@ import BranchCardElement from "src/components/pages/index/BranchCardElement";
 import { CommonListResponse } from "src/types/api/common";
 import { API_ROUTES } from "src/constants/routes";
 import { Link } from "react-router-dom";
-import useAuthSWR from "src/hooks/common/useAuthSWR";
+import useAuthSWR from "src/hooks/api/common/useAuthSWR";
 import { Branch } from "src/types/api/profile";
 import { PostPreview } from "src/types/api/post";
 
