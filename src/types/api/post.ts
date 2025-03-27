@@ -6,13 +6,14 @@ export interface Post {
   id: number;
   title: string;
   content: string;
-  category: Category;
   author: Author;
-  isPinned: boolean;
-  views: number;
-  numComments: number;
-  createdDatetime: string;
   thumbnail: string;
+  isPinned: boolean;
+  numComments: number;
+  views: number;
+  category: Category;
+  comments: Comment[];
+  createdDatetime: string;
 }
 
 export interface PostSummary {
