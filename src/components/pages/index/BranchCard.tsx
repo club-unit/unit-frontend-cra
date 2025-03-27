@@ -1,12 +1,9 @@
 import { Card, Empty } from "antd";
 import { BRANCH_LOOKUP_TABLE, BRANCH_SLUGS } from "src/constants/branches";
 import BranchCardElement from "src/components/pages/index/BranchCardElement";
-import { CommonListResponse } from "src/types/api/common";
-import { API_ROUTES } from "src/constants/routes";
 import { Link } from "react-router-dom";
-import useAuthSWR from "src/hooks/api/useAuthSWR";
 import { Branch } from "src/types/api/profile";
-import { PostPreview } from "src/types/api/post";
+import usePostSummary from "src/hooks/api/index/usePostSummary";
 
 interface Props {
   slug: (typeof BRANCH_SLUGS)[number];
@@ -14,9 +11,7 @@ interface Props {
 }
 
 function BranchCard({ slug, myBranch }: Props) {
-  const { data: postsSummary } = useAuthSWR<CommonListResponse<PostPreview>>({
-    url: API_ROUTES.posts.summary(slug),
-  });
+  const { data: postsSummary } = usePostSummary(slug);
 
   return (
     <Card
