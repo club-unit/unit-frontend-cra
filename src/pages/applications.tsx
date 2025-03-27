@@ -26,9 +26,9 @@ function ApplicationsPage() {
   const branchList = ["ALL", ...BRANCH_SLUGS.map((slug) => slug.toUpperCase())];
   const sortedApplications = data?.sort((a, b) => {
     if (order === "TIME_ASC") {
-      return new Date(a.created) > new Date(b.created) ? 1 : -1;
+      return new Date(a.createdDatetime) > new Date(b.createdDatetime) ? 1 : -1;
     } else if (order === "TIME_DESC") {
-      return new Date(b.created) > new Date(a.created) ? 1 : -1;
+      return new Date(b.createdDatetime) > new Date(a.createdDatetime) ? 1 : -1;
     } else if (order === "NAME_ASC") {
       return a.applicant.name.toUpperCase() > b.applicant.name.toUpperCase() ? 1 : -1;
     } else if (order === "STATUS") {

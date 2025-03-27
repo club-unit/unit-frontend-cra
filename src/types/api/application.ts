@@ -1,4 +1,4 @@
-import { Branch } from "src/types/api/profile";
+import { Branch, Sex } from "src/types/api/profile";
 
 export interface Application {
   id: number;
@@ -12,12 +12,12 @@ export interface Application {
   firstChoice: Branch;
   secondChoice: Branch;
   extra: ExtraQuestion[];
-  created: string;
+  createdDatetime: string;
 }
 
 export interface Applicant {
   name: string;
-  sex: string;
+  sex: Sex;
   phoneNumber: string;
   yearAge: string;
 }

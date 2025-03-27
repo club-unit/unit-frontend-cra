@@ -10,6 +10,7 @@ import useNotification from "src/contexts/notification/useNotfication";
 import useAuth from "src/contexts/auth/useAuth";
 import dayjs from "dayjs";
 import { ArrowRightOutlined } from "@ant-design/icons";
+import { SEX_LOOKUP_TABLE } from "src/constants/user";
 
 interface Props {
   applications: Application[];
@@ -32,7 +33,7 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
     ...application,
     index: index + 1,
     name: application.applicant.name,
-    sex: application.applicant.sex === "1" ? "남" : "여",
+    sex: SEX_LOOKUP_TABLE[application.applicant.sex],
     phoneNumber: application.applicant.phoneNumber,
     yearAge: application.applicant.yearAge,
     status: APPLICATION_STATUS_LOOKUP_TABLE[application.status],

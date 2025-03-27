@@ -3,13 +3,13 @@ import { API_ROUTES } from "src/constants/routes";
 import { PostSummary } from "src/types/api/post";
 import { CommonPagedResponse } from "src/types/api/common";
 
-interface PostListQuery {
+interface UsePostsQuery {
   categoryName?: string;
   ordering?: string;
   page?: number;
 }
 
-function usePosts(slug: string, query: PostListQuery, isDisabled: boolean) {
+function usePosts(slug: string, query: UsePostsQuery, isDisabled: boolean) {
   const { data, isLoading, mutate, error } = useAuthSWR<CommonPagedResponse<PostSummary>>(
     !isDisabled && slug
       ? {
