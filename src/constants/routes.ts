@@ -27,7 +27,7 @@ export const API_ROUTES = {
   },
   forms: {
     byId: (id: number) => `/v2/forms/${id}/`,
-    answerById: (id: number) => `/v2/forms/${id}/answer/`,
+    answerById: (id: number) => `/v2/forms/${id}/answers/`,
   },
   notices: {
     root: () => "/v2/notices/",
