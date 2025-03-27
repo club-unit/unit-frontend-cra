@@ -15,7 +15,17 @@ export interface Post {
   thumbnail: string;
 }
 
-export interface PostListElement {}
+export interface PostSummary {
+  id: number;
+  title: string;
+  category: Category;
+  author: Author;
+  thumbnail: string;
+  numComments: number;
+  isPinned: boolean;
+  views: number;
+  createdDatetime: string;
+}
 
 export interface PostPreview {
   id: number;

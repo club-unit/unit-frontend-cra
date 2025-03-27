@@ -7,6 +7,14 @@ export interface Profile {
   rank: Rank;
 }
 
+export interface AuthorProfile {
+  name: string;
+  profilePhoto: string;
+  branch: Branch;
+  rank: Rank;
+  responsibility: Responsibility;
+}
+
 export interface OtherProfile extends Profile {
   generation: Generation;
   badges: Badge[];
