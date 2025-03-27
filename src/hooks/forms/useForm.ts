@@ -2,9 +2,9 @@ import useAuthSWR from "src/hooks/common/useAuthSWR";
 import { Form } from "src/types/api/form";
 import { API_ROUTES } from "src/constants/routes";
 
-function useForm(id: number, isEnabled: boolean) {
+function useForm(id: number, isDisabled?: boolean) {
   const { data, isLoading } = useAuthSWR<Form>(
-    isEnabled ? { url: API_ROUTES.forms.byId(id) } : null
+    !isDisabled && id ? { url: API_ROUTES.forms.byId(id) } : null
   );
   return { data, isLoading };
 }

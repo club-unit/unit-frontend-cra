@@ -3,9 +3,9 @@ import { CommonListResponse } from "src/types/api/common";
 import { Notice } from "src/types/api/notice";
 import { API_ROUTES } from "src/constants/routes";
 
-function useNotices(isEnabled: boolean) {
+function useNotices(isDisabled?: boolean) {
   const { data, isLoading } = useAuthSWR<CommonListResponse<Notice>>(
-    isEnabled ? { url: API_ROUTES.notices.root() } : null
+    !isDisabled ? { url: API_ROUTES.notices.root() } : null
   );
 
   return { data, isLoading };
