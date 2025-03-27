@@ -1,16 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { Spin } from "antd";
-import { CommonListResponse, CommonPagedResponse } from "src/types/api/common";
-import { API_ROUTES } from "src/constants/routes";
-import { Category } from "src/types/api/category";
 import PostListCategorySection from "src/components/pages/[slug]/PostListCategorySection";
 import PostListTableSection from "src/components/pages/[slug]/PostListTableSection";
 import PostListBottomSection from "src/components/pages/[slug]/PostListBottomSection";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import useAuthSWR from "src/hooks/api/useAuthSWR";
 import useNotification from "src/contexts/notification/useNotfication";
 import PostListMobileSection from "src/components/pages/[slug]/PostListMobileSection";
-import { PostSummary } from "src/types/api/post";
+import usePosts from "src/hooks/api/[slug]/usePosts";
+import useCategories from "src/hooks/api/[slug]/useCategories";
 
 function PostListPage() {
   const { slug } = useParams();
@@ -25,25 +22,16 @@ function PostListPage() {
     data: posts,
     error,
     mutate,
-  } = useAuthSWR<CommonPagedResponse<PostSummary>>(
-    slug
-      ? {
-          url: API_ROUTES.posts.bySlug(slug),
-          query: {
-            category__name:
-              searchParams.get("category") !== "전체" ? searchParams.get("category") : undefined,
-            page: searchParams.get("page"),
-          },
-        }
-      : null
-  );
-  const { data: categories } = useAuthSWR<CommonListResponse<Category>>(
-    slug
-      ? {
-          url: API_ROUTES.categories.bySlug(slug),
-        }
-      : null
-  );
+  } = usePosts(slug, {
+    categoryName:
+      searchParams.get("category") !== "전체" && searchParams.get("category") !== null
+        ? String(searchParams.get("category"))
+        : undefined,
+    page: searchParams.get("page") ? Number(searchParams.get("page")) : undefined,
+  });
+
+  const { data: categories } = useCategories(slug);
+
   const categoryList = categories
     ? [{ id: 0, name: "전체" }, ...categories]
     : [{ id: 0, name: "전체" }];

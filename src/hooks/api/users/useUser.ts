@@ -2,7 +2,7 @@ import { OtherUser } from "src/types/api/user";
 import useAuthSWR from "src/hooks/api/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
 
-function useUser(id: number, isDisabled?: boolean) {
+function useUser(id: number | undefined, isDisabled?: boolean) {
   const { data, isLoading, mutate, error } = useAuthSWR<OtherUser>(
     !isDisabled && id
       ? {

@@ -3,7 +3,7 @@ import { CommonListResponse } from "src/types/api/common";
 import { Category } from "src/types/api/category";
 import { API_ROUTES } from "src/constants/routes";
 
-function useCategories(slug: string, isDisabled?: boolean) {
+function useCategories(slug: string | undefined, isDisabled?: boolean) {
   const { data, isLoading, mutate, error } = useAuthSWR<CommonListResponse<Category>>(
     !isDisabled && slug
       ? {

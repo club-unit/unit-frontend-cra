@@ -3,7 +3,7 @@ import { API_ROUTES } from "src/constants/routes";
 import { PostPreview } from "src/types/api/post";
 import { CommonListResponse } from "src/types/api/common";
 
-function usePostSummary(slug: string, isDisabled?: boolean) {
+function usePostSummary(slug: string | undefined, isDisabled?: boolean) {
   const { data, isLoading, mutate, error } = useAuthSWR<CommonListResponse<PostPreview>>(
     !isDisabled && slug
       ? {

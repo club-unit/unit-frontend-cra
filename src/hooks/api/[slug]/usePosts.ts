@@ -9,7 +9,7 @@ interface UsePostsQuery {
   page?: number;
 }
 
-function usePosts(slug: string, query: UsePostsQuery, isDisabled: boolean) {
+function usePosts(slug: string | undefined, query: UsePostsQuery, isDisabled?: boolean) {
   const { data, isLoading, mutate, error } = useAuthSWR<CommonPagedResponse<PostSummary>>(
     !isDisabled && slug
       ? {
