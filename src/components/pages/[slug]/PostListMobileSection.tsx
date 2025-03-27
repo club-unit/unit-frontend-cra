@@ -1,4 +1,3 @@
-import { PostPreview } from "src/types/api/post";
 import { Image, List, Typography } from "antd";
 import {
   ClockCircleOutlined,
@@ -11,9 +10,10 @@ import dayjs from "dayjs";
 import { Link, useParams } from "react-router-dom";
 import formatDateString from "src/utils/common/dateToString";
 import React from "react";
+import { PostSummary } from "src/types/api/post";
 
 interface Props {
-  posts: PostPreview[];
+  posts: PostSummary[];
 }
 
 function PostListMobileSection({ posts }: Props) {
@@ -49,10 +49,12 @@ function PostListMobileSection({ posts }: Props) {
                     <ClockCircleOutlined />
                     <Typography.Text
                       className={
-                        dayjs().diff(dayjs(post.created), "hour") < 24 ? "text-red-600" : undefined
+                        dayjs().diff(dayjs(post.createdDatetime), "hour") < 24
+                          ? "text-red-600"
+                          : undefined
                       }
                     >
-                      {formatDateString(post.created)}
+                      {formatDateString(post.createdDatetime)}
                     </Typography.Text>
                   </Typography.Text>
                 </div>

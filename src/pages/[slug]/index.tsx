@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { Spin } from "antd";
-import { PostPreview } from "src/types/api/post";
 import { CommonListResponse, CommonPagedResponse } from "src/types/api/common";
 import { API_ROUTES } from "src/constants/routes";
 import { Category } from "src/types/api/category";
@@ -11,6 +10,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import useAuthSWR from "src/hooks/common/useAuthSWR";
 import useNotification from "src/contexts/notification/useNotfication";
 import PostListMobileSection from "src/components/pages/[slug]/PostListMobileSection";
+import { PostSummary } from "src/types/api/post";
 
 function PostListPage() {
   const { slug } = useParams();
@@ -25,7 +25,7 @@ function PostListPage() {
     data: posts,
     error,
     mutate,
-  } = useAuthSWR<CommonPagedResponse<PostPreview>>(
+  } = useAuthSWR<CommonPagedResponse<PostSummary>>(
     slug
       ? {
           url: API_ROUTES.posts.bySlug(slug),

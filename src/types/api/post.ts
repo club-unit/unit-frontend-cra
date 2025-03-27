@@ -32,12 +32,11 @@ export interface PostPreview {
   id: number;
   title: string;
   shortenContent: string;
-  author: Author;
-  views: number;
-  created: string;
-  numComments: number;
   thumbnail: string;
-  isPinned: boolean;
+  numComments: number;
+  views: number;
+  author: Author;
+  createdDatetime: string;
 }
 
 export interface PostWritten {
