@@ -1,26 +1,18 @@
 import { Typography } from "antd";
 import { withAuth } from "src/components/common/withAuth";
-import useAuthSWR from "src/hooks/api/useAuthSWR";
-import { API_ROUTES } from "src/constants/routes";
 import { useNavigate, useParams } from "react-router-dom";
-import { OtherUser } from "src/types/api/user";
 import useAuth from "src/contexts/auth/useAuth";
 import ActivityInfoCard from "src/components/pages/users/ActivityInfoCard";
 import BasicInfoCard from "src/components/pages/users/BasicInfoCard";
 import BadgeCard from "src/components/pages/users/BadgeCard";
 import { useLayoutEffect } from "react";
+import useUser from "src/hooks/api/users/useUser";
 
 function ProfilePage() {
   const { id } = useParams();
   const { user: me } = useAuth();
   const navigate = useNavigate();
-  const { data: user } = useAuthSWR<OtherUser>(
-    id
-      ? {
-          url: API_ROUTES.users.byId(Number(id)),
-        }
-      : null
-  );
+  const { data: user } = useUser(Number(id));
 
   useLayoutEffect(() => {
     if (user && me && user?.id === me?.id) {
