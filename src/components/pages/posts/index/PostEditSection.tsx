@@ -8,7 +8,7 @@ import { Category } from "src/types/api/category";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
 import { clientAxios } from "src/utils/common/clientAxios";
-import useAuthSWR from "src/hooks/api/common/useAuthSWR";
+import useAuthSWR from "src/hooks/api/useAuthSWR";
 import ContentEditor from "src/components/common/ContentEditor";
 import extractFirstImage from "src/utils/[slug]/extractFirstImage";
 import { AxiosError } from "axios";

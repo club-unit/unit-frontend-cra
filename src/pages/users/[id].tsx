@@ -1,6 +1,6 @@
 import { Typography } from "antd";
 import { withAuth } from "src/components/common/withAuth";
-import useAuthSWR from "src/hooks/api/common/useAuthSWR";
+import useAuthSWR from "src/hooks/api/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
 import { useNavigate, useParams } from "react-router-dom";
 import { OtherUser } from "src/types/api/user";

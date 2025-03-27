@@ -1,4 +1,4 @@
-import useAuthSWR from "src/hooks/api/common/useAuthSWR";
+import useAuthSWR from "src/hooks/api/useAuthSWR";
 import { Form } from "src/types/api/form";
 import { API_ROUTES } from "src/constants/routes";
 
