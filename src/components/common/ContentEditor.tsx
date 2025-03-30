@@ -19,8 +19,8 @@ function ContentEditor({ setContent, content }: Props) {
     return new Promise((resolve, _) => {
       Resizer.imageFileResizer(
         file,
-        800,
-        800,
+        600,
+        600,
         "JPEG",
         90,
         0,
@@ -43,8 +43,8 @@ function ContentEditor({ setContent, content }: Props) {
   }) => {
     const originalBlob = blobInfo.blob();
 
-    if (originalBlob.size > 15 * 1024 * 1024) {
-      return Promise.reject({ message: "15MB 이하의 이미지만 업로드 가능합니다.", remove: true });
+    if (originalBlob.size > 10 * 1024 * 1024) {
+      return Promise.reject({ message: "10MB 이하의 이미지만 업로드 가능합니다.", remove: true });
     }
 
     try {
