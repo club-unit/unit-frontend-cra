@@ -1,18 +1,13 @@
 import { Menu, MenuProps } from "antd";
-import { CommonListResponse } from "src/types/api/common";
-import { Board } from "src/types/api/board";
-import { API_ROUTES } from "src/constants/routes";
 import { Link } from "react-router-dom";
-import useAuthSWR from "src/hooks/useAuthSWR";
 import { useEffect, useState } from "react";
 import useAuth from "src/contexts/auth/useAuth";
+import useBoards from "src/hooks/api/common/useBoards";
 
 function Navbar() {
   const { user } = useAuth();
 
-  const { data: boardsResponse, mutate } = useAuthSWR<CommonListResponse<Board>>({
-    url: API_ROUTES.boards.root(),
-  });
+  const { data: boardsResponse, mutate } = useBoards();
 
   const boardsAndHome = boardsResponse
     ? [{ slug: "home", name: "UNIT", children: [] }, ...boardsResponse]

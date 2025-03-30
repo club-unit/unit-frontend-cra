@@ -29,7 +29,7 @@ function CommentInput({ parentId, mutate, initialComment, setIsOnEdit, setReplyi
 
   const onPostFinish = async (values: FormValues) => {
     setIsSubmitting(true);
-    const comment = { content: values.content, parentComment: parentId, post: id };
+    const comment = { content: values.content, parentCommentId: parentId };
     try {
       await clientAxios.post(
         API_ROUTES.comments.bySlugAndPostId(String(slug), Number(id)),
@@ -45,6 +45,7 @@ function CommentInput({ parentId, mutate, initialComment, setIsOnEdit, setReplyi
           api.error({
             message: "댓글 등록에 실패하였습니다.",
             description: "로그인이 만료되었습니다.",
+            key: "token-expire",
           });
           logout();
         }
@@ -80,6 +81,7 @@ function CommentInput({ parentId, mutate, initialComment, setIsOnEdit, setReplyi
           api.error({
             message: "댓글 수정에 실패하였습니다.",
             description: "로그인이 만료되었습니다.",
+            key: "token-expire",
           });
           logout();
         }

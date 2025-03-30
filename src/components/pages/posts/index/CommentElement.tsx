@@ -40,6 +40,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
           api.error({
             message: "댓글 삭제에 실패했습니다.",
             description: "로그인이 만료되었습니다.",
+            key: "token-expire",
           });
           logout();
         }
@@ -59,7 +60,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
               <div className="flex gap-1 ml-2">
                 <ClockCircleOutlined />
                 <Typography.Text className="whitespace-nowrap">
-                  {formatDateString(comment.created)}
+                  {formatDateString(comment.createdDatetime)}
                 </Typography.Text>
               </div>
             </div>
@@ -122,8 +123,8 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
           <p>댓글을 삭제하시겠습니까?</p>
         </Modal>
       </div>
-      {comment.children.length
-        ? comment.children.map((child) => (
+      {comment.replies
+        ? comment.replies.map((child) => (
             <CommentElement
               key={child.id}
               comment={child}

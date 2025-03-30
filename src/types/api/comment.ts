@@ -4,6 +4,6 @@ export interface Comment {
   id: number;
   content: string;
   author: Author;
-  children: Comment[];
-  created: string;
+  replies: Comment[];
+  createdDatetime: string;
 }

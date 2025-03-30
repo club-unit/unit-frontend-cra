@@ -1,7 +1,7 @@
 import { Image, Table, Typography } from "antd";
 import React from "react";
 import { PushpinFilled } from "@ant-design/icons";
-import { Post } from "src/types/api/post";
+import { Post, PostSummary } from "src/types/api/post";
 import { Author } from "src/types/api/author";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
@@ -9,7 +9,7 @@ import BadgeSet from "src/components/common/BadgeSet";
 import formatDateString from "src/utils/common/dateToString";
 
 interface Props {
-  posts: Post[];
+  posts: PostSummary[];
 }
 
 function PostListTableSection({ posts }: Props) {
@@ -65,15 +65,15 @@ function PostListTableSection({ posts }: Props) {
     },
     {
       title: "작성일",
-      dataIndex: "created",
-      key: "created",
-      render: (created: string) => (
+      dataIndex: "createdDatetime",
+      key: "createdDatetime",
+      render: (createdDatetime: string) => (
         <Typography.Text
           className={`text-xs md:text-sm ${
-            dayjs().diff(dayjs(created), "hour") < 24 && "text-red-600"
+            dayjs().diff(dayjs(createdDatetime), "hour") < 24 && "text-red-600"
           }`}
         >
-          {formatDateString(created)}
+          {formatDateString(createdDatetime)}
         </Typography.Text>
       ),
       width: 100,
@@ -101,12 +101,19 @@ function PostListTableSection({ posts }: Props) {
         columns={columns}
         pagination={false}
         size="small"
-        onRow={(post) => {
-          return {
-            onClick: () => navigate(`/${slug}/${post.id}`),
-            className: "hover:cursor-pointer",
-          };
-        }}
+        onRow={(post) => ({
+          onClick: (e) => {
+            if (e.button === 0 && !e.ctrlKey && !e.metaKey) {
+              navigate(`/${slug}/${post.id}`);
+            }
+          },
+          onAuxClick: (e) => {
+            if (e.button === 1) {
+              window.open(`/${slug}/${post.id}`, "_blank");
+            }
+          },
+          className: "hover:cursor-pointer",
+        })}
       />
     </div>
   );

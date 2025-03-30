@@ -3,11 +3,11 @@ import { CommentOutlined, EyeOutlined } from "@ant-design/icons";
 import React from "react";
 import { BRANCH_SLUGS } from "src/constants/branches";
 import { Link } from "react-router-dom";
-import { PostSummary } from "src/types/api/post";
+import { PostPreview } from "src/types/api/post";
 import BadgeSet from "src/components/common/BadgeSet";
 
 interface Props {
-  post: PostSummary;
+  post: PostPreview;
   slug: (typeof BRANCH_SLUGS)[number];
 }
 

@@ -2,8 +2,8 @@ import { Typography } from "antd";
 import { ClockCircleOutlined, CommentOutlined, EyeOutlined, TagFilled } from "@ant-design/icons";
 import { PostDetail } from "src/types/api/post";
 import IconWithText from "src/components/common/IconWithText";
-import dayjs from "dayjs";
 import UserHeader from "src/components/common/UserHeader";
+import dateToString from "src/utils/common/dateToString";
 
 interface Props {
   post: PostDetail;
@@ -17,14 +17,14 @@ function PostHeaderSection({ post }: Props) {
         <div className="flex gap-2 flex-wrap">
           <UserHeader user={post.author} />
           <div className="flex gap-2">
-            <IconWithText icon={<TagFilled />} text={post.category} />
+            <IconWithText icon={<TagFilled />} text={post.category?.name} />
             <IconWithText icon={<CommentOutlined />} text={post.numComments} />
             <IconWithText icon={<EyeOutlined />} text={post.views} />
           </div>
         </div>
         <IconWithText
           icon={<ClockCircleOutlined />}
-          text={dayjs(post.created).format("YYYY/MM/DD HH:mm")}
+          text={dateToString(post.createdDatetime, { absolute: true, full: true })}
         />
       </div>
     </div>

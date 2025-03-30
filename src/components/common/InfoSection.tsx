@@ -1,15 +1,12 @@
 import InfoBanner from "src/components/common/InfoBanner";
-import useAuthSWR from "src/hooks/useAuthSWR";
-import { CommonListResponse } from "src/types/api/common";
-import { Notice } from "src/types/api/notice";
-import { API_ROUTES } from "src/constants/routes";
+import useNotices from "src/hooks/api/common/useNotices";
 
 interface Props {
   position: "top" | "side";
 }
 
 function InfoSection({ position }: Props) {
-  const { data } = useAuthSWR<CommonListResponse<Notice>>({ url: API_ROUTES.notices.root() });
+  const { data } = useNotices();
 
   return (
     <div

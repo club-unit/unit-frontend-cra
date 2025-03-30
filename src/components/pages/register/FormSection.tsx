@@ -116,8 +116,8 @@ function FormSection({ setCurrentStep }: Props) {
         >
           <Select
             options={[
-              { value: 1, label: "남" },
-              { value: 2, label: "여" },
+              { value: "M", label: "남" },
+              { value: "F", label: "여" },
             ]}
           />
         </Form.Item>

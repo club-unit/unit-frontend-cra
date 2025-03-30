@@ -1,13 +1,13 @@
 import { Avatar, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import BadgeSet from "src/components/common/BadgeSet";
-import { User } from "src/types/api/user";
+import { MyUser } from "src/types/api/user";
 import { Author } from "src/types/api/author";
 import { Link } from "react-router-dom";
 import useAuth from "src/contexts/auth/useAuth";
 
 interface Props {
-  user: User | Author;
+  user: MyUser | Author;
 }
 
 function UserHeader({ user }: Props) {

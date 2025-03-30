@@ -55,16 +55,12 @@ function UserCard() {
               <Typography.Text className="text-gray-500">{`${user.profile.activityTerm}학기${
                 user.profile.rank === "OB" ? " 이상" : "째"
               } `}</Typography.Text>
-              <Typography.Text className="text-gray-500">{` 활동 중! (${user.profile.generation}기)`}</Typography.Text>
+              <Typography.Text className="text-gray-500">{` 활동 중! (${user.profile.generation?.number}기)`}</Typography.Text>
             </div>
           )}
           <div className="flex justify-end">
-            <Typography.Text
-              className="text-blue-500 hover:cursor-pointer"
-              underline
-              onClick={() => navigate("/users/me")}
-            >
-              내 정보 보기
+            <Typography.Text className="text-blue-500 hover:cursor-pointer" underline>
+              <Link to="/users/me">내 정보 보기</Link>
             </Typography.Text>
           </div>
           <Divider className="my-2" />

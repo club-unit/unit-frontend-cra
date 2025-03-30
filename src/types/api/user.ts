@@ -1,9 +1,9 @@
-import { OtherProfile, ProfileDetail } from "src/types/api/profile";
+import { MyProfile, OtherProfile } from "src/types/api/profile";
 
-export interface User {
+export interface MyUser {
   id: number;
   username: string;
-  profile: ProfileDetail;
+  profile: MyProfile;
 }
 
 export interface OtherUser {

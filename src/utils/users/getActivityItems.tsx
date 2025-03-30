@@ -1,25 +1,29 @@
 import { DescriptionsProps, Image } from "antd";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
 import { Branch } from "src/types/api/profile";
-import { OtherUser, User } from "src/types/api/user";
+import { MyUser, OtherUser } from "src/types/api/user";
 
-function getActivityItems(user: User | OtherUser): DescriptionsProps["items"] {
+function getActivityItems(user: MyUser | OtherUser): DescriptionsProps["items"] {
   return [
-    {
-      key: "1",
-      label: "지구대",
-      children: <p>{BRANCH_LOOKUP_TABLE[user?.profile.branch as Branch]}</p>,
-    },
-    {
-      key: "2",
-      label: "가입기수",
-      children: <p>{user?.profile.generation}기</p>,
-    },
-    {
-      key: "3",
-      label: "활동학기",
-      children: <p>{user?.profile.activityTerm}학기</p>,
-    },
+    ...(user?.profile.rank !== "NONE"
+      ? [
+          {
+            key: "1",
+            label: "지구대",
+            children: <p>{BRANCH_LOOKUP_TABLE[user?.profile.branch as Branch]}</p>,
+          },
+          {
+            key: "2",
+            label: "가입기수",
+            children: <p>{user?.profile.generation.number}기</p>,
+          },
+          {
+            key: "3",
+            label: "활동학기",
+            children: <p>{user?.profile.activityTerm}학기</p>,
+          },
+        ]
+      : []),
     {
       key: "4",
       label: "회원등급",
@@ -33,7 +37,7 @@ function getActivityItems(user: User | OtherUser): DescriptionsProps["items"] {
         />
       ),
     },
-    ...(user?.profile.responsibility !== "NORMAL"
+    ...(user?.profile.responsibility !== "NORMAL" && user.profile.responsibility !== "NONE"
       ? [
           {
             key: "5",

@@ -12,12 +12,12 @@ export const clientAxios = axios.create({
   baseURL: process.env.REACT_APP_API_ENDPOINT,
 });
 
-axios.interceptors.request.use((config) => {
+clientAxios.interceptors.request.use((config) => {
   if (!config.headers) return config;
 
   const token: string | undefined = Cookies.get(ACCESS_COOKIE_NAME);
 
-  config.headers.Authorization = token ? `Bearer ${token}` : "asfd";
+  config.headers.Authorization = token ? `Bearer ${token}` : "notoken";
 
   return config;
 });

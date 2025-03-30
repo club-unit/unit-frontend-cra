@@ -1,6 +1,6 @@
-import { Profile } from "src/types/api/profile";
+import { AuthorProfile } from "src/types/api/profile";
 
 export interface Author {
   id: number;
-  profile: Profile;
+  profile: AuthorProfile;
 }

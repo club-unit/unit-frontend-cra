@@ -30,6 +30,7 @@ function PostFooterSection({ setIsEditing, isMine, content }: Props) {
           api.error({
             message: "게시글 삭제에 실패했습니다.",
             description: "로그인이 만료되었습니다.",
+            key: "token-expire",
           });
           logout();
         }
