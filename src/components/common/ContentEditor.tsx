@@ -19,10 +19,10 @@ function ContentEditor({ setContent, content }: Props) {
     return new Promise((resolve, _) => {
       Resizer.imageFileResizer(
         file,
-        600,
-        600,
+        800,
+        800,
         "JPEG",
-        90,
+        95,
         0,
         (resizedFile) => {
           resolve(resizedFile as Blob);
