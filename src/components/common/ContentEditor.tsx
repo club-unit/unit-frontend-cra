@@ -42,19 +42,24 @@ function ContentEditor({ setContent, content }: Props) {
     uri: () => string | undefined;
   }) => {
     const originalBlob = blobInfo.blob();
+    const fileExtension = blobInfo.filename().split(".").pop() || "jpeg";
+    const fileName = `${blobInfo.filename()}.${fileExtension}`;
 
     if (originalBlob.size > 10 * 1024 * 1024) {
       return Promise.reject({ message: "10MB 이하의 이미지만 업로드 가능합니다.", remove: true });
     }
 
     try {
-      const resizedBlob = await resizeImage(originalBlob);
+      let blobToUpload: Blob;
 
-      const fileExtension = blobInfo.filename().split(".").pop() || "jpeg";
-      const fileName = `${blobInfo.filename()}.${fileExtension}`;
+      if (fileExtension === "gif") {
+        blobToUpload = originalBlob;
+      } else {
+        blobToUpload = await resizeImage(originalBlob);
+      }
 
       const formData = new FormData();
-      formData.append("image", resizedBlob, fileName);
+      formData.append("image", blobToUpload, fileName);
 
       const response = await clientAxios.post<{ url: string }>(
         API_ROUTES.posts.uploadImage(slug ? slug : ""),
