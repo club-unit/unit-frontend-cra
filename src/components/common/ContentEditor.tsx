@@ -42,8 +42,8 @@ function ContentEditor({ setContent, content }: Props) {
     uri: () => string | undefined;
   }) => {
     const originalBlob = blobInfo.blob();
-    const filename = blobInfo.filename();
-    const fileExtension = filename.split(".").pop()?.toLowerCase();
+    const fileExtension = blobInfo.filename().split(".").pop() || "jpeg";
+    const fileName = `${blobInfo.filename()}.${fileExtension}`;
 
     if (originalBlob.size > 10 * 1024 * 1024) {
       return Promise.reject({ message: "10MB 이하의 이미지만 업로드 가능합니다.", remove: true });
