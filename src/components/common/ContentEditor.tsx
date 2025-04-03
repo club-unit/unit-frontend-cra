@@ -69,6 +69,7 @@ function ContentEditor({ setContent, content }: Props) {
       return response.data.url;
     } catch (error) {
       // api.error("이미지 업로드 중 오류가 발생했습니다.");
+      alert(error);
       return Promise.reject({ message: "이미지 업로드 실패", remove: true });
     }
   };
