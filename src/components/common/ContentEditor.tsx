@@ -43,19 +43,19 @@ function ContentEditor({ setContent, content }: Props) {
   }) => {
     const originalBlob = blobInfo.blob();
     const fileExtension = blobInfo.filename().split(".").pop() || "jpeg";
-    const fileName = `${blobInfo.filename()}.${fileExtension}`;
+    const fileName = blobInfo.filename();
 
-    if (originalBlob.size > 10 * 1024 * 1024) {
-      return Promise.reject({ message: "10MB 이하의 이미지만 업로드 가능합니다.", remove: true });
+    if (originalBlob.size > 15 * 1024 * 1024) {
+      return Promise.reject({ message: "15MB 이하의 이미지만 업로드 가능합니다.", remove: true });
     }
 
     try {
       let blobToUpload: Blob;
 
-      if (fileExtension === "gif") {
-        blobToUpload = originalBlob;
-      } else {
+      if (fileExtension === "jpg" || fileExtension === "jpeg") {
         blobToUpload = await resizeImage(originalBlob);
+      } else {
+        blobToUpload = originalBlob;
       }
 
       const formData = new FormData();
