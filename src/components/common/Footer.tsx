@@ -32,7 +32,7 @@ function Footer() {
         style={{ fontSize: 13, fontWeight: 300, textAlign: "center", color: "#515151" }}
         className="mt-20"
       >
-        {new Date().getFullYear()} clubunit © All Rights Reserved
+        {new Date().getFullYear()} clubunit © All Rights Reserved TEST 2
       </Typography.Text>
     </div>
   );
