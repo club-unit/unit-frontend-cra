@@ -67,7 +67,7 @@ function ContentEditor({ setContent, content }: Props) {
       return Promise.reject({ message: "이미지 업로드 실패", remove: true });
     }
   };
-  
+
   return (
     <Editor
       apiKey={process.env.REACT_APP_EDITOR_API_KEY}
