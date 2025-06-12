@@ -43,14 +43,15 @@ function ContentEditor({ setContent, content }: Props) {
   }) => {
     const originalBlob = blobInfo.blob();
 
-    if (originalBlob.size > 5 * 1024 * 1024) {
-      return Promise.reject({ message: "5MB 이하의 이미지만 업로드 가능합니다.", remove: true });
+    if (originalBlob.size > 10 * 1024 * 1024) {
+      return Promise.reject({ message: "10MB 이하의 이미지만 업로드 가능합니다.", remove: true });
     }
 
     try {
+      const fileExtension = blobInfo.filename().split(".").pop();
       const fileName = blobInfo.filename();
       let resizedBlob;
-      if (originalBlob.size > 1 * 1024 * 1024) {
+      if (originalBlob.size > 1 * 1024 * 1024 && fileExtension !== "gif") {
         resizedBlob = await resizeImage(originalBlob);
       } else {
         resizedBlob = originalBlob;
