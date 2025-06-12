@@ -19,10 +19,10 @@ function ContentEditor({ setContent, content }: Props) {
     return new Promise((resolve, _) => {
       Resizer.imageFileResizer(
         file,
-        800,
-        800,
+        1500,
+        1500,
         "JPEG",
-        95,
+        98,
         0,
         (resizedFile) => {
           resolve(resizedFile as Blob);
@@ -43,18 +43,22 @@ function ContentEditor({ setContent, content }: Props) {
   }) => {
     const originalBlob = blobInfo.blob();
 
-    if (originalBlob.size > 10 * 1024 * 1024) {
-      return Promise.reject({ message: "10MB 이하의 이미지만 업로드 가능합니다.", remove: true });
+    if (originalBlob.size > 5 * 1024 * 1024) {
+      return Promise.reject({ message: "5MB 이하의 이미지만 업로드 가능합니다.", remove: true });
     }
 
     try {
-      // const resizedBlob = await resizeImage(originalBlob);
-
-      const fileExtension = blobInfo.filename().split(".").pop() || "jpeg";
-      const fileName = `${blobInfo.filename()}.${fileExtension}`;
+      const fileName = blobInfo.filename();
+      let resizedBlob;
+      if (originalBlob.size > 1 * 1024 * 1024) {
+        resizedBlob = await resizeImage(originalBlob);
+      } else {
+        resizedBlob = originalBlob;
+      }
+      console.log(originalBlob.size, resizedBlob.size);
 
       const formData = new FormData();
-      formData.append("image", originalBlob, fileName);
+      formData.append("image", resizedBlob, fileName);
 
       const response = await clientAxios.post<{ url: string }>(
         API_ROUTES.posts.uploadImage(slug ? slug : ""),
