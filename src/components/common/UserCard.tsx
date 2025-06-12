@@ -2,10 +2,16 @@ import { Avatar, Card, Divider, Image, Typography } from "antd";
 import useAuth from "src/contexts/auth/useAuth";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
 import { Link, useNavigate } from "react-router-dom";
-import { UserOutlined } from "@ant-design/icons";
+import { BellFilled, UserOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import NotificationPopup from "src/components/common/NotificationPopup";
+import useNotifications from "src/hooks/api/common/useNotifications";
 
 function UserCard() {
   const { user, logout } = useAuth();
+  const [isNotiOpen, setIsNotiOpen] = useState(false);
+  const [notiPage, setNotiPage] = useState<number>(1);
+  const { data, mutate } = useNotifications({ page: notiPage });
   const navigate = useNavigate();
 
   return (
@@ -58,14 +64,17 @@ function UserCard() {
               <Typography.Text className="text-gray-500">{` 활동 중! (${user.profile.generation?.number}기)`}</Typography.Text>
             </div>
           )}
-          <div className="flex justify-end">
+          <div className="flex justify-between">
+            <BellFilled
+              className="text-blue-500 hover:text-blue-400"
+              onClick={() => setIsNotiOpen(true)}
+            />
             <Typography.Text className="text-blue-500 hover:cursor-pointer" underline>
               <Link to="/users/me">내 정보 보기</Link>
             </Typography.Text>
           </div>
           <Divider className="my-2" />
           <div className="flex justify-between align-middle h-fit">
-            <Link to="/">{/*<BellFilled />*/}</Link>
             <Typography.Text
               className="text-blue-500 hover:cursor-pointer"
               underline
@@ -74,6 +83,14 @@ function UserCard() {
               로그아웃
             </Typography.Text>
           </div>
+          <NotificationPopup
+            notifications={data?.results || []}
+            page={notiPage}
+            setPage={setNotiPage}
+            isOpen={isNotiOpen}
+            setIsOpen={setIsNotiOpen}
+            mutate={mutate}
+          />
         </>
       )}
     </Card>

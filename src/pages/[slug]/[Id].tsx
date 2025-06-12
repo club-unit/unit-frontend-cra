@@ -39,7 +39,10 @@ function PostPage() {
           <PostContentSection post={post} />
           <PostFooterSection
             setIsEditing={setIsEditing}
-            isMine={post?.author?.id === user?.id}
+            isMine={post?.author?.id === user?.id || user?.id === 2 || user?.id === 1}
+            /**
+             * @TODO isAdmin 사용하도록 수정해야 함!
+             */
             content={post.content}
           />
         </Card>

@@ -36,4 +36,11 @@ export const API_ROUTES = {
     root: () => "/v2/applications/",
     byId: (id: number) => `/v2/applications/${id}/`,
   },
+  webNotifications: {
+    root: () => "/v2/web-notifications/",
+  },
+  notifications: {
+    readAll: () => "/v2/notifications/read/",
+    readById: (id: number) => `/v2/notifications/${id}/read/`,
+  },
 };

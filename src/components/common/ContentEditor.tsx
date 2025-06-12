@@ -19,10 +19,10 @@ function ContentEditor({ setContent, content }: Props) {
     return new Promise((resolve, _) => {
       Resizer.imageFileResizer(
         file,
-        800,
-        800,
+        1500,
+        1500,
         "JPEG",
-        95,
+        98,
         0,
         (resizedFile) => {
           resolve(resizedFile as Blob);
@@ -48,13 +48,18 @@ function ContentEditor({ setContent, content }: Props) {
     }
 
     try {
-      // const resizedBlob = await resizeImage(originalBlob);
-
-      const fileExtension = blobInfo.filename().split(".").pop() || "jpeg";
-      const fileName = `${blobInfo.filename()}.${fileExtension}`;
+      const fileExtension = blobInfo.filename().split(".").pop();
+      const fileName = blobInfo.filename();
+      let resizedBlob;
+      if (originalBlob.size > 1 * 1024 * 1024 && fileExtension !== "gif") {
+        resizedBlob = await resizeImage(originalBlob);
+      } else {
+        resizedBlob = originalBlob;
+      }
+      console.log(originalBlob.size, resizedBlob.size);
 
       const formData = new FormData();
-      formData.append("image", originalBlob, fileName);
+      formData.append("image", resizedBlob, fileName);
 
       const response = await clientAxios.post<{ url: string }>(
         API_ROUTES.posts.uploadImage(slug ? slug : ""),
@@ -67,7 +72,7 @@ function ContentEditor({ setContent, content }: Props) {
       return Promise.reject({ message: "이미지 업로드 실패", remove: true });
     }
   };
-  
+
   return (
     <Editor
       apiKey={process.env.REACT_APP_EDITOR_API_KEY}
