@@ -50,7 +50,7 @@ function NotificationPopup({
         size="small"
         dataSource={notifications}
         renderItem={(notification) => (
-          <NotificationElement notification={notification} setIsOpen={setIsOpen} />
+          <NotificationElement notification={notification} setIsOpen={setIsOpen} mutate={mutate} />
         )}
         className="h-[60vh] overflow-auto"
       />
