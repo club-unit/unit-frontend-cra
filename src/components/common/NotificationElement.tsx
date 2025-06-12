@@ -7,14 +7,16 @@ import { API_ROUTES } from "src/constants/routes";
 interface Props {
   notification: Notification;
   setIsOpen: (isOpen: boolean) => void;
+  mutate: () => void;
 }
 
-function NotificationElement({ notification, setIsOpen }: Props) {
+function NotificationElement({ notification, setIsOpen, mutate }: Props) {
   const handleNotiClick = async () => {
     setIsOpen(false);
     await clientAxios.post<{ url: string }>(
       API_ROUTES.notifications.readById(notification.notificationId)
     );
+    mutate();
   };
 
   return (
