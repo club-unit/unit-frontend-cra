@@ -10,4 +10,8 @@ export interface Notification {
   createdDatetime: string;
 }
 
+export interface NotificationsNumUnreads {
+  numUnreads: number;
+}
+
 export type NotificationType = "COMMENT" | "REPLY";
