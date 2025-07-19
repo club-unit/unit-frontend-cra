@@ -1,4 +1,4 @@
-import { Avatar, Card, Divider, Image, Typography } from "antd";
+import { Avatar, Badge, Card, Divider, Image, Typography } from "antd";
 import useAuth from "src/contexts/auth/useAuth";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,12 +6,14 @@ import { BellFilled, UserOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import NotificationPopup from "src/components/common/NotificationPopup";
 import useNotifications from "src/hooks/api/common/useNotifications";
+import useNotificationsNumUnreads from "src/hooks/api/common/useNotificationsNumUnreads";
 
 function UserCard() {
   const { user, logout } = useAuth();
   const [isNotiOpen, setIsNotiOpen] = useState(false);
   const [notiPage, setNotiPage] = useState<number>(1);
-  const { data, mutate } = useNotifications({ page: notiPage });
+  const { data: notiData, mutate: notiMutate } = useNotifications({ page: notiPage });
+  const { data: notiUnreadsNumData, mutate: notiUnreadsMutate } = useNotificationsNumUnreads();
   const navigate = useNavigate();
 
   return (
@@ -65,10 +67,13 @@ function UserCard() {
             </div>
           )}
           <div className="flex justify-between">
-            <BellFilled
-              className="text-blue-500 hover:text-blue-400"
-              onClick={() => setIsNotiOpen(true)}
-            />
+            <Badge count={notiUnreadsNumData?.numUnreads} size="small">
+              <BellFilled
+                className="text-blue-500 hover:text-blue-400"
+                onClick={() => setIsNotiOpen(true)}
+              />
+            </Badge>
+
             <Typography.Text className="text-blue-500 hover:cursor-pointer" underline>
               <Link to="/users/me">내 정보 보기</Link>
             </Typography.Text>
@@ -84,12 +89,15 @@ function UserCard() {
             </Typography.Text>
           </div>
           <NotificationPopup
-            notifications={data?.results || []}
+            notifications={notiData?.results || []}
             page={notiPage}
             setPage={setNotiPage}
             isOpen={isNotiOpen}
             setIsOpen={setIsNotiOpen}
-            mutate={mutate}
+            mutate={() => {
+              notiMutate();
+              notiUnreadsMutate();
+            }}
           />
         </>
       )}

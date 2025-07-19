@@ -4,12 +4,10 @@ import { List, Modal, Pagination } from "antd";
 import { NOTI_PAGE_SIZE } from "src/constants/pagination";
 import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
-import { KeyedMutator } from "swr";
-import { CommonPagedResponse } from "src/types/api/common";
 
 interface Props {
   notifications: Notification[];
-  mutate: KeyedMutator<CommonPagedResponse<Notification>>;
+  mutate: () => void;
   page: number;
   setPage: (page: number) => void;
   total?: number;

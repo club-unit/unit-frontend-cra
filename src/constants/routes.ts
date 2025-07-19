@@ -38,6 +38,7 @@ export const API_ROUTES = {
   },
   webNotifications: {
     root: () => "/v2/web-notifications/",
+    numUnreads: () => "/v2/web-notifications/num-unreads/",
   },
   notifications: {
     readAll: () => "/v2/notifications/read/",
