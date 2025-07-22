@@ -18,13 +18,14 @@ import Footer from "src/components/common/Footer";
 import PrivacyPolicy from "src/pages/privacy";
 import InfoSection from "src/components/common/InfoSection";
 import FormWithAuth from "src/pages/forms/[id]";
-import ApplicationWithAuth from "src/pages/applications";
 import ApplicationsWithAuth from "src/pages/applications";
+import useNotificationsNumUnreads from "src/hooks/api/common/useNotificationsNumUnreads";
 
 function App() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const { isLoggedIn } = useAuth();
+  const { data: notiUnreadsNumData, mutate: notiUnreadsMutate } = useNotificationsNumUnreads();
 
   useEffect(() => {
     setOpen(false);
@@ -59,6 +60,7 @@ function App() {
               </Route>
               <Route path="/*" element={<NotFoundPage />} />
             </Routes>
+
             <FloatButton
               onClick={() => setOpen(true)}
               icon={isLoggedIn ? <UserOutlined /> : <LoginOutlined />}
@@ -69,6 +71,7 @@ function App() {
                 </Typography.Text>
               }
               shape="square"
+              badge={{ count: notiUnreadsNumData?.numUnreads }}
             />
             <Drawer placement="right" onClose={() => setOpen(false)} open={open}>
               <AuthOrUserCard setOpen={setOpen} />
