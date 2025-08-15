@@ -6,14 +6,14 @@ import { BellFilled, UserOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import NotificationPopup from "src/components/common/NotificationPopup";
 import useNotifications from "src/hooks/api/common/useNotifications";
-import useNotificationsNumUnreads from "src/hooks/api/common/useNotificationsNumUnreads";
+import useNotiNumUnreads from "src/contexts/notiNumUnreads/useNotiNumUnreads";
 
 function UserCard() {
-  const { user, logout } = useAuth();
+  const { user, logout, isLoggedIn, isLoading } = useAuth();
   const [isNotiOpen, setIsNotiOpen] = useState(false);
   const [notiPage, setNotiPage] = useState<number>(1);
   const { data: notiData, mutate: notiMutate } = useNotifications({ page: notiPage });
-  const { data: notiUnreadsNumData, mutate: notiUnreadsMutate } = useNotificationsNumUnreads();
+  const { numUnreads, mutateNumUnreads } = useNotiNumUnreads();
   const navigate = useNavigate();
 
   return (
@@ -67,7 +67,7 @@ function UserCard() {
             </div>
           )}
           <div className="flex justify-between">
-            <Badge count={notiUnreadsNumData?.numUnreads} size="small">
+            <Badge count={numUnreads} size="small">
               <BellFilled
                 className="text-blue-500 hover:text-blue-400"
                 onClick={() => setIsNotiOpen(true)}
@@ -96,7 +96,7 @@ function UserCard() {
             setIsOpen={setIsNotiOpen}
             mutate={() => {
               notiMutate();
-              notiUnreadsMutate();
+              mutateNumUnreads();
             }}
           />
         </>

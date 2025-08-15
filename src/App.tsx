@@ -19,13 +19,13 @@ import PrivacyPolicy from "src/pages/privacy";
 import InfoSection from "src/components/common/InfoSection";
 import FormWithAuth from "src/pages/forms/[id]";
 import ApplicationsWithAuth from "src/pages/applications";
-import useNotificationsNumUnreads from "src/hooks/api/common/useNotificationsNumUnreads";
+import useNotiNumUnreads from "src/contexts/notiNumUnreads/useNotiNumUnreads";
 
 function App() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const { isLoggedIn } = useAuth();
-  const { data: notiUnreadsNumData, mutate: notiUnreadsMutate } = useNotificationsNumUnreads();
+  const { numUnreads, mutateNumUnreads } = useNotiNumUnreads();
 
   useEffect(() => {
     setOpen(false);
@@ -71,7 +71,7 @@ function App() {
                 </Typography.Text>
               }
               shape="square"
-              badge={{ count: notiUnreadsNumData?.numUnreads }}
+              badge={{ count: numUnreads }}
             />
             <Drawer placement="right" onClose={() => setOpen(false)} open={open}>
               <AuthOrUserCard setOpen={setOpen} />
