@@ -4,6 +4,7 @@ import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
 import dayjs from "dayjs";
+import { AxiosError } from "axios";
 
 interface Props {
   setCurrentStep: Dispatch<number>;
@@ -26,8 +27,13 @@ function FormSection({ setCurrentStep }: Props) {
     try {
       await clientAxios.post(API_ROUTES.users.signUp(), registerForm);
       setCurrentStep(3);
-    } catch (e) {
-      api.error({ message: "회원가입에 실패하였습니다.", description: "다시 시도해주세요." });
+    } catch (err) {
+      const e = err as AxiosError;
+      const errorData = e.response?.data as any;
+      api.error({
+        message: "회원가입에 실패하였습니다.",
+        description: errorData?.message || "다시 시도해주세요.",
+      });
     }
   };
 
