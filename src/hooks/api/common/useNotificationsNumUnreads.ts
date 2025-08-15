@@ -2,9 +2,9 @@ import useAuthSWR from "src/hooks/api/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
 import { NotificationsNumUnreads } from "src/types/api/notification";
 
-function useNotificationsNumUnreads(isDisabled?: boolean) {
+function useNotificationsNumUnreads(isEnabled?: boolean) {
   const { data, isLoading, mutate, error } = useAuthSWR<NotificationsNumUnreads>(
-    !isDisabled
+    isEnabled
       ? {
           url: API_ROUTES.webNotifications.numUnreads(),
         }

@@ -7,6 +7,7 @@ import NotificationProvider from "src/contexts/notification/NotificationProvider
 import AuthProvider from "src/contexts/auth/AuthProvider";
 import { BrowserRouter } from "react-router-dom";
 import App from "src/App";
+import NotiNumUnreadsProvider from "src/contexts/notiNumUnreads/NotiNumUnreadsProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -20,7 +21,9 @@ root.render(
       <BrowserRouter>
         <NotificationProvider>
           <AuthProvider>
-            <App />
+            <NotiNumUnreadsProvider>
+              <App />
+            </NotiNumUnreadsProvider>
           </AuthProvider>
         </NotificationProvider>
       </BrowserRouter>

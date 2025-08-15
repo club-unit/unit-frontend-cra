@@ -13,7 +13,7 @@ function useAuthSWR<T>(params: Params | null) {
   const { logout } = useAuth();
   const { api } = useNotification();
   const navigate = useNavigate();
-  const { data, mutate, error, isLoading } = useSWR<T>({ ...params });
+  const { data, mutate, error, isLoading } = useSWR<T>(params ? { ...params } : null);
 
   useEffect(() => {
     if (error?.response?.status === 403) {
