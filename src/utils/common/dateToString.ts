@@ -14,7 +14,7 @@ function formatDateString(dateString: string, options?: FormatOptions) {
   const diffInDays = now.diff(date, "day");
 
   if (options?.absolute) {
-    return date.format(options?.full ? "YYYY/MM/DD hh:mm" : "YYYY/MM/DD");
+    return date.format(options?.full ? "YYYY/MM/DD HH:mm" : "YYYY/MM/DD");
   } else {
     if (diffInSeconds < 60) {
       return "방금";
@@ -25,7 +25,7 @@ function formatDateString(dateString: string, options?: FormatOptions) {
     } else if (diffInDays < 7) {
       return `${diffInDays}일 전`;
     } else {
-      return date.format(options?.full ? "YYYY/MM/DD hh:mm" : "YYYY/MM/DD");
+      return date.format(options?.full ? "YYYY/MM/DD HH:mm" : "YYYY/MM/DD");
     }
   }
 }
