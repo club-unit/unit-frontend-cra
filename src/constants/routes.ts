@@ -44,4 +44,8 @@ export const API_ROUTES = {
     readAll: () => "/v2/notifications/read/",
     readById: (id: number) => `/v2/notifications/${id}/read/`,
   },
+  bowling: {
+    records: () => "/v2/bowling/records/",
+    record: () => "/v2/bowling/records/record",
+  },
 };
