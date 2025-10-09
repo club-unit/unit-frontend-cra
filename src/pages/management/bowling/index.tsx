@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, DatePicker, Select, Space, Table } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { withAuth } from "src/components/common/withAuth";
@@ -13,16 +13,21 @@ import { RANK_LOOKUP_TABLE } from "src/constants/rank";
 
 function ManageBowlingMain() {
   const { user } = useAuth();
-
   const [selectedBranch, setSelectedBranch] = useState<Branch | undefined>(user?.profile.branch);
-  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs]>([null, dayjs()]);
+  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, dayjs()]);
   const [queryDates, setQueryDates] = useState<[Date, Date] | null>(null);
 
-  const { data, isLoading, error } = useBowlingRecordList({
+  const mockupStartDate = "2025-01-01";
+
+  const { data, isLoading } = useBowlingRecordList({
     branch: selectedBranch,
     startDate: queryDates?.[0],
     endDate: queryDates?.[1],
   });
+
+  useEffect(() => {
+    dateRange[0] = dayjs(mockupStartDate);
+  }, [dateRange, mockupStartDate]);
 
   const handleSearch = () => {
     if (dateRange && dateRange[0] && dateRange[1]) {
@@ -64,6 +69,8 @@ function ManageBowlingMain() {
         maxGameIndex = Math.max(maxGameIndex, recordMaxIndex);
       }
     });
+
+    const lastDateFormatted = dayjs(lastDate).format("YYYY년 MM월 DD일");
 
     const baseColumns: ColumnsType<PersonalBowlingRecord> = [
       {
@@ -122,6 +129,11 @@ function ManageBowlingMain() {
         key: `game${i + 1}`,
         align: "center",
         onCell: () => ({ style: { whiteSpace: "nowrap", padding: "4px 8px" } }),
+        onHeaderCell: () => ({
+          style: {
+            borderLeft: i === 0 ? "2px solid #f0f0f0" : undefined,
+          },
+        }),
         render: (_, record) => {
           const lastDateRecord = record.records.find((r) => r.date === lastDate);
           if (lastDateRecord) {
@@ -133,7 +145,22 @@ function ManageBowlingMain() {
       })
     );
 
-    return [...baseColumns, ...gameColumns];
+    const columnsWithGroup = [...baseColumns, ...gameColumns];
+
+    if (maxGameIndex > 0) {
+      const headerColumns: ColumnsType<PersonalBowlingRecord> = [
+        ...baseColumns.map((col) => ({ ...col, title: col.title })),
+        {
+          title: lastDateFormatted,
+          key: "games-group",
+          align: "center" as const,
+          children: gameColumns,
+        },
+      ];
+      return headerColumns;
+    }
+
+    return columnsWithGroup;
   }, [data, lastDate]);
 
   return (
@@ -144,12 +171,12 @@ function ManageBowlingMain() {
             value={selectedBranch}
             onChange={setSelectedBranch}
             options={branchOptions}
-            style={{ width: 120 }}
-            placeholder="지부 선택"
+            style={{ width: 80 }}
+            placeholder="지구대 선택"
           />
           <DatePicker.RangePicker
             value={dateRange}
-            onChange={(dates) => setDateRange(dates as [Dayjs | null, Dayjs])}
+            onChange={(dates) => setDateRange(dates as [Dayjs | null, Dayjs | null])}
             format="YYYY-MM-DD"
             placeholder={["시작 날짜", "종료 날짜"]}
           />
@@ -158,13 +185,13 @@ function ManageBowlingMain() {
           </Button>
         </Space>
 
-        {lastDate && (
-          <div style={{ fontSize: "14px", fontWeight: "500" }}>
-            기준 날짜: {dayjs(lastDate).format("YYYY년 MM월 DD일")}
-          </div>
-        )}
-
         <div style={{ overflowX: "auto" }}>
+          <style>{`
+            .compact-table .ant-table-thead > tr > th {
+              padding: 4px 8px !important;
+              white-space: nowrap;
+            }
+          `}</style>
           <Table
             columns={columns}
             dataSource={data}
@@ -173,6 +200,8 @@ function ManageBowlingMain() {
             pagination={false}
             size="small"
             style={{ fontSize: "13px" }}
+            bordered
+            className="compact-table"
           />
         </div>
       </Space>
