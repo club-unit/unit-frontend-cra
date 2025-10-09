@@ -17,7 +17,7 @@ function ManageBowlingMain() {
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, dayjs()]);
   const [queryDates, setQueryDates] = useState<[Date, Date] | null>(null);
 
-  const mockupStartDate = "2025-01-01";
+  const mockupStartDate = "2025-01-01"; //@TODO 실제값 받아오도록 수정
 
   const { data, isLoading } = useBowlingRecordList({
     branch: selectedBranch,
@@ -26,6 +26,7 @@ function ManageBowlingMain() {
   });
 
   useEffect(() => {
+    //@TODO 실제값 받아오도록 수정
     dateRange[0] = dayjs(mockupStartDate);
   }, [dateRange, mockupStartDate]);
 
