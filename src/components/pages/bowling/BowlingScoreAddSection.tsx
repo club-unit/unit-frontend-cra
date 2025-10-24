@@ -1,5 +1,15 @@
 import { useMemo, useState } from "react";
-import { Button, Checkbox, DatePicker, InputNumber, Select, Space, Table, Typography } from "antd";
+import {
+  Button,
+  Checkbox,
+  DatePicker,
+  InputNumber,
+  Modal,
+  Select,
+  Space,
+  Table,
+  Typography,
+} from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import dayjs, { Dayjs } from "dayjs";
@@ -32,6 +42,7 @@ function BowlingScoreAddSection() {
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectedBranch, setSelectedBranch] = useState<Branch | undefined>(user?.profile.branch);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
+  const [isOnSubmit, setIsOnSubmit] = useState(false);
 
   const { data: usersData, isLoading: isLoadingUsers } = useUsers({
     search: searchValue,
@@ -73,34 +84,42 @@ function BowlingScoreAddSection() {
         title: "회원",
         key: "member",
         width: 200,
-        render: (_, record) => (
-          <Select
-            style={{ width: "100%" }}
-            placeholder="회원 선택"
-            value={record.memberId}
-            showSearch
-            loading={isLoadingUsers}
-            filterOption={false}
-            onSearch={(value) => setSearchValue(value)}
-            onChange={(value, option) => {
-              const newRows = [...individualScoreRows];
-              const rowIndex = newRows.findIndex((r) => r.key === record.key);
-              if (rowIndex !== -1) {
-                newRows[rowIndex].memberId = value;
-                newRows[rowIndex].memberName = (option as { label: string })?.label || "";
-                setIndividualScoreRows(newRows);
+        render: (_, record) => {
+          const selectedMemberIds = individualScoreRows
+            .filter((row) => row.key !== record.key && row.memberId !== undefined)
+            .map((row) => row.memberId);
+
+          return (
+            <Select
+              style={{ width: "100%" }}
+              placeholder="회원 선택"
+              value={record.memberId}
+              showSearch
+              loading={isLoadingUsers}
+              filterOption={false}
+              onSearch={(value) => setSearchValue(value)}
+              onChange={(value, option) => {
+                const newRows = [...individualScoreRows];
+                const rowIndex = newRows.findIndex((r) => r.key === record.key);
+                if (rowIndex !== -1) {
+                  newRows[rowIndex].memberId = value;
+                  newRows[rowIndex].memberName = (option as { label: string })?.label || "";
+                  setIndividualScoreRows(newRows);
+                }
+              }}
+              options={
+                usersData?.results
+                  .filter((user) => !selectedMemberIds.includes(user.id))
+                  .map((user) => ({
+                    value: user.id,
+                    label: `${user.profile.name}/${RANK_LOOKUP_TABLE[user.profile.rank]}/${
+                      user.profile.joinedGeneration?.number || "N/A"
+                    }`,
+                  })) || []
               }
-            }}
-            options={
-              usersData?.results.map((user) => ({
-                value: user.id,
-                label: `${user.profile.name}/${RANK_LOOKUP_TABLE[user.profile.rank]}/${
-                  user.profile.joinedGeneration?.number || "N/A"
-                }`,
-              })) || []
-            }
-          />
-        ),
+            />
+          );
+        },
       },
     ];
 
@@ -136,8 +155,8 @@ function BowlingScoreAddSection() {
                 const rowIndex = newRows.findIndex((r) => r.key === record.key);
                 if (rowIndex !== -1) {
                   newRows[rowIndex].games[i] = {
-                    ...newRows[rowIndex].games[i],
                     participated: e.target.checked,
+                    score: e.target.checked ? newRows[rowIndex].games[i]?.score ?? 0 : 0,
                   };
                   setIndividualScoreRows(newRows);
                 }
@@ -221,7 +240,10 @@ function BowlingScoreAddSection() {
       }));
 
     console.log("Submit bowling scores:", formattedData);
+    setIsOnSubmit(false);
   };
+
+  const validRowCount = individualScoreRows.filter((row) => row.memberId !== undefined).length;
 
   return (
     <div>
@@ -267,11 +289,28 @@ function BowlingScoreAddSection() {
           행 추가
         </Button>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button type="primary" onClick={handleSubmit}>
+          <Button type="primary" onClick={() => setIsOnSubmit(true)}>
             등록
           </Button>
         </div>
       </Space>
+      <Modal
+        open={isOnSubmit}
+        title="볼링 점수 등록 확인"
+        onOk={handleSubmit}
+        onCancel={() => setIsOnSubmit(false)}
+        okText="등록"
+        cancelText="취소"
+        footer={(_, { OkBtn, CancelBtn }) => (
+          <>
+            <CancelBtn />
+            <OkBtn />
+          </>
+        )}
+      >
+        <p>선택한 날짜: {selectedDate?.format("YYYY년 MM월 DD일")}</p>
+        <p>입력한 행 개수: {validRowCount}개</p>
+      </Modal>
     </div>
   );
 }
