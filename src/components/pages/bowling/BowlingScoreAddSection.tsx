@@ -18,6 +18,9 @@ import useAuth from "src/contexts/auth/useAuth";
 import { RANK_LOOKUP_TABLE } from "src/constants/rank";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
 import { Branch } from "src/types/api/profile";
+import { clientAxios } from "src/utils/common/clientAxios";
+import { API_ROUTES } from "src/constants/routes";
+import useNotification from "src/contexts/notification/useNotfication";
 
 const { Text } = Typography;
 
@@ -35,6 +38,7 @@ interface BowlingRow {
 
 function BowlingScoreAddSection() {
   const { user } = useAuth();
+  const { api } = useNotification();
 
   const [individualScoreRows, setIndividualScoreRows] = useState<BowlingRow[]>([
     { key: "row-0", games: [{ participated: true, score: 0 }] },
@@ -43,6 +47,7 @@ function BowlingScoreAddSection() {
   const [selectedBranch, setSelectedBranch] = useState<Branch | undefined>(user?.profile.branch);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
   const [isOnSubmit, setIsOnSubmit] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: usersData, isLoading: isLoadingUsers } = useUsers({
     search: searchValue,
@@ -186,7 +191,6 @@ function BowlingScoreAddSection() {
       });
     }
 
-    // 가변 너비 열 추가
     cols.push({
       title: "",
       key: "spacer",
@@ -225,7 +229,9 @@ function BowlingScoreAddSection() {
     setIndividualScoreRows([...individualScoreRows, newRow]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+
     const formattedData = individualScoreRows
       .filter((row) => row.memberId !== undefined) // memberId가 없는 행 제외
       .map((row) => ({
@@ -239,11 +245,49 @@ function BowlingScoreAddSection() {
           .filter((game) => game.score !== null), // participated가 false인 게임 제외
       }));
 
-    console.log("Submit bowling scores:", formattedData);
-    setIsOnSubmit(false);
+    const uploadPromises = formattedData.map((data) =>
+      clientAxios.post(API_ROUTES.bowling.record(), data)
+    );
+
+    try {
+      const results = await Promise.allSettled(uploadPromises);
+
+      const successCount = results.filter((result) => result.status === "fulfilled").length;
+      const failCount = results.filter((result) => result.status === "rejected").length;
+      const totalCount = results.length;
+
+      if (successCount === totalCount) {
+        api.success({ message: "볼링 점수가 성공적으로 등록되었습니다." });
+        setIndividualScoreRows([{ key: "row-0", games: [{ participated: true, score: 0 }] }]);
+        setIsOnSubmit(false);
+      } else if (successCount > 0 && failCount > 0) {
+        api.warning({
+          message: "업로드에 실패한 행이 있습니다.",
+          description: `${successCount}개 성공, ${failCount}개 실패`,
+        });
+        setIsOnSubmit(false);
+      } else {
+        api.error({
+          message: "볼링 점수 등록에 실패하였습니다.",
+          description: "다시 시도해주세요.",
+        });
+        setIsOnSubmit(false);
+      }
+    } catch (e) {
+      api.error({
+        message: "볼링 점수 등록에 실패하였습니다.",
+        description: "다시 시도해주세요.",
+      });
+      setIsOnSubmit(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const validRowCount = individualScoreRows.filter((row) => row.memberId !== undefined).length;
+  const hasInvalidRow = individualScoreRows.some((row) =>
+    row.games.every((game) => !game.participated)
+  );
 
   return (
     <div>
@@ -283,13 +327,24 @@ function BowlingScoreAddSection() {
             bordered
             className="add-bowling-table"
             style={{ fontSize: "13px" }}
+            loading={isSubmitting}
           />
         </div>
-        <Button type="dashed" icon={<PlusOutlined />} onClick={addRow} block>
+        <Button
+          type="dashed"
+          icon={<PlusOutlined />}
+          onClick={addRow}
+          block
+          disabled={isSubmitting}
+        >
           행 추가
         </Button>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button type="primary" onClick={() => setIsOnSubmit(true)}>
+          <Button
+            type="primary"
+            onClick={() => setIsOnSubmit(true)}
+            disabled={isSubmitting || hasInvalidRow}
+          >
             등록
           </Button>
         </div>
@@ -301,6 +356,8 @@ function BowlingScoreAddSection() {
         onCancel={() => setIsOnSubmit(false)}
         okText="등록"
         cancelText="취소"
+        confirmLoading={isSubmitting}
+        cancelButtonProps={{ disabled: isSubmitting }}
         footer={(_, { OkBtn, CancelBtn }) => (
           <>
             <CancelBtn />
