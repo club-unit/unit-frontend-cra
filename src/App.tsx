@@ -22,7 +22,7 @@ import ApplicationsWithAuth from "src/pages/applications";
 import useNotiNumUnreads from "src/contexts/notiNumUnreads/useNotiNumUnreads";
 import ManagementMainWithAuth from "src/pages/management";
 import ManageBowlingMainWithAuth from "src/pages/management/bowling";
-import ManageMembersMainWithAuth from "src/pages/management/mambers";
+import ManageMembersMainWithAuth from "src/pages/management/members";
 
 function App() {
   const location = useLocation();
