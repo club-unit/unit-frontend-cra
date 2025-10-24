@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Button, Space } from "antd";
 import { withAuth } from "src/components/common/withAuth";
 import useAuth from "src/contexts/auth/useAuth";
-import BowlingRecordViewSection from "src/components/bowling/BowlingRecordViewSection";
-import BowlingScoreAddSection from "src/components/bowling/BowlingScoreAddSection";
+import BowlingRecordViewSection from "src/components/pages/bowling/BowlingRecordViewSection";
+import BowlingScoreAddSection from "src/components/pages/bowling/BowlingScoreAddSection";
 
 function ManageBowlingMain() {
   const { user } = useAuth();

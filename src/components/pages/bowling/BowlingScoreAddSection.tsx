@@ -1,7 +1,15 @@
 import { useMemo, useState } from "react";
-import { Button, Checkbox, InputNumber, Select, Space, Table } from "antd";
+import { Button, Checkbox, DatePicker, InputNumber, Select, Space, Table, Typography } from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
+import dayjs, { Dayjs } from "dayjs";
+import useUsers from "src/hooks/api/users/useUsers";
+import useAuth from "src/contexts/auth/useAuth";
+import { RANK_LOOKUP_TABLE } from "src/constants/rank";
+import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
+import { Branch } from "src/types/api/profile";
+
+const { Text } = Typography;
 
 interface GameScore {
   participated: boolean;
@@ -16,9 +24,25 @@ interface BowlingRow {
 }
 
 function BowlingScoreAddSection() {
+  const { user } = useAuth();
+
   const [individualScoreRows, setIndividualScoreRows] = useState<BowlingRow[]>([
     { key: "row-0", games: [{ participated: true, score: 0 }] },
   ]);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [selectedBranch, setSelectedBranch] = useState<Branch | undefined>(user?.profile.branch);
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
+
+  const { data: usersData, isLoading: isLoadingUsers } = useUsers({
+    search: searchValue,
+    branch: selectedBranch,
+    page_size: 50,
+  });
+
+  const branchOptions = Object.entries(BRANCH_LOOKUP_TABLE).map(([key, value]) => ({
+    value: key,
+    label: value,
+  }));
 
   const addBowlingColumns = useMemo(() => {
     const numGames = individualScoreRows[0]?.games.length || 1;
@@ -48,16 +72,33 @@ function BowlingScoreAddSection() {
       {
         title: "회원",
         key: "member",
-        width: 150,
+        width: 200,
         render: (_, record) => (
           <Select
             style={{ width: "100%" }}
             placeholder="회원 선택"
             value={record.memberId}
-            options={[
-              { value: 1, label: "회원1" },
-              { value: 2, label: "회원2" },
-            ]}
+            showSearch
+            loading={isLoadingUsers}
+            filterOption={false}
+            onSearch={(value) => setSearchValue(value)}
+            onChange={(value, option) => {
+              const newRows = [...individualScoreRows];
+              const rowIndex = newRows.findIndex((r) => r.key === record.key);
+              if (rowIndex !== -1) {
+                newRows[rowIndex].memberId = value;
+                newRows[rowIndex].memberName = (option as { label: string })?.label || "";
+                setIndividualScoreRows(newRows);
+              }
+            }}
+            options={
+              usersData?.results.map((user) => ({
+                value: user.id,
+                label: `${user.profile.name}/${RANK_LOOKUP_TABLE[user.profile.rank]}/${
+                  user.profile.joinedGeneration?.number || "N/A"
+                }`,
+              })) || []
+            }
           />
         ),
       },
@@ -126,6 +167,13 @@ function BowlingScoreAddSection() {
       });
     }
 
+    // 가변 너비 열 추가
+    cols.push({
+      title: "",
+      key: "spacer",
+      render: () => null,
+    });
+
     cols.push({
       title: (
         <Button
@@ -147,7 +195,7 @@ function BowlingScoreAddSection() {
     });
 
     return cols;
-  }, [individualScoreRows]);
+  }, [individualScoreRows, usersData, isLoadingUsers]);
 
   const addRow = () => {
     const numGames = individualScoreRows[0]?.games.length || 1;
@@ -159,16 +207,42 @@ function BowlingScoreAddSection() {
   };
 
   const handleSubmit = () => {
-    // TODO: Implement submit logic
-    console.log("Submit bowling scores:", individualScoreRows);
+    const formattedData = individualScoreRows
+      .filter((row) => row.memberId !== undefined) // memberId가 없는 행 제외
+      .map((row) => ({
+        playerId: row.memberId!,
+        date: selectedDate?.format("YYYY-MM-DD") || "",
+        games: row.games
+          .map((game, index) => ({
+            index: index + 1,
+            score: game.participated ? game.score : null,
+          }))
+          .filter((game) => game.score !== null), // participated가 false인 게임 제외
+      }));
+
+    console.log("Submit bowling scores:", formattedData);
   };
 
   return (
     <div>
       <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-        <Button type="primary" onClick={handleSubmit}>
-          등록
-        </Button>
+        <Space>
+          <Select
+            value={selectedBranch}
+            onChange={setSelectedBranch}
+            options={branchOptions}
+            style={{ width: 100 }}
+            placeholder="지구대"
+            allowClear
+          />
+          <DatePicker
+            value={selectedDate}
+            onChange={setSelectedDate}
+            format="YYYY-MM-DD"
+            placeholder="날짜 선택"
+          />
+          <Text type="secondary">(한국 표준시 기준)</Text>
+        </Space>
         <div style={{ overflowX: "auto" }}>
           <style>{`
             .add-bowling-table .ant-table-thead > tr > th {
@@ -192,6 +266,11 @@ function BowlingScoreAddSection() {
         <Button type="dashed" icon={<PlusOutlined />} onClick={addRow} block>
           행 추가
         </Button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button type="primary" onClick={handleSubmit}>
+            등록
+          </Button>
+        </div>
       </Space>
     </div>
   );
