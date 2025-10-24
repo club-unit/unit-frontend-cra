@@ -1,6 +1,7 @@
 export const API_ROUTES = {
   token: { root: () => "/token/", refresh: () => "/token/refresh/" },
   users: {
+    root: () => "/v2/users/",
     my: () => "/v2/users/my/",
     signUp: () => "/v2/users/sign-up/",
     changePassword: () => "/v2/users/my/change-password/",
