@@ -309,27 +309,26 @@ function BowlingScoreAddSection() {
           />
           <Text type="secondary">(한국 표준시 기준)</Text>
         </Space>
-        <div style={{ overflowX: "auto" }}>
-          <style>{`
-            .add-bowling-table .ant-table-thead > tr > th {
-              padding: 4px 8px !important;
-              white-space: nowrap;
-            }
-            .add-bowling-table .ant-table-tbody > tr > td {
-              padding: 4px 8px !important;
-            }
-          `}</style>
-          <Table
-            columns={addBowlingColumns}
-            dataSource={individualScoreRows}
-            pagination={false}
-            size="small"
-            bordered
-            className="add-bowling-table"
-            style={{ fontSize: "13px" }}
-            loading={isSubmitting}
-          />
-        </div>
+        <style>{`
+          .add-bowling-table .ant-table-thead > tr > th {
+            padding: 4px 8px !important;
+            white-space: nowrap;
+          }
+          .add-bowling-table .ant-table-tbody > tr > td {
+            padding: 4px 8px !important;
+          }
+        `}</style>
+        <Table
+          columns={addBowlingColumns}
+          dataSource={individualScoreRows}
+          pagination={false}
+          size="small"
+          bordered
+          className="add-bowling-table"
+          style={{ fontSize: "13px" }}
+          loading={isSubmitting}
+          scroll={{ x: "max-content" }}
+        />
         <Button
           type="dashed"
           icon={<PlusOutlined />}
