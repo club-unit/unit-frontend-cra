@@ -95,7 +95,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         }),
         render: (_, record) => (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <BadgeSet user={record as any} height={20} />
+            <BadgeSet user={record as any} height={20} onlyLeaders />
           </div>
         ),
       },
