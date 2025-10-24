@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DatePicker, Segmented, Space, Table } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
@@ -16,6 +16,8 @@ interface BowlingRecordViewSectionProps {
 function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionProps) {
   const [selectedBranch, setSelectedBranch] = useState<Branch | "ALL">(initialBranch || "ALL");
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, dayjs()]);
+  const [showScrollShadow, setShowScrollShadow] = useState(false);
+  const scrollWrapperRef = useRef<HTMLDivElement>(null);
 
   const { data: generationsData } = useGenerations();
 
@@ -33,6 +35,31 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
       }
     }
   }, [generationsData]);
+
+  useEffect(() => {
+    const checkScroll = () => {
+      const wrapper = scrollWrapperRef.current;
+      if (wrapper) {
+        const tableContainer = wrapper.querySelector(".ant-table-content");
+        if (tableContainer) {
+          const { scrollLeft, scrollWidth, clientWidth } = tableContainer;
+          setShowScrollShadow(scrollLeft + clientWidth < scrollWidth - 1);
+        }
+      }
+    };
+
+    const wrapper = scrollWrapperRef.current;
+    if (wrapper) {
+      const tableContainer = wrapper.querySelector(".ant-table-content");
+      if (tableContainer) {
+        tableContainer.addEventListener("scroll", checkScroll);
+        checkScroll();
+        return () => {
+          tableContainer.removeEventListener("scroll", checkScroll);
+        };
+      }
+    }
+  }, [data]);
 
   const branchOptions = [
     { value: "ALL", label: "전체" },
@@ -192,19 +219,38 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
           padding: 4px 8px !important;
           white-space: nowrap;
         }
+        .table-scroll-wrapper {
+          position: relative;
+        }
+        .table-scroll-wrapper.show-shadow::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          width: 50px;
+          background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+          pointer-events: none;
+          z-index: 1;
+        }
       `}</style>
-      <Table
-        columns={columns}
-        dataSource={data}
-        loading={isLoading}
-        rowKey="id"
-        pagination={false}
-        size="small"
-        style={{ fontSize: "13px" }}
-        bordered
-        className="compact-table"
-        scroll={{ x: "max-content" }}
-      />
+      <div
+        ref={scrollWrapperRef}
+        className={`table-scroll-wrapper ${showScrollShadow ? "show-shadow" : ""}`}
+      >
+        <Table
+          columns={columns}
+          dataSource={data}
+          loading={isLoading}
+          rowKey="id"
+          pagination={false}
+          size="small"
+          style={{ fontSize: "13px" }}
+          bordered
+          className="compact-table"
+          scroll={{ x: "max-content" }}
+        />
+      </div>
     </div>
   );
 }
