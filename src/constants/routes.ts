@@ -1,6 +1,7 @@
 export const API_ROUTES = {
   token: { root: () => "/token/", refresh: () => "/token/refresh/" },
   users: {
+    root: () => "/v2/users/",
     my: () => "/v2/users/my/",
     signUp: () => "/v2/users/sign-up/",
     changePassword: () => "/v2/users/my/change-password/",
@@ -46,6 +47,6 @@ export const API_ROUTES = {
   },
   bowling: {
     records: () => "/v2/bowling/records/",
-    record: () => "/v2/bowling/records/record",
+    record: () => "/v2/bowling/records/record/",
   },
 };
