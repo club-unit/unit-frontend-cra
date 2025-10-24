@@ -5,10 +5,16 @@ import { Author } from "src/types/api/author";
 interface Props {
   user: MyUser | Author;
   height: number;
+  onlyLeaders?: boolean;
 }
 
-function BadgeSet({ user, height }: Props) {
-  return user.profile.responsibility !== "NONE" && user.profile.responsibility !== "NORMAL" ? (
+function BadgeSet({ user, height, onlyLeaders = false }: Props) {
+  const shouldShowResponsibility = onlyLeaders
+    ? user.profile.responsibility === "BRANCH_LEADER" ||
+      user.profile.responsibility === "CLUB_LEADER"
+    : user.profile.responsibility !== "NONE" && user.profile.responsibility !== "NORMAL";
+
+  return shouldShowResponsibility ? (
     <Image
       height={height}
       width={height * 1.75}

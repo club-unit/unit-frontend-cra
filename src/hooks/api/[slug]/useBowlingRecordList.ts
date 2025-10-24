@@ -12,14 +12,14 @@ interface BowlingRecordListQuery {
 }
 
 function useBowlingRecordList(query: BowlingRecordListQuery, isDisabled?: boolean) {
-  const shouldFetch = !isDisabled && query?.branch && query?.startDate && query?.endDate;
+  const shouldFetch = !isDisabled && query?.startDate && query?.endDate;
 
   const { data, isLoading, mutate, error } = useAuthSWR<CommonListResponse<PersonalBowlingRecord>>(
     shouldFetch
       ? {
           url: API_ROUTES.bowling.records(),
           query: {
-            branch: query.branch,
+            ...(query.branch && { branch: query.branch }),
             start_date: dayjs(query.startDate).format("YYYY-MM-DD"),
             end_date: dayjs(query.endDate).format("YYYY-MM-DD"),
           },

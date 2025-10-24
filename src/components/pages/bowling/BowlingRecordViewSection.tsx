@@ -1,10 +1,10 @@
-import { useMemo, useState } from "react";
-import { Button, DatePicker, Select, Space, Table } from "antd";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { DatePicker, Segmented, Space, Table } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
-import { RESPONSIBILITY_LOOKUP_TABLE } from "src/constants/responsibility";
-import { RANK_LOOKUP_TABLE } from "src/constants/rank";
 import useBowlingRecordList from "src/hooks/api/[slug]/useBowlingRecordList";
+import useGenerations from "src/hooks/api/generations/useGenerations";
+import BadgeSet from "src/components/common/BadgeSet";
 import { Branch } from "src/types/api/profile";
 import { PersonalBowlingRecord } from "src/types/api/bowling";
 import type { ColumnsType } from "antd/es/table";
@@ -14,26 +14,60 @@ interface BowlingRecordViewSectionProps {
 }
 
 function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionProps) {
-  const [selectedBranch, setSelectedBranch] = useState<Branch | undefined>(initialBranch);
+  const [selectedBranch, setSelectedBranch] = useState<Branch | "ALL">(initialBranch || "ALL");
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, dayjs()]);
-  const [queryDates, setQueryDates] = useState<[Date, Date] | null>(null);
+  const [showScrollShadow, setShowScrollShadow] = useState(false);
+  const scrollWrapperRef = useRef<HTMLDivElement>(null);
+
+  const { data: generationsData } = useGenerations();
 
   const { data, isLoading } = useBowlingRecordList({
-    branch: selectedBranch,
-    startDate: queryDates?.[0],
-    endDate: queryDates?.[1],
+    branch: selectedBranch === "ALL" ? undefined : selectedBranch,
+    startDate: dateRange[0]?.toDate(),
+    endDate: dateRange[1]?.toDate(),
   });
 
-  const handleSearch = () => {
-    if (dateRange && dateRange[0] && dateRange[1]) {
-      setQueryDates([dateRange[0].toDate(), dateRange[1].toDate()]);
+  useEffect(() => {
+    if (generationsData && generationsData.length > 0) {
+      const firstGeneration = generationsData[0];
+      if (firstGeneration.startDate) {
+        setDateRange([dayjs(firstGeneration.startDate), dayjs()]);
+      }
     }
-  };
+  }, [generationsData]);
 
-  const branchOptions = Object.entries(BRANCH_LOOKUP_TABLE).map(([key, value]) => ({
-    value: key,
-    label: value,
-  }));
+  useEffect(() => {
+    const checkScroll = () => {
+      const wrapper = scrollWrapperRef.current;
+      if (wrapper) {
+        const tableContainer = wrapper.querySelector(".ant-table-content");
+        if (tableContainer) {
+          const { scrollLeft, scrollWidth, clientWidth } = tableContainer;
+          setShowScrollShadow(scrollLeft + clientWidth < scrollWidth - 1);
+        }
+      }
+    };
+
+    const wrapper = scrollWrapperRef.current;
+    if (wrapper) {
+      const tableContainer = wrapper.querySelector(".ant-table-content");
+      if (tableContainer) {
+        tableContainer.addEventListener("scroll", checkScroll);
+        checkScroll();
+        return () => {
+          tableContainer.removeEventListener("scroll", checkScroll);
+        };
+      }
+    }
+  }, [data]);
+
+  const branchOptions = [
+    { value: "ALL", label: "전체" },
+    ...Object.entries(BRANCH_LOOKUP_TABLE).map(([key, value]) => ({
+      value: key,
+      label: value,
+    })),
+  ];
 
   const lastDate = useMemo(() => {
     if (!data || data.length === 0) return null;
@@ -79,12 +113,18 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         title: "등급",
         key: "grade",
         align: "center",
-        onCell: () => ({ style: { whiteSpace: "nowrap", padding: "4px 8px" } }),
-        render: (_, record) => {
-          return record.profile.responsibility !== "NORMAL"
-            ? RESPONSIBILITY_LOOKUP_TABLE[record.profile.responsibility]
-            : RANK_LOOKUP_TABLE[record.profile.rank];
-        },
+        width: 60,
+        onCell: () => ({
+          style: {
+            whiteSpace: "nowrap",
+            padding: "4px 8px",
+          },
+        }),
+        render: (_, record) => (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <BadgeSet user={record as any} height={20} onlyLeaders />
+          </div>
+        ),
       },
       {
         title: "이름",
@@ -120,7 +160,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     const gameColumns: ColumnsType<PersonalBowlingRecord> = Array.from(
       { length: maxGameIndex },
       (_, i) => ({
-        title: `게임${i + 1}`,
+        title: `${i + 1}`,
         key: `game${i + 1}`,
         align: "center",
         onCell: () => ({ style: { whiteSpace: "nowrap", padding: "4px 8px" } }),
@@ -160,13 +200,11 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
 
   return (
     <div>
-      <Space>
-        <Select
+      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+        <Segmented
           value={selectedBranch}
-          onChange={setSelectedBranch}
+          onChange={(value) => setSelectedBranch(value as Branch | "ALL")}
           options={branchOptions}
-          style={{ width: 80 }}
-          placeholder="지구대 선택"
         />
         <DatePicker.RangePicker
           value={dateRange}
@@ -174,18 +212,32 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
           format="YYYY-MM-DD"
           placeholder={["시작 날짜", "종료 날짜"]}
         />
-        <Button type="primary" onClick={handleSearch} disabled={!dateRange[0]}>
-          조회
-        </Button>
       </Space>
 
-      <div style={{ overflowX: "auto" }}>
-        <style>{`
-          .compact-table .ant-table-thead > tr > th {
-            padding: 4px 8px !important;
-            white-space: nowrap;
-          }
-        `}</style>
+      <style>{`
+        .compact-table .ant-table-thead > tr > th {
+          padding: 4px 8px !important;
+          white-space: nowrap;
+        }
+        .table-scroll-wrapper {
+          position: relative;
+        }
+        .table-scroll-wrapper.show-shadow::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          width: 50px;
+          background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+          pointer-events: none;
+          z-index: 1;
+        }
+      `}</style>
+      <div
+        ref={scrollWrapperRef}
+        className={`table-scroll-wrapper ${showScrollShadow ? "show-shadow" : ""}`}
+      >
         <Table
           columns={columns}
           dataSource={data}
@@ -196,6 +248,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
           style={{ fontSize: "13px" }}
           bordered
           className="compact-table"
+          scroll={{ x: "max-content" }}
         />
       </div>
     </div>
