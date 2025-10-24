@@ -1,6 +1,6 @@
 import useAuthSWR from "src/hooks/api/useAuthSWR";
 import { API_ROUTES } from "src/constants/routes";
-import { OtherUser } from "src/types/api/user";
+import { UsersListUser } from "src/types/api/user";
 import { CommonPagedResponse } from "src/types/api/common";
 import { Branch, Responsibility } from "src/types/api/profile";
 
@@ -15,7 +15,7 @@ interface UseUsersQuery {
 }
 
 function useUsers(query: UseUsersQuery = {}, isDisabled?: boolean) {
-  const { data, isLoading, mutate, error } = useAuthSWR<CommonPagedResponse<OtherUser>>(
+  const { data, isLoading, mutate, error } = useAuthSWR<CommonPagedResponse<UsersListUser>>(
     !isDisabled
       ? {
           url: API_ROUTES.users.root(),
