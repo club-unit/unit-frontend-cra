@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Button, DatePicker, Select, Space, Table } from "antd";
+import { Button, DatePicker, Segmented, Space, Table, Typography } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
 import { RESPONSIBILITY_LOOKUP_TABLE } from "src/constants/responsibility";
@@ -9,17 +9,19 @@ import { Branch } from "src/types/api/profile";
 import { PersonalBowlingRecord } from "src/types/api/bowling";
 import type { ColumnsType } from "antd/es/table";
 
+const { Text } = Typography;
+
 interface BowlingRecordViewSectionProps {
   initialBranch?: Branch;
 }
 
 function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionProps) {
-  const [selectedBranch, setSelectedBranch] = useState<Branch | undefined>(initialBranch);
+  const [selectedBranch, setSelectedBranch] = useState<Branch | "ALL">(initialBranch || "ALL");
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, dayjs()]);
   const [queryDates, setQueryDates] = useState<[Date, Date] | null>(null);
 
   const { data, isLoading } = useBowlingRecordList({
-    branch: selectedBranch,
+    branch: selectedBranch === "ALL" ? undefined : selectedBranch,
     startDate: queryDates?.[0],
     endDate: queryDates?.[1],
   });
@@ -30,10 +32,13 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     }
   };
 
-  const branchOptions = Object.entries(BRANCH_LOOKUP_TABLE).map(([key, value]) => ({
-    value: key,
-    label: value,
-  }));
+  const branchOptions = [
+    { value: "ALL", label: "전체" },
+    ...Object.entries(BRANCH_LOOKUP_TABLE).map(([key, value]) => ({
+      value: key,
+      label: value,
+    })),
+  ];
 
   const lastDate = useMemo(() => {
     if (!data || data.length === 0) return null;
@@ -160,23 +165,23 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
 
   return (
     <div>
-      <Space>
-        <Select
+      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+        <Segmented
           value={selectedBranch}
-          onChange={setSelectedBranch}
+          onChange={(value) => setSelectedBranch(value as Branch | "ALL")}
           options={branchOptions}
-          style={{ width: 80 }}
-          placeholder="지구대 선택"
         />
-        <DatePicker.RangePicker
-          value={dateRange}
-          onChange={(dates) => setDateRange(dates as [Dayjs | null, Dayjs | null])}
-          format="YYYY-MM-DD"
-          placeholder={["시작 날짜", "종료 날짜"]}
-        />
-        <Button type="primary" onClick={handleSearch} disabled={!dateRange[0]}>
-          조회
-        </Button>
+        <Space>
+          <DatePicker.RangePicker
+            value={dateRange}
+            onChange={(dates) => setDateRange(dates as [Dayjs | null, Dayjs | null])}
+            format="YYYY-MM-DD"
+            placeholder={["시작 날짜", "종료 날짜"]}
+          />
+          <Button type="primary" onClick={handleSearch} disabled={!dateRange[0]}>
+            조회
+          </Button>
+        </Space>
       </Space>
 
       <div style={{ overflowX: "auto" }}>
