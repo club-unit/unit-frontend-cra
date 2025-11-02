@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Button,
   Checkbox,
   DatePicker,
+  Input,
   InputNumber,
   Modal,
   Select,
@@ -10,7 +11,7 @@ import {
   Table,
   Typography,
 } from "antd";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined, WarningOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import dayjs, { Dayjs } from "dayjs";
 import useUsers from "src/hooks/api/users/useUsers";
@@ -48,12 +49,25 @@ function BowlingScoreAddSection() {
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
   const [isOnSubmit, setIsOnSubmit] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmationText, setConfirmationText] = useState("");
 
   const { data: usersData, isLoading: isLoadingUsers } = useUsers({
     search: searchValue,
     branch: selectedBranch,
     page_size: 50,
   });
+
+  const selectRefs = useRef<Map<string, any>>(new Map());
+
+  useEffect(() => {
+    const lastRowKey = individualScoreRows[individualScoreRows.length - 1]?.key;
+    if (lastRowKey && selectRefs.current.has(lastRowKey)) {
+      const selectRef = selectRefs.current.get(lastRowKey);
+      if (selectRef) {
+        setTimeout(() => selectRef.focus(), 0);
+      }
+    }
+  }, [individualScoreRows.length]);
 
   const branchOptions = Object.entries(BRANCH_LOOKUP_TABLE).map(([key, value]) => ({
     value: key,
@@ -82,6 +96,7 @@ function BowlingScoreAddSection() {
               }
             }}
             disabled={individualScoreRows.length === 1}
+            tabIndex={-1}
           />
         ),
       },
@@ -96,6 +111,13 @@ function BowlingScoreAddSection() {
 
           return (
             <Select
+              ref={(el) => {
+                if (el) {
+                  selectRefs.current.set(record.key, el);
+                } else {
+                  selectRefs.current.delete(record.key);
+                }
+              }}
               style={{ width: "100%" }}
               placeholder="회원 선택"
               value={record.memberId}
@@ -146,6 +168,7 @@ function BowlingScoreAddSection() {
                 setIndividualScoreRows(newRows);
               }}
               disabled={numGames === 1}
+              tabIndex={-1}
             />
           </Space>
         ),
@@ -166,12 +189,14 @@ function BowlingScoreAddSection() {
                   setIndividualScoreRows(newRows);
                 }
               }}
+              disabled={!record.memberId}
+              tabIndex={-1}
             />
             <InputNumber
               style={{ width: 50 }}
               min={0}
               max={300}
-              disabled={!record.games[i]?.participated}
+              disabled={!record.memberId || !record.games[i]?.participated}
               value={record.games[i]?.score ?? 0}
               controls={false}
               onChange={(value) => {
@@ -260,18 +285,21 @@ function BowlingScoreAddSection() {
         api.success({ message: "볼링 점수가 성공적으로 등록되었습니다." });
         setIndividualScoreRows([{ key: "row-0", games: [{ participated: true, score: 0 }] }]);
         setIsOnSubmit(false);
+        setConfirmationText("");
       } else if (successCount > 0 && failCount > 0) {
         api.warning({
           message: "업로드에 실패한 행이 있습니다.",
           description: `${successCount}개 성공, ${failCount}개 실패`,
         });
         setIsOnSubmit(false);
+        setConfirmationText("");
       } else {
         api.error({
           message: "볼링 점수 등록에 실패하였습니다.",
           description: "다시 시도해주세요.",
         });
         setIsOnSubmit(false);
+        setConfirmationText("");
       }
     } catch (e) {
       api.error({
@@ -279,6 +307,7 @@ function BowlingScoreAddSection() {
         description: "다시 시도해주세요.",
       });
       setIsOnSubmit(false);
+      setConfirmationText("");
     } finally {
       setIsSubmitting(false);
     }
@@ -288,6 +317,29 @@ function BowlingScoreAddSection() {
   const hasInvalidRow = individualScoreRows.some((row) =>
     row.games.every((game) => !game.participated)
   );
+
+  const { zeroScoreCount, perfectScoreCount } = useMemo(() => {
+    let zeroCount = 0;
+    let perfectCount = 0;
+
+    individualScoreRows.forEach((row) => {
+      if (row.memberId) {
+        row.games.forEach((game) => {
+          if (game.participated) {
+            if (game.score === 0) zeroCount++;
+            if (game.score === 300) perfectCount++;
+          }
+        });
+      }
+    });
+
+    return { zeroScoreCount: zeroCount, perfectScoreCount: perfectCount };
+  }, [individualScoreRows]);
+
+  const isNotSaturday = selectedDate?.day() !== 6;
+  const isToday = selectedDate ? dayjs().isSame(selectedDate, "day") : false;
+
+  const hasWarning = zeroScoreCount > 0 || perfectScoreCount > 0 || isNotSaturday || isToday;
 
   return (
     <div>
@@ -352,11 +404,15 @@ function BowlingScoreAddSection() {
         open={isOnSubmit}
         title="볼링 점수 등록 확인"
         onOk={handleSubmit}
-        onCancel={() => setIsOnSubmit(false)}
+        onCancel={() => {
+          setIsOnSubmit(false);
+          setConfirmationText("");
+        }}
         okText="등록"
         cancelText="취소"
         confirmLoading={isSubmitting}
         cancelButtonProps={{ disabled: isSubmitting }}
+        okButtonProps={{ disabled: hasWarning && confirmationText !== "확실합니다" }}
         footer={(_, { OkBtn, CancelBtn }) => (
           <>
             <CancelBtn />
@@ -364,8 +420,85 @@ function BowlingScoreAddSection() {
           </>
         )}
       >
-        <p>선택한 날짜: {selectedDate?.format("YYYY년 MM월 DD일")}</p>
-        <p>입력한 행 개수: {validRowCount}개</p>
+        <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+          <p>선택한 날짜: {selectedDate?.format("YYYY년 MM월 DD일")}</p>
+          <p>입력한 행 개수: {validRowCount}개</p>
+
+          {/* 점수 경고 */}
+          {(zeroScoreCount > 0 || perfectScoreCount > 0) && (
+            <div style={{ marginTop: 16 }}>
+              <Space direction="vertical" size="small">
+                <Text
+                  type="danger"
+                  strong
+                  style={{ fontSize: "18px", display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <WarningOutlined />
+                  <span>점수 확인 필요</span>
+                </Text>
+                {zeroScoreCount > 0 && (
+                  <Text type="danger" strong style={{ fontSize: "16px" }}>
+                    • 0점: {zeroScoreCount}개
+                  </Text>
+                )}
+                {perfectScoreCount > 0 && (
+                  <Text type="danger" strong style={{ fontSize: "16px" }}>
+                    • 300점: {perfectScoreCount}개
+                  </Text>
+                )}
+                <Text type="danger" strong style={{ fontSize: "16px" }}>
+                  점수가 정말 맞습니까?
+                </Text>
+              </Space>
+            </div>
+          )}
+
+          {/* 날짜 경고 */}
+          {(isNotSaturday || isToday) && (
+            <div style={{ marginTop: 16 }}>
+              <Space direction="vertical" size="small">
+                <Text
+                  type="danger"
+                  strong
+                  style={{ fontSize: "18px", display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <WarningOutlined />
+                  <span>날짜 확인 필요</span>
+                </Text>
+                {isNotSaturday && (
+                  <Text type="danger" strong style={{ fontSize: "16px" }}>
+                    • 선택한 날짜가 토요일이 아닙니다!
+                  </Text>
+                )}
+                {isToday && (
+                  <Text type="danger" strong style={{ fontSize: "16px" }}>
+                    • 선택한 날짜가 오늘입니다!
+                  </Text>
+                )}
+                <Text type="danger" strong style={{ fontSize: "16px" }}>
+                  날짜가 확실합니까?
+                </Text>
+              </Space>
+            </div>
+          )}
+
+          {/* 확인 입력 필드 */}
+          {hasWarning && (
+            <div style={{ marginTop: 16 }}>
+              <Space direction="vertical" size="small" style={{ width: "100%" }}>
+                <Text strong style={{ fontSize: "14px" }}>
+                  확실하다면 아래에 "확실합니다"를 입력하세요:
+                </Text>
+                <Input
+                  placeholder="확실합니다"
+                  value={confirmationText}
+                  onChange={(e) => setConfirmationText(e.target.value)}
+                  style={{ width: "100%" }}
+                />
+              </Space>
+            </div>
+          )}
+        </Space>
       </Modal>
     </div>
   );
