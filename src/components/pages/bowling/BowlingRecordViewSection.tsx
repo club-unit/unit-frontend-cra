@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { DatePicker, Segmented, Space, Table } from "antd";
+import { Button, DatePicker, Segmented, Space, Table } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
 import dayjs, { Dayjs } from "dayjs";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
 import useBowlingRecordList from "src/hooks/api/[slug]/useBowlingRecordList";
@@ -8,6 +9,7 @@ import BadgeSet from "src/components/common/BadgeSet";
 import { Branch } from "src/types/api/profile";
 import { PersonalBowlingRecord } from "src/types/api/bowling";
 import type { ColumnsType } from "antd/es/table";
+import { exportBowlingRecordsToExcel } from "src/utils/bowling/exportBowlingRecordsToExcel";
 
 interface BowlingRecordViewSectionProps {
   initialBranch?: Branch;
@@ -91,15 +93,25 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     }
 
     let maxGameIndex = 0;
-    data.forEach((record) => {
-      const lastDateRecord = record.records.find((r) => r.date === lastDate);
-      if (lastDateRecord && lastDateRecord.games.length > 0) {
-        const recordMaxIndex = Math.max(...lastDateRecord.games.map((g) => g.index));
-        maxGameIndex = Math.max(maxGameIndex, recordMaxIndex);
-      }
-    });
+    // "전체" 탭이 아닐 때만 게임 인덱스 계산
+    if (selectedBranch !== "ALL") {
+      data.forEach((record) => {
+        const lastDateRecord = record.records.find((r) => r.date === lastDate);
+        if (lastDateRecord && lastDateRecord.games.length > 0) {
+          const recordMaxIndex = Math.max(...lastDateRecord.games.map((g) => g.index));
+          maxGameIndex = Math.max(maxGameIndex, recordMaxIndex);
+        }
+      });
+    }
 
     const lastDateFormatted = dayjs(lastDate).format("YYYY년 MM월 DD일");
+
+    // 동률 감지: 각 순위가 몇 번 나타나는지 계산
+    const rankCounts = new Map<number, number>();
+    data.forEach((record) => {
+      const count = rankCounts.get(record.rank) || 0;
+      rankCounts.set(record.rank, count + 1);
+    });
 
     const baseColumns: ColumnsType<PersonalBowlingRecord> = [
       {
@@ -107,7 +119,12 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         dataIndex: "rank",
         key: "rank",
         align: "center",
-        onCell: () => ({ style: { whiteSpace: "nowrap", padding: "4px 8px" } }),
+        width: 60,
+        onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
+        render: (rank: number) => {
+          const isTied = (rankCounts.get(rank) || 0) > 1;
+          return isTied ? <span style={{ fontWeight: 900 }}>{rank}</span> : rank;
+        },
       },
       {
         title: "등급",
@@ -116,7 +133,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         width: 60,
         onCell: () => ({
           style: {
-            whiteSpace: "nowrap",
+            whiteSpace: "nowrap" as const,
             padding: "4px 8px",
           },
         }),
@@ -126,11 +143,25 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
           </div>
         ),
       },
+    ];
+
+    // "전체" 탭일 때만 지구대 컬럼 추가
+    if (selectedBranch === "ALL") {
+      baseColumns.push({
+        title: "지구대",
+        key: "branch",
+        align: "center",
+        onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
+        render: (_, record) => BRANCH_LOOKUP_TABLE[record.profile.branch],
+      });
+    }
+
+    baseColumns.push(
       {
         title: "이름",
         key: "name",
         align: "center",
-        onCell: () => ({ style: { whiteSpace: "nowrap", padding: "4px 8px" } }),
+        onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
         render: (_, record) => record.profile.name,
       },
       {
@@ -138,7 +169,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         dataIndex: "average",
         key: "average",
         align: "center",
-        onCell: () => ({ style: { whiteSpace: "nowrap", padding: "4px 8px" } }),
+        onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
         render: (value) => value.toFixed(2),
       },
       {
@@ -146,16 +177,19 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         dataIndex: "numGames",
         key: "numGames",
         align: "center",
-        onCell: () => ({ style: { whiteSpace: "nowrap", padding: "4px 8px" } }),
+        onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
+        render: (numGames: number) => (
+          <span style={{ color: numGames < 5 ? "red" : "inherit" }}>{numGames}</span>
+        ),
       },
       {
         title: "하이",
         dataIndex: "high",
         key: "high",
         align: "center",
-        onCell: () => ({ style: { whiteSpace: "nowrap", padding: "4px 8px" } }),
-      },
-    ];
+        onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
+      }
+    );
 
     const gameColumns: ColumnsType<PersonalBowlingRecord> = Array.from(
       { length: maxGameIndex },
@@ -163,7 +197,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         title: `${i + 1}`,
         key: `game${i + 1}`,
         align: "center",
-        onCell: () => ({ style: { whiteSpace: "nowrap", padding: "4px 8px" } }),
+        onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
         onHeaderCell: () => ({
           style: {
             borderLeft: i === 0 ? "2px solid #f0f0f0" : undefined,
@@ -196,7 +230,13 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     }
 
     return columnsWithGroup;
-  }, [data, lastDate]);
+  }, [data, lastDate, selectedBranch]);
+
+  const handleExportExcel = () => {
+    if (data) {
+      exportBowlingRecordsToExcel(data, generationsData?.[0]?.number, dateRange[0], dateRange[1]);
+    }
+  };
 
   return (
     <div>
@@ -206,12 +246,17 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
           onChange={(value) => setSelectedBranch(value as Branch | "ALL")}
           options={branchOptions}
         />
-        <DatePicker.RangePicker
-          value={dateRange}
-          onChange={(dates) => setDateRange(dates as [Dayjs | null, Dayjs | null])}
-          format="YYYY-MM-DD"
-          placeholder={["시작 날짜", "종료 날짜"]}
-        />
+        <Space>
+          <DatePicker.RangePicker
+            value={dateRange}
+            onChange={(dates) => setDateRange(dates as [Dayjs | null, Dayjs | null])}
+            format="YYYY-MM-DD"
+            placeholder={["시작 날짜", "종료 날짜"]}
+          />
+          <Button icon={<DownloadOutlined />} onClick={handleExportExcel}>
+            엑셀 다운로드
+          </Button>
+        </Space>
       </Space>
 
       <style>{`
