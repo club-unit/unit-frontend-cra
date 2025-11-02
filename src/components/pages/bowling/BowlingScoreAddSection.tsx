@@ -432,24 +432,42 @@ function BowlingScoreAddSection() {
         </Button>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Space>
-            <Button icon={<SaveOutlined />} onClick={handleSaveTempData} disabled={isSubmitting}>
+            <Button
+              icon={<SaveOutlined />}
+              onClick={handleSaveTempData}
+              disabled={isSubmitting || validRowCount === 0}
+            >
               임시저장
             </Button>
             {hasTempData && (
-              <Button
-                icon={<FolderOpenOutlined />}
-                onClick={handleLoadTempData}
-                disabled={isSubmitting}
-                type="dashed"
-              >
-                임시저장 점수 불러오기
-              </Button>
+              <Space.Compact>
+                <Button
+                  icon={<FolderOpenOutlined />}
+                  onClick={handleLoadTempData}
+                  disabled={isSubmitting}
+                  type="dashed"
+                >
+                  임시저장 점수 불러오기
+                </Button>
+                <Button
+                  icon={<DeleteOutlined />}
+                  onClick={() => {
+                    handleClearTempData();
+                    api.success({ message: "임시저장 점수가 삭제되었습니다." });
+                  }}
+                  disabled={isSubmitting}
+                  danger
+                  type="dashed"
+                >
+                  삭제
+                </Button>
+              </Space.Compact>
             )}
           </Space>
           <Button
             type="primary"
             onClick={() => setIsOnSubmit(true)}
-            disabled={isSubmitting || hasInvalidRow}
+            disabled={isSubmitting || hasInvalidRow || validRowCount === 0}
           >
             등록
           </Button>
