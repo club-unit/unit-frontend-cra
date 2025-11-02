@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { DatePicker, Segmented, Space, Table } from "antd";
+import { Button, DatePicker, Segmented, Space, Table } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
 import dayjs, { Dayjs } from "dayjs";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
 import useBowlingRecordList from "src/hooks/api/[slug]/useBowlingRecordList";
@@ -8,6 +9,7 @@ import BadgeSet from "src/components/common/BadgeSet";
 import { Branch } from "src/types/api/profile";
 import { PersonalBowlingRecord } from "src/types/api/bowling";
 import type { ColumnsType } from "antd/es/table";
+import { exportBowlingRecordsToExcel } from "src/utils/bowling/exportBowlingRecordsToExcel";
 
 interface BowlingRecordViewSectionProps {
   initialBranch?: Branch;
@@ -230,6 +232,12 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     return columnsWithGroup;
   }, [data, lastDate, selectedBranch]);
 
+  const handleExportExcel = () => {
+    if (data) {
+      exportBowlingRecordsToExcel(data, generationsData?.[0]?.number, dateRange[0], dateRange[1]);
+    }
+  };
+
   return (
     <div>
       <Space direction="vertical" size="middle" style={{ width: "100%" }}>
@@ -238,12 +246,17 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
           onChange={(value) => setSelectedBranch(value as Branch | "ALL")}
           options={branchOptions}
         />
-        <DatePicker.RangePicker
-          value={dateRange}
-          onChange={(dates) => setDateRange(dates as [Dayjs | null, Dayjs | null])}
-          format="YYYY-MM-DD"
-          placeholder={["시작 날짜", "종료 날짜"]}
-        />
+        <Space>
+          <DatePicker.RangePicker
+            value={dateRange}
+            onChange={(dates) => setDateRange(dates as [Dayjs | null, Dayjs | null])}
+            format="YYYY-MM-DD"
+            placeholder={["시작 날짜", "종료 날짜"]}
+          />
+          <Button icon={<DownloadOutlined />} onClick={handleExportExcel}>
+            엑셀 다운로드
+          </Button>
+        </Space>
       </Space>
 
       <style>{`
