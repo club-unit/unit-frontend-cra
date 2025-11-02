@@ -15,13 +15,6 @@ export interface AuthorProfile {
   responsibility: Responsibility;
 }
 
-export interface BowlingRecordProfile {
-  name: string;
-  branch: Branch;
-  rank: Rank;
-  responsibility: Responsibility;
-}
-
 export interface OtherProfile extends Profile {
   generation: Generation;
   badges: Badge[];
