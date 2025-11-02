@@ -11,7 +11,13 @@ import {
   Table,
   Typography,
 } from "antd";
-import { DeleteOutlined, PlusOutlined, WarningOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  FolderOpenOutlined,
+  PlusOutlined,
+  SaveOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import dayjs, { Dayjs } from "dayjs";
 import useUsers from "src/hooks/api/users/useUsers";
@@ -22,20 +28,15 @@ import { Branch } from "src/types/api/profile";
 import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
+import {
+  BowlingRow,
+  checkTempBowlingData,
+  saveTempBowlingData,
+  loadTempBowlingData,
+  clearTempBowlingData,
+} from "src/utils/bowling/tempBowlingDataStorage";
 
 const { Text } = Typography;
-
-interface GameScore {
-  participated: boolean;
-  score: number;
-}
-
-interface BowlingRow {
-  key: string;
-  memberId?: number;
-  memberName?: string;
-  games: GameScore[];
-}
 
 function BowlingScoreAddSection() {
   const { user } = useAuth();
@@ -50,6 +51,7 @@ function BowlingScoreAddSection() {
   const [isOnSubmit, setIsOnSubmit] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
+  const [hasTempData, setHasTempData] = useState(false);
 
   const { data: usersData, isLoading: isLoadingUsers } = useUsers({
     search: searchValue,
@@ -68,6 +70,10 @@ function BowlingScoreAddSection() {
       }
     }
   }, [individualScoreRows.length]);
+
+  useEffect(() => {
+    setHasTempData(checkTempBowlingData());
+  }, []);
 
   const branchOptions = Object.entries(BRANCH_LOOKUP_TABLE).map(([key, value]) => ({
     value: key,
@@ -245,6 +251,39 @@ function BowlingScoreAddSection() {
     return cols;
   }, [individualScoreRows, usersData, isLoadingUsers]);
 
+  const handleSaveTempData = () => {
+    const success = saveTempBowlingData({
+      individualScoreRows,
+      selectedDate: selectedDate?.toISOString() || null,
+      selectedBranch,
+    });
+
+    if (success) {
+      setHasTempData(true);
+      api.success({ message: "점수가 임시저장되었습니다." });
+    } else {
+      api.error({ message: "임시저장에 실패했습니다." });
+    }
+  };
+
+  const handleLoadTempData = () => {
+    const tempData = loadTempBowlingData();
+
+    if (tempData) {
+      setIndividualScoreRows(tempData.individualScoreRows || []);
+      setSelectedDate(tempData.selectedDate ? dayjs(tempData.selectedDate) : null);
+      setSelectedBranch(tempData.selectedBranch);
+      api.success({ message: "임시저장 점수를 불러왔습니다." });
+    } else {
+      api.error({ message: "점수 불러오기에 실패했습니다." });
+    }
+  };
+
+  const handleClearTempData = () => {
+    clearTempBowlingData();
+    setHasTempData(false);
+  };
+
   const addRow = () => {
     const numGames = individualScoreRows[0]?.games.length || 1;
     const newRow: BowlingRow = {
@@ -286,6 +325,7 @@ function BowlingScoreAddSection() {
         setIndividualScoreRows([{ key: "row-0", games: [{ participated: true, score: 0 }] }]);
         setIsOnSubmit(false);
         setConfirmationText("");
+        handleClearTempData();
       } else if (successCount > 0 && failCount > 0) {
         api.warning({
           message: "업로드에 실패한 행이 있습니다.",
@@ -390,7 +430,22 @@ function BowlingScoreAddSection() {
         >
           행 추가
         </Button>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Space>
+            <Button icon={<SaveOutlined />} onClick={handleSaveTempData} disabled={isSubmitting}>
+              임시저장
+            </Button>
+            {hasTempData && (
+              <Button
+                icon={<FolderOpenOutlined />}
+                onClick={handleLoadTempData}
+                disabled={isSubmitting}
+                type="dashed"
+              >
+                임시저장 점수 불러오기
+              </Button>
+            )}
+          </Space>
           <Button
             type="primary"
             onClick={() => setIsOnSubmit(true)}
