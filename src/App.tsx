@@ -20,6 +20,9 @@ import InfoSection from "src/components/common/InfoSection";
 import FormWithAuth from "src/pages/forms/[id]";
 import ApplicationsWithAuth from "src/pages/applications";
 import useNotiNumUnreads from "src/contexts/notiNumUnreads/useNotiNumUnreads";
+import ManagementMainWithAuth from "src/pages/management";
+import ManageBowlingMainWithAuth from "src/pages/management/bowling";
+import ManageMembersMainWithAuth from "src/pages/management/members";
 
 function App() {
   const location = useLocation();
@@ -53,6 +56,15 @@ function App() {
                 <Route path=":id" element={<FormWithAuth />} />
               </Route>
               <Route path="/applications" element={<ApplicationsWithAuth />} />
+              <Route path="/management">
+                <Route path="" element={<ManagementMainWithAuth />} />
+                <Route path="bowling">
+                  <Route path="" element={<ManageBowlingMainWithAuth />} />
+                </Route>
+                <Route path="members">
+                  <Route path="" element={<ManageMembersMainWithAuth />} />
+                </Route>
+              </Route>
               <Route path="/:slug">
                 <Route path="" element={<PostListPage />} />
                 <Route path="write" element={<PostWritePage />} />
