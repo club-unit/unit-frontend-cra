@@ -12,10 +12,10 @@ import PostPage from "src/pages/[slug]/[Id]";
 import AuthOrUserCard from "src/components/common/AuthOrUserCard";
 import NotificationPopup from "src/components/common/NotificationPopup";
 import {
+  BarChartOutlined,
   BellOutlined,
   LoginOutlined,
   MenuOutlined,
-  TrophyOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import useAuth from "src/contexts/auth/useAuth";
@@ -105,7 +105,7 @@ function App() {
               />
               {isLoggedIn && (
                 <FloatButton
-                  icon={<TrophyOutlined />}
+                  icon={<BarChartOutlined />}
                   onClick={() => navigate("/bowling-scores")}
                 />
               )}
@@ -133,7 +133,7 @@ function App() {
                   <div className="flex gap-2">
                     <Button
                       block
-                      icon={<TrophyOutlined />}
+                      icon={<BarChartOutlined />}
                       onClick={() => navigate("/bowling-scores")}
                     >
                       볼링 기록 조회
