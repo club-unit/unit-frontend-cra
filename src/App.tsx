@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, FloatButton, Layout, Typography } from "antd";
+import { Drawer, FloatButton, Layout } from "antd";
 import Navbar from "src/components/common/Navbar";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Index from "src/pages";
 import MyWithAuth from "src/pages/users/me";
 import PasswordResetWithAuth from "src/pages/pw-reset";
@@ -10,8 +10,16 @@ import PostListPage from "src/pages/[slug]";
 import PostWritePage from "src/pages/[slug]/write";
 import PostPage from "src/pages/[slug]/[Id]";
 import AuthOrUserCard from "src/components/common/AuthOrUserCard";
-import { LoginOutlined, UserOutlined } from "@ant-design/icons";
+import NotificationPopup from "src/components/common/NotificationPopup";
+import {
+  BellOutlined,
+  LoginOutlined,
+  MenuOutlined,
+  TrophyOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import useAuth from "src/contexts/auth/useAuth";
+import useNotifications from "src/hooks/api/common/useNotifications";
 import NotFoundPage from "src/pages/404";
 import ProfileWithAuth from "src/pages/users/[id]";
 import Footer from "src/components/common/Footer";
@@ -27,9 +35,13 @@ import BowlingScoresWithAuth from "src/pages/bowling-scores";
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [notiOpen, setNotiOpen] = useState(false);
+  const [notiPage, setNotiPage] = useState<number>(1);
   const { isLoggedIn } = useAuth();
   const { numUnreads, mutateNumUnreads } = useNotiNumUnreads();
+  const { data: notiData, mutate: notiMutate } = useNotifications({ page: notiPage });
 
   useEffect(() => {
     setOpen(false);
@@ -75,21 +87,43 @@ function App() {
               <Route path="/*" element={<NotFoundPage />} />
             </Routes>
 
-            <FloatButton
-              onClick={() => setOpen(true)}
-              icon={isLoggedIn ? <UserOutlined /> : <LoginOutlined />}
-              type="primary"
-              description={
-                <Typography.Text className="text-white text-xs">
-                  {isLoggedIn ? "내정보" : "로그인"}
-                </Typography.Text>
-              }
+            <FloatButton.Group
+              trigger="click"
               shape="square"
+              type="primary"
+              icon={<MenuOutlined />}
               badge={{ count: numUnreads }}
-            />
+            >
+              <FloatButton
+                icon={<BellOutlined />}
+                onClick={() => setNotiOpen(true)}
+                badge={{ count: numUnreads }}
+              />
+              <FloatButton
+                icon={isLoggedIn ? <UserOutlined /> : <LoginOutlined />}
+                onClick={() => setOpen(true)}
+              />
+              {isLoggedIn && (
+                <FloatButton
+                  icon={<TrophyOutlined />}
+                  onClick={() => navigate("/bowling-scores")}
+                />
+              )}
+            </FloatButton.Group>
             <Drawer placement="right" onClose={() => setOpen(false)} open={open}>
               <AuthOrUserCard setOpen={setOpen} />
             </Drawer>
+            <NotificationPopup
+              notifications={notiData?.results || []}
+              page={notiPage}
+              setPage={setNotiPage}
+              isOpen={notiOpen}
+              setIsOpen={setNotiOpen}
+              mutate={() => {
+                notiMutate();
+                mutateNumUnreads();
+              }}
+            />
           </div>
           {!["/register", "/pw-reset"].includes(location.pathname) && (
             <div className="xl:flex xl:flex-col xl:gap-2 hidden xl:block pt-4">
