@@ -23,6 +23,7 @@ import useNotiNumUnreads from "src/contexts/notiNumUnreads/useNotiNumUnreads";
 import ManagementMainWithAuth from "src/pages/management";
 import ManageBowlingMainWithAuth from "src/pages/management/bowling";
 import ManageMembersMainWithAuth from "src/pages/management/members";
+import BowlingScoresWithAuth from "src/pages/bowling-scores";
 
 function App() {
   const location = useLocation();
@@ -56,6 +57,7 @@ function App() {
                 <Route path=":id" element={<FormWithAuth />} />
               </Route>
               <Route path="/applications" element={<ApplicationsWithAuth />} />
+              <Route path="/bowling-scores" element={<BowlingScoresWithAuth />} />
               <Route path="/management">
                 <Route path="" element={<ManagementMainWithAuth />} />
                 <Route path="bowling">
