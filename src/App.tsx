@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, FloatButton, Layout } from "antd";
+import { Button, Card, Drawer, FloatButton, Layout } from "antd";
 import Navbar from "src/components/common/Navbar";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Index from "src/pages";
@@ -128,6 +128,19 @@ function App() {
           {!["/register", "/pw-reset"].includes(location.pathname) && (
             <div className="xl:flex xl:flex-col xl:gap-2 hidden xl:block pt-4">
               <AuthOrUserCard />
+              {isLoggedIn && (
+                <Card size="small">
+                  <div className="flex gap-2">
+                    <Button
+                      block
+                      icon={<TrophyOutlined />}
+                      onClick={() => navigate("/bowling-scores")}
+                    >
+                      볼링 기록 조회
+                    </Button>
+                  </div>
+                </Card>
+              )}
               <InfoSection position="side" />
             </div>
           )}
