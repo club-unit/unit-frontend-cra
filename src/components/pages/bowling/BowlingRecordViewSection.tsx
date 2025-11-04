@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Button, DatePicker, Segmented, Space, Table } from "antd";
+import { Button, DatePicker, Segmented, Space, Table, Typography } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import dayjs, { Dayjs } from "dayjs";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
@@ -239,7 +239,8 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
+      <Typography.Title level={2}>볼링 기록 조회</Typography.Title>
       <Space direction="vertical" size="middle" style={{ width: "100%" }}>
         <Segmented
           value={selectedBranch}
