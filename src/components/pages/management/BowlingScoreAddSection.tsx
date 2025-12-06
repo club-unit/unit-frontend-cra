@@ -16,6 +16,7 @@ import {
   FolderOpenOutlined,
   PlusOutlined,
   SaveOutlined,
+  SearchOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
@@ -31,9 +32,9 @@ import useNotification from "src/contexts/notification/useNotfication";
 import {
   BowlingRow,
   checkTempBowlingData,
-  saveTempBowlingData,
-  loadTempBowlingData,
   clearTempBowlingData,
+  loadTempBowlingData,
+  saveTempBowlingData,
 } from "src/utils/bowling/tempBowlingDataStorage";
 
 const { Text } = Typography;
@@ -140,7 +141,40 @@ function BowlingScoreAddSection() {
                   setIndividualScoreRows(newRows);
                 }
               }}
+              notFoundContent={
+                searchValue.trim() === "" ? (
+                  <div
+                    style={{
+                      padding: "12px 16px",
+                      color: "#999",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    <SearchOutlined style={{ fontSize: "16px" }} />
+                    <div>
+                      <p style={{ margin: 0 }}>회윈 이름을</p>
+                      <p style={{ margin: 0 }}>입력해주세요</p>
+                    </div>
+                  </div>
+                ) : isLoadingUsers ? (
+                  "로딩 중..."
+                ) : (
+                  "검색 결과가 없습니다"
+                )
+              }
               options={(() => {
+                // searchValue가 비어있으면 빈 배열 반환
+                if (searchValue.trim() === "") {
+                  // 단, 이미 선택된 회원은 표시 유지 (임시저장 불러오기 등의 경우)
+                  if (record.memberId && record.memberName) {
+                    return [{ value: record.memberId, label: record.memberName }];
+                  }
+                  return [];
+                }
+
+                // 기존 옵션 생성 로직 (검색어가 있을 때만 실행)
                 const currentOptions =
                   usersData?.results
                     .filter((user) => !selectedMemberIds.includes(user.id))
