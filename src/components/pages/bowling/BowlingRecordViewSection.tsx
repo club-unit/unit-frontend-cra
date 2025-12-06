@@ -178,9 +178,6 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         key: "numGames",
         align: "center",
         onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
-        render: (numGames: number) => (
-          <span style={{ color: numGames < 5 ? "red" : "inherit" }}>{numGames}</span>
-        ),
       },
       {
         title: "하이",
