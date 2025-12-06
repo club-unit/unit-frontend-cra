@@ -254,9 +254,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
             format="YYYY-MM-DD"
             placeholder={["시작 날짜", "종료 날짜"]}
           />
-          <Button icon={<DownloadOutlined />} onClick={handleExportExcel}>
-            엑셀 다운로드
-          </Button>
+          <Button icon={<DownloadOutlined />} onClick={handleExportExcel} />
         </Space>
       </Space>
 
