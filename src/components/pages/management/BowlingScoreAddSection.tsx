@@ -140,16 +140,28 @@ function BowlingScoreAddSection() {
                   setIndividualScoreRows(newRows);
                 }
               }}
-              options={
-                usersData?.results
-                  .filter((user) => !selectedMemberIds.includes(user.id))
-                  .map((user) => ({
-                    value: user.id,
-                    label: `${user.profile.name}/${RANK_LOOKUP_TABLE[user.profile.rank]}/${
-                      user.profile.joinedGeneration?.number || "N/A"
-                    }`,
-                  })) || []
-              }
+              options={(() => {
+                const currentOptions =
+                  usersData?.results
+                    .filter((user) => !selectedMemberIds.includes(user.id))
+                    .map((user) => ({
+                      value: user.id,
+                      label: `${user.profile.name}/${RANK_LOOKUP_TABLE[user.profile.rank]}/${
+                        user.profile.joinedGeneration?.number || "N/A"
+                      }`,
+                    })) || [];
+
+                // If this row has a saved member that's not in current options, add it
+                if (
+                  record.memberId &&
+                  record.memberName &&
+                  !currentOptions.find((opt) => opt.value === record.memberId)
+                ) {
+                  return [{ value: record.memberId, label: record.memberName }, ...currentOptions];
+                }
+
+                return currentOptions;
+              })()}
             />
           );
         },
