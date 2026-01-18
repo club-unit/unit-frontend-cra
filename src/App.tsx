@@ -41,7 +41,7 @@ function App() {
   const [notiPage, setNotiPage] = useState<number>(1);
   const { isLoggedIn } = useAuth();
   const { numUnreads, mutateNumUnreads } = useNotiNumUnreads();
-  const { data: notiData, mutate: notiMutate } = useNotifications({ page: notiPage });
+  const { data: notiData, mutate: notiMutate } = useNotifications({ page: notiPage }, !isLoggedIn);
 
   useEffect(() => {
     setOpen(false);
