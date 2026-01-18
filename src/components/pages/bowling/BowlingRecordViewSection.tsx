@@ -178,9 +178,6 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         key: "numGames",
         align: "center",
         onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
-        render: (numGames: number) => (
-          <span style={{ color: numGames < 5 ? "red" : "inherit" }}>{numGames}</span>
-        ),
       },
       {
         title: "하이",
@@ -254,9 +251,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
             format="YYYY-MM-DD"
             placeholder={["시작 날짜", "종료 날짜"]}
           />
-          <Button icon={<DownloadOutlined />} onClick={handleExportExcel}>
-            엑셀 다운로드
-          </Button>
+          <Button icon={<DownloadOutlined />} onClick={handleExportExcel} />
         </Space>
       </Space>
 
