@@ -20,7 +20,9 @@ function BranchCard({ slug, myBranch }: Props) {
       extra={<Link to={`/${slug}`}>더보기</Link>}
     >
       <div className="flex flex-col gap-4">
-        {postsSummary?.map((post) => <BranchCardElement key={post.id} post={post} slug={slug} />)}
+        {postsSummary?.map((post) => (
+          <BranchCardElement key={post.id} post={post} slug={slug} />
+        ))}
       </div>
       {!postsSummary?.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
     </Card>
