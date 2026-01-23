@@ -120,8 +120,8 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
                 "SECOND_CHOICE_WAITING",
               ]
             : statusEnum === "SECOND_CHOICE_WAITING"
-            ? ["SECOND_CHOICE_WAITING", "SECOND_CHOICE_JOIN", "SECOND_CHOICE_FAIL"]
-            : Object.keys(APPLICATION_STATUS_LOOKUP_TABLE);
+              ? ["SECOND_CHOICE_WAITING", "SECOND_CHOICE_JOIN", "SECOND_CHOICE_FAIL"]
+              : Object.keys(APPLICATION_STATUS_LOOKUP_TABLE);
         return (
           <Select
             value={statusEnum}
@@ -240,9 +240,9 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
                 statusModalContent?.statusEnum === "SECOND_CHOICE_JOIN"
                   ? "text-green-500"
                   : statusModalContent?.statusEnum === "FIRST_CHOICE_FAIL" ||
-                    statusModalContent?.statusEnum === "SECOND_CHOICE_FAIL"
-                  ? "text-red-500"
-                  : ""
+                      statusModalContent?.statusEnum === "SECOND_CHOICE_FAIL"
+                    ? "text-red-500"
+                    : ""
               }`}
               strong
             >
@@ -255,9 +255,9 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
                 statusModalContent?.e === "SECOND_CHOICE_JOIN"
                   ? "text-green-500"
                   : statusModalContent?.e === "FIRST_CHOICE_FAIL" ||
-                    statusModalContent?.e === "SECOND_CHOICE_FAIL"
-                  ? "text-red-500"
-                  : ""
+                      statusModalContent?.e === "SECOND_CHOICE_FAIL"
+                    ? "text-red-500"
+                    : ""
               }`}
               strong
             >
@@ -283,9 +283,9 @@ function ApplicationsTableSection({ applications, mutate }: Props) {
               application.statusEnum === "SECOND_CHOICE_JOIN"
                 ? "text-green-500"
                 : application.statusEnum === "FIRST_CHOICE_FAIL" ||
-                  application.statusEnum === "SECOND_CHOICE_FAIL"
-                ? "text-red-500"
-                : ""
+                    application.statusEnum === "SECOND_CHOICE_FAIL"
+                  ? "text-red-500"
+                  : ""
             }`,
           };
         }}

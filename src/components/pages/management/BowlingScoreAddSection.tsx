@@ -236,7 +236,7 @@ function BowlingScoreAddSection() {
                 if (rowIndex !== -1) {
                   newRows[rowIndex].games[i] = {
                     participated: e.target.checked,
-                    score: e.target.checked ? newRows[rowIndex].games[i]?.score ?? 0 : 0,
+                    score: e.target.checked ? (newRows[rowIndex].games[i]?.score ?? 0) : 0,
                   };
                   setIndividualScoreRows(newRows);
                 }

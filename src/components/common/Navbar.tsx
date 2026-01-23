@@ -1,4 +1,4 @@
-import { Menu, MenuProps } from "antd";
+import { ConfigProvider, Menu, MenuProps } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAuth from "src/contexts/auth/useAuth";
@@ -47,13 +47,26 @@ function Navbar() {
   }, [user, mutate]);
 
   return (
-    <Menu
-      items={menuItems}
-      mode="horizontal"
-      className="bg-transparent text-white text-lg font-bold"
-      selectedKeys={[current]}
-      onClick={onClick}
-    />
+    <ConfigProvider
+      theme={{
+        components: {
+          Menu: {
+            darkItemColor: "#ffffff",
+            darkItemHoverColor: "#ffffff",
+            darkItemSelectedColor: "#ffffff",
+          },
+        },
+      }}
+    >
+      <Menu
+        items={menuItems}
+        mode="horizontal"
+        theme="dark"
+        className="bg-transparent text-lg font-bold"
+        selectedKeys={[current]}
+        onClick={onClick}
+      />
+    </ConfigProvider>
   );
 }
 
