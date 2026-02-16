@@ -9,6 +9,7 @@ interface UseUsersQuery {
   branch?: Branch;
   generation?: number;
   responsibility?: Responsibility;
+  active_generation?: number;
   ordering?: string;
   page?: number;
   page_size?: number;
@@ -24,6 +25,7 @@ function useUsers(query: UseUsersQuery = {}, isDisabled?: boolean) {
             branch: query.branch,
             generation: query.generation,
             responsibility: query.responsibility,
+            active_generation: query.active_generation,
             ordering: query.ordering,
             page: query.page,
             page_size: query.page_size,
