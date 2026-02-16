@@ -19,7 +19,7 @@ function Footer() {
         </div>
         <div className="flex flex-col items-start sm:items-end">
           <Typography.Text style={{ fontSize: 15, fontWeight: 300, color: "#515151" }}>
-            회장: 이세은 | 010-2704-9715
+            회장: 이기헌 | 010-2483-0388
           </Typography.Text>
           <Link to="/privacy" className="underline hover:text-blue-500 underline-offset-1">
             <Typography.Text style={{ fontSize: 15, fontWeight: 300, color: "#515151" }}>
