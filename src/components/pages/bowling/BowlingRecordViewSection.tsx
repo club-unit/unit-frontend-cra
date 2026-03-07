@@ -19,6 +19,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
   const [selectedBranches, setSelectedBranches] = useState<Branch[]>(
     initialBranch ? [initialBranch] : []
   );
+  const [selectedGeneration, setSelectedGeneration] = useState<number | null>(null);
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, dayjs()]);
   const [showScrollShadow, setShowScrollShadow] = useState(false);
   const scrollWrapperRef = useRef<HTMLDivElement>(null);
@@ -34,11 +35,26 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
   useEffect(() => {
     if (generationsData && generationsData.length > 0) {
       const firstGeneration = generationsData[0];
+      setSelectedGeneration(firstGeneration.id);
       if (firstGeneration.startDate) {
-        setDateRange([dayjs(firstGeneration.startDate), dayjs()]);
+        setDateRange([
+          dayjs(firstGeneration.startDate),
+          firstGeneration.endDate ? dayjs(firstGeneration.endDate) : dayjs(),
+        ]);
       }
     }
   }, [generationsData]);
+
+  const handleGenerationChange = (id: number) => {
+    setSelectedGeneration(id);
+    const generation = generationsData?.find((g) => g.id === id);
+    if (generation?.startDate) {
+      setDateRange([
+        dayjs(generation.startDate),
+        generation.endDate ? dayjs(generation.endDate) : dayjs(),
+      ]);
+    }
+  };
 
   useEffect(() => {
     const checkScroll = () => {
@@ -241,9 +257,11 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     return columnsWithGroup;
   }, [data, lastDate, selectedBranches]);
 
+  const selectedGenerationData = generationsData?.find((g) => g.id === selectedGeneration);
+
   const handleExportExcel = () => {
     if (data) {
-      exportBowlingRecordsToExcel(data, generationsData?.[0]?.number, dateRange[0], dateRange[1]);
+      exportBowlingRecordsToExcel(data, selectedGenerationData?.number, dateRange[0], dateRange[1]);
     }
   };
 
@@ -259,6 +277,15 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
           placeholder="지구대 선택"
           style={{ minWidth: 200 }}
         />
+        <Space>
+          <Select
+            value={selectedGeneration}
+            onChange={handleGenerationChange}
+            options={generationsData?.map((g) => ({ value: g.id, label: `${g.number}기` })) ?? []}
+            placeholder="기수 선택"
+            style={{ minWidth: 100 }}
+          />
+        </Space>
         <Space>
           <DatePicker.RangePicker
             value={dateRange}
