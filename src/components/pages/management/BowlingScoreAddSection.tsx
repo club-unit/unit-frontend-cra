@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Alert,
   Button,
   Checkbox,
   DatePicker,
@@ -29,8 +30,10 @@ import { Branch } from "src/types/api/profile";
 import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
 import useNotification from "src/contexts/notification/useNotfication";
+import useBowlingRecordList from "src/hooks/api/[slug]/useBowlingRecordList";
 import {
   BowlingRow,
+  GameScore,
   checkTempBowlingData,
   clearTempBowlingData,
   loadTempBowlingData,
@@ -53,12 +56,28 @@ function BowlingScoreAddSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [hasTempData, setHasTempData] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [deleteConfirmRow, setDeleteConfirmRow] = useState<BowlingRow | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { data: usersData, isLoading: isLoadingUsers } = useUsers({
     search: searchValue,
     branch: selectedBranch,
     page_size: 50,
   });
+
+  const {
+    data: existingRecordsData,
+    isLoading: isLoadingExistingRecords,
+    mutate: mutateExistingRecords,
+  } = useBowlingRecordList(
+    {
+      branch: selectedBranch,
+      startDate: selectedDate?.toDate(),
+      endDate: selectedDate?.toDate(),
+    },
+    !selectedBranch || !selectedDate
+  );
 
   const selectRefs = useRef<Map<string, any>>(new Map());
 
@@ -67,7 +86,13 @@ function BowlingScoreAddSection() {
     if (lastRowKey && selectRefs.current.has(lastRowKey)) {
       const selectRef = selectRefs.current.get(lastRowKey);
       if (selectRef) {
-        setTimeout(() => selectRef.focus(), 0);
+        setTimeout(() => {
+          try {
+            selectRef.focus();
+          } catch (_) {
+            // 페이지 전환 직후 DOM 참조가 null일 수 있음
+          }
+        }, 0);
       }
     }
   }, [individualScoreRows.length]);
@@ -75,6 +100,50 @@ function BowlingScoreAddSection() {
   useEffect(() => {
     setHasTempData(checkTempBowlingData());
   }, []);
+
+  useEffect(() => {
+    if (!selectedBranch || !selectedDate) {
+      setIsEditMode(false);
+      setIndividualScoreRows([{ key: "row-0", games: [{ participated: true, score: 0 }] }]);
+      return;
+    }
+
+    if (isLoadingExistingRecords) return;
+
+    if (existingRecordsData && existingRecordsData.length > 0) {
+      const maxGames = Math.max(
+        ...existingRecordsData.map((r) => {
+          const games = r.records[0]?.games || [];
+          return games.length > 0 ? Math.max(...games.map((g) => g.index)) : 1;
+        })
+      );
+
+      const newRows: BowlingRow[] = existingRecordsData.map((record) => {
+        const gamesArray: GameScore[] = Array.from({ length: maxGames }, (_, i) => {
+          const game = record.records[0]?.games.find((g) => g.index === i + 1);
+          return game
+            ? { participated: true, score: game.score }
+            : { participated: false, score: 0 };
+        });
+
+        return {
+          key: `row-${record.records[0].id}`,
+          recordId: record.records[0].id,
+          memberId: record.id,
+          memberName: `${record.profile.name}/${RANK_LOOKUP_TABLE[record.profile.rank]}/${BRANCH_LOOKUP_TABLE[record.profile.branch]}`,
+          games: gamesArray,
+        };
+      });
+
+      setIndividualScoreRows(newRows);
+      setIsEditMode(true);
+    } else {
+      if (isEditMode) {
+        setIndividualScoreRows([{ key: "row-0", games: [{ participated: true, score: 0 }] }]);
+      }
+      setIsEditMode(false);
+    }
+  }, [selectedBranch, selectedDate, existingRecordsData, isLoadingExistingRecords]);
 
   const branchOptions = Object.entries(BRANCH_LOOKUP_TABLE).map(([key, value]) => ({
     value: key,
@@ -97,12 +166,16 @@ function BowlingScoreAddSection() {
             danger
             icon={<DeleteOutlined />}
             onClick={() => {
-              const newRows = individualScoreRows.filter((row) => row.key !== record.key);
-              if (newRows.length > 0) {
-                setIndividualScoreRows(newRows);
+              if (isEditMode && record.recordId) {
+                setDeleteConfirmRow(record);
+              } else {
+                const newRows = individualScoreRows.filter((row) => row.key !== record.key);
+                if (newRows.length > 0) {
+                  setIndividualScoreRows(newRows);
+                }
               }
             }}
-            disabled={individualScoreRows.length === 1}
+            disabled={!isEditMode && individualScoreRows.length === 1}
             tabIndex={-1}
           />
         ),
@@ -295,7 +368,7 @@ function BowlingScoreAddSection() {
     });
 
     return cols;
-  }, [individualScoreRows, usersData, isLoadingUsers]);
+  }, [individualScoreRows, usersData, isLoadingUsers, isEditMode]);
 
   const handleSaveTempData = () => {
     const success = saveTempBowlingData({
@@ -330,6 +403,29 @@ function BowlingScoreAddSection() {
     setHasTempData(false);
   };
 
+  const handleConfirmDelete = async () => {
+    if (!deleteConfirmRow?.recordId) return;
+
+    setIsDeleting(true);
+    try {
+      await clientAxios.delete(API_ROUTES.bowling.recordById(deleteConfirmRow.recordId));
+
+      const newRows = individualScoreRows.filter((row) => row.key !== deleteConfirmRow.key);
+      if (newRows.length === 0) {
+        setIsEditMode(false);
+        setIndividualScoreRows([{ key: "row-0", games: [{ participated: true, score: 0 }] }]);
+      } else {
+        setIndividualScoreRows(newRows);
+      }
+      api.success({ message: "볼링 기록이 삭제되었습니다." });
+      setDeleteConfirmRow(null);
+    } catch (e) {
+      api.error({ message: "볼링 기록 삭제에 실패했습니다." });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const addRow = () => {
     const numGames = individualScoreRows[0]?.games.length || 1;
     const newRow: BowlingRow = {
@@ -342,7 +438,9 @@ function BowlingScoreAddSection() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
-    const formattedData = individualScoreRows
+    const rowsToSubmit = individualScoreRows;
+
+    const formattedData = rowsToSubmit
       .filter((row) => row.memberId !== undefined) // memberId가 없는 행 제외
       .map((row) => ({
         playerId: row.memberId!,
@@ -368,10 +466,10 @@ function BowlingScoreAddSection() {
 
       if (successCount === totalCount) {
         api.success({ message: "볼링 점수가 성공적으로 등록되었습니다." });
-        setIndividualScoreRows([{ key: "row-0", games: [{ participated: true, score: 0 }] }]);
         setIsOnSubmit(false);
         setConfirmationText("");
         handleClearTempData();
+        mutateExistingRecords();
       } else if (successCount > 0 && failCount > 0) {
         api.warning({
           message: "업로드에 실패한 행이 있습니다.",
@@ -399,9 +497,10 @@ function BowlingScoreAddSection() {
     }
   };
 
-  const validRowCount = individualScoreRows.filter((row) => row.memberId !== undefined).length;
-  const hasInvalidRow = individualScoreRows.some((row) =>
-    row.games.every((game) => !game.participated)
+  const rowsToSubmit = individualScoreRows;
+  const validRowCount = rowsToSubmit.filter((row) => row.memberId !== undefined).length;
+  const hasInvalidRow = rowsToSubmit.some(
+    (row) => row.memberId !== undefined && row.games.every((game) => !game.participated)
   );
 
   const { zeroScoreCount, perfectScoreCount } = useMemo(() => {
@@ -447,6 +546,14 @@ function BowlingScoreAddSection() {
           />
           <Text type="secondary">(한국 표준시 기준)</Text>
         </Space>
+        {isEditMode && (
+          <Alert
+            type="warning"
+            message="기존에 등록된 볼링 기록이 있어 수정 모드로 전환되었습니다."
+            description="행 삭제 시 즉시 DB에서 삭제됩니다. 그 외 수정은 저장을 눌러야 반영됩니다."
+            showIcon
+          />
+        )}
         <style>{`
           .add-bowling-table .ant-table-thead > tr > th {
             padding: 4px 8px !important;
@@ -515,19 +622,19 @@ function BowlingScoreAddSection() {
             onClick={() => setIsOnSubmit(true)}
             disabled={isSubmitting || hasInvalidRow || validRowCount === 0}
           >
-            등록
+            {isEditMode ? "저장" : "등록"}
           </Button>
         </div>
       </Space>
       <Modal
         open={isOnSubmit}
-        title="볼링 점수 등록 확인"
+        title={isEditMode ? "볼링 점수 저장 확인" : "볼링 점수 등록 확인"}
         onOk={handleSubmit}
         onCancel={() => {
           setIsOnSubmit(false);
           setConfirmationText("");
         }}
-        okText="등록"
+        okText={isEditMode ? "저장" : "등록"}
         cancelText="취소"
         confirmLoading={isSubmitting}
         cancelButtonProps={{ disabled: isSubmitting }}
@@ -617,6 +724,27 @@ function BowlingScoreAddSection() {
               </Space>
             </div>
           )}
+        </Space>
+      </Modal>
+      <Modal
+        open={deleteConfirmRow !== null}
+        title="볼링 기록 삭제 확인"
+        onOk={handleConfirmDelete}
+        onCancel={() => setDeleteConfirmRow(null)}
+        okText="삭제"
+        okButtonProps={{ danger: true }}
+        cancelText="취소"
+        confirmLoading={isDeleting}
+        cancelButtonProps={{ disabled: isDeleting }}
+      >
+        <Space direction="vertical" size="small">
+          <Text type="danger" strong>
+            <WarningOutlined /> 주의: 즉시 DB에서 삭제됩니다
+          </Text>
+          <Text>
+            수정 모드에서 행을 삭제하면 저장하기 전에 즉시 DB에서 삭제됩니다. 계속하시겠습니까?
+          </Text>
+          {deleteConfirmRow?.memberName && <Text strong>대상: {deleteConfirmRow.memberName}</Text>}
         </Space>
       </Modal>
     </div>

@@ -47,6 +47,7 @@ export const API_ROUTES = {
   },
   bowling: {
     records: () => "/v2/bowling/records/",
+    recordById: (id: number) => `/v2/bowling/records/${id}/`,
     recordDates: () => "/v2/bowling/records/dates/",
   },
   generations: {

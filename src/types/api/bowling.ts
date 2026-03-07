@@ -12,6 +12,7 @@ export interface PersonalBowlingRecord {
 }
 
 export interface DailyBowlingRecord {
+  id: number;
   date: string;
   games: BowlingGame[];
 }
