@@ -20,3 +20,7 @@ export interface BowlingGame {
   index: number;
   score: number;
 }
+
+export interface BowlingRecordDate {
+  date: string;
+}

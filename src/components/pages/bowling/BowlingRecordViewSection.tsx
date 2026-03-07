@@ -4,6 +4,7 @@ import { DownloadOutlined } from "@ant-design/icons";
 import dayjs, { Dayjs } from "dayjs";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
 import useBowlingRecordList from "src/hooks/api/[slug]/useBowlingRecordList";
+import useBowlingRecordDates from "src/hooks/api/[slug]/useBowlingRecordDates";
 import useGenerations from "src/hooks/api/generations/useGenerations";
 import BadgeSet from "src/components/common/BadgeSet";
 import { Branch } from "src/types/api/profile";
@@ -21,6 +22,10 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
   );
   const [selectedGeneration, setSelectedGeneration] = useState<number | null>(null);
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, dayjs()]);
+  const [generationDateRange, setGenerationDateRange] = useState<
+    [Date | undefined, Date | undefined]
+  >([undefined, undefined]);
+  const [selectedRecordDate, setSelectedRecordDate] = useState<string | null>(null);
   const [showScrollShadow, setShowScrollShadow] = useState(false);
   const scrollWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -37,10 +42,11 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
       const firstGeneration = generationsData[0];
       setSelectedGeneration(firstGeneration.id);
       if (firstGeneration.startDate) {
-        setDateRange([
-          dayjs(firstGeneration.startDate),
-          firstGeneration.endDate ? dayjs(firstGeneration.endDate) : dayjs(),
-        ]);
+        const startDate = new Date(firstGeneration.startDate);
+        const endDate = firstGeneration.endDate ? new Date(firstGeneration.endDate) : new Date();
+        setGenerationDateRange([startDate, endDate]);
+        setDateRange([dayjs(startDate), dayjs()]);
+        setSelectedRecordDate(null);
       }
     }
   }, [generationsData]);
@@ -49,12 +55,21 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     setSelectedGeneration(id);
     const generation = generationsData?.find((g) => g.id === id);
     if (generation?.startDate) {
-      setDateRange([
-        dayjs(generation.startDate),
-        generation.endDate ? dayjs(generation.endDate) : dayjs(),
-      ]);
+      const startDate = new Date(generation.startDate);
+      const endDate = generation.endDate ? new Date(generation.endDate) : new Date();
+      setGenerationDateRange([startDate, endDate]);
+      setDateRange([dayjs(startDate), dayjs()]);
+      setSelectedRecordDate(null);
     }
   };
+
+  const { data: recordDatesData } = useBowlingRecordDates({
+    branch: selectedBranches.length > 0 ? selectedBranches.join(",") : undefined,
+    startDate: generationDateRange[0],
+    endDate: generationDateRange[1],
+  });
+
+  const recordDateOptions = recordDatesData?.map((d) => ({ value: d.date, label: d.date })) ?? [];
 
   useEffect(() => {
     const checkScroll = () => {
@@ -285,13 +300,25 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
             placeholder="기수 선택"
             style={{ minWidth: 100 }}
           />
+          <Select
+            options={recordDateOptions}
+            placeholder="멤버십 선택"
+            style={{ minWidth: 140 }}
+            value={selectedRecordDate}
+            allowClear={false}
+            onChange={(value: string) => {
+              setSelectedRecordDate(value);
+              setDateRange([dateRange[0], dayjs(value)]);
+            }}
+          />
         </Space>
         <Space>
           <DatePicker.RangePicker
             value={dateRange}
-            onChange={(dates) => setDateRange(dates as [Dayjs | null, Dayjs | null])}
             format="YYYY-MM-DD"
             placeholder={["시작 날짜", "종료 날짜"]}
+            inputReadOnly
+            open={false}
           />
           <Button icon={<DownloadOutlined />} onClick={handleExportExcel} />
         </Space>
