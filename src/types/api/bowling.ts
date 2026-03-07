@@ -5,12 +5,14 @@ export interface PersonalBowlingRecord {
   profile: BowlingRecordProfile;
   rank: number;
   average: number;
+  averageChange: number | null;
   high: number;
   numGames: number;
   records: DailyBowlingRecord[];
 }
 
 export interface DailyBowlingRecord {
+  id: number;
   date: string;
   games: BowlingGame[];
 }
@@ -18,4 +20,8 @@ export interface DailyBowlingRecord {
 export interface BowlingGame {
   index: number;
   score: number;
+}
+
+export interface BowlingRecordDate {
+  date: string;
 }

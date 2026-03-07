@@ -7,6 +7,7 @@ export interface GameScore {
 
 export interface BowlingRow {
   key: string;
+  recordId?: number;
   memberId?: number;
   memberName?: string;
   games: GameScore[];
