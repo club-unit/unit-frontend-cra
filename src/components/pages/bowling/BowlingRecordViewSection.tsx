@@ -210,8 +210,8 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
         render: (value: number | null) => {
           if (value === null) return "-";
-          if (value > 0) return <span style={{ color: "red" }}>{`+${value.toFixed(2)}`}</span>;
-          if (value < 0) return <span style={{ color: "blue" }}>{value.toFixed(2)}</span>;
+          if (value > 0) return <span style={{ color: "#e05c5c" }}>{`+${value.toFixed(2)}`}</span>;
+          if (value < 0) return <span style={{ color: "#5b8fd4" }}>{value.toFixed(2)}</span>;
           return value.toFixed(2);
         },
       },
