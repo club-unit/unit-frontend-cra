@@ -356,7 +356,7 @@ function BowlingScoreAddSection() {
       }));
 
     const uploadPromises = formattedData.map((data) =>
-      clientAxios.post(API_ROUTES.bowling.record(), data)
+      clientAxios.post(API_ROUTES.bowling.records(), data)
     );
 
     try {

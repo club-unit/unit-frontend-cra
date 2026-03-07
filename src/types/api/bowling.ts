@@ -5,6 +5,7 @@ export interface PersonalBowlingRecord {
   profile: BowlingRecordProfile;
   rank: number;
   average: number;
+  averageChange: number | null;
   high: number;
   numGames: number;
   records: DailyBowlingRecord[];

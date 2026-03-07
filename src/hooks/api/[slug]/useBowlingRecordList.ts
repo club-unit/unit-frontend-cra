@@ -2,11 +2,10 @@ import useAuthSWR from "src/hooks/api/useAuthSWR";
 import { CommonListResponse } from "src/types/api/common";
 import { API_ROUTES } from "src/constants/routes";
 import { PersonalBowlingRecord } from "src/types/api/bowling";
-import { Branch } from "src/types/api/profile";
 import dayjs from "dayjs";
 
 interface BowlingRecordListQuery {
-  branch?: Branch;
+  branch?: string;
   startDate?: Date;
   endDate?: Date;
 }

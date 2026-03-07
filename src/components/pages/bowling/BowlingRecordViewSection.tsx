@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Button, DatePicker, Segmented, Space, Table, Typography } from "antd";
+import { Button, DatePicker, Select, Space, Table, Typography } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import dayjs, { Dayjs } from "dayjs";
 import { BRANCH_LOOKUP_TABLE } from "src/constants/branches";
@@ -16,7 +16,9 @@ interface BowlingRecordViewSectionProps {
 }
 
 function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionProps) {
-  const [selectedBranch, setSelectedBranch] = useState<Branch | "ALL">(initialBranch || "ALL");
+  const [selectedBranches, setSelectedBranches] = useState<Branch[]>(
+    initialBranch ? [initialBranch] : []
+  );
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, dayjs()]);
   const [showScrollShadow, setShowScrollShadow] = useState(false);
   const scrollWrapperRef = useRef<HTMLDivElement>(null);
@@ -24,7 +26,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
   const { data: generationsData } = useGenerations();
 
   const { data, isLoading } = useBowlingRecordList({
-    branch: selectedBranch === "ALL" ? undefined : selectedBranch,
+    branch: selectedBranches.length > 0 ? selectedBranches.join(",") : undefined,
     startDate: dateRange[0]?.toDate(),
     endDate: dateRange[1]?.toDate(),
   });
@@ -63,13 +65,10 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     }
   }, [data]);
 
-  const branchOptions = [
-    { value: "ALL", label: "전체" },
-    ...Object.entries(BRANCH_LOOKUP_TABLE).map(([key, value]) => ({
-      value: key,
-      label: value,
-    })),
-  ];
+  const branchOptions = Object.entries(BRANCH_LOOKUP_TABLE).map(([key, value]) => ({
+    value: key,
+    label: value,
+  }));
 
   const lastDate = useMemo(() => {
     if (!data || data.length === 0) return null;
@@ -93,8 +92,8 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     }
 
     let maxGameIndex = 0;
-    // "전체" 탭이 아닐 때만 게임 인덱스 계산
-    if (selectedBranch !== "ALL") {
+    // 지구대가 정확히 1개 선택된 경우에만 게임 인덱스 계산
+    if (selectedBranches.length === 1) {
       data.forEach((record) => {
         const lastDateRecord = record.records.find((r) => r.date === lastDate);
         if (lastDateRecord && lastDateRecord.games.length > 0) {
@@ -145,8 +144,8 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
       },
     ];
 
-    // "전체" 탭일 때만 지구대 컬럼 추가
-    if (selectedBranch === "ALL") {
+    // 지구대가 1개만 선택되지 않은 경우 지구대 컬럼 추가
+    if (selectedBranches.length !== 1) {
       baseColumns.push({
         title: "지구대",
         key: "branch",
@@ -171,6 +170,19 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
         align: "center",
         onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
         render: (value) => value.toFixed(2),
+      },
+      {
+        title: "등락",
+        dataIndex: "averageChange",
+        key: "averageChange",
+        align: "center",
+        onCell: () => ({ style: { whiteSpace: "nowrap" as const, padding: "4px 8px" } }),
+        render: (value: number | null) => {
+          if (value === null) return "-";
+          if (value > 0) return <span style={{ color: "red" }}>{`+${value.toFixed(2)}`}</span>;
+          if (value < 0) return <span style={{ color: "blue" }}>{value.toFixed(2)}</span>;
+          return value.toFixed(2);
+        },
       },
       {
         title: "게임수",
@@ -227,7 +239,7 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     }
 
     return columnsWithGroup;
-  }, [data, lastDate, selectedBranch]);
+  }, [data, lastDate, selectedBranches]);
 
   const handleExportExcel = () => {
     if (data) {
@@ -239,10 +251,13 @@ function BowlingRecordViewSection({ initialBranch }: BowlingRecordViewSectionPro
     <div className="flex flex-col gap-4">
       <Typography.Title level={2}>볼링 기록 조회</Typography.Title>
       <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-        <Segmented
-          value={selectedBranch}
-          onChange={(value) => setSelectedBranch(value as Branch | "ALL")}
+        <Select
+          mode="multiple"
+          value={selectedBranches}
+          onChange={(values) => setSelectedBranches(values as Branch[])}
           options={branchOptions}
+          placeholder="지구대 선택"
+          style={{ minWidth: 200 }}
         />
         <Space>
           <DatePicker.RangePicker
