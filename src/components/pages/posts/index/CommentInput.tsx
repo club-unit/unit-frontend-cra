@@ -41,7 +41,7 @@ function CommentInput({ parentId, mutate, initialComment, setIsOnEdit, setReplyi
       setReplyingParent && setReplyingParent(null);
     } catch (e) {
       if (e instanceof AxiosError) {
-        if (e.response?.data?.code === "token_not_valid") {
+        if (e.response?.data?.code === "C010001") {
           api.error({
             message: "댓글 등록에 실패하였습니다.",
             description: "로그인이 만료되었습니다.",
@@ -77,7 +77,7 @@ function CommentInput({ parentId, mutate, initialComment, setIsOnEdit, setReplyi
       }
     } catch (e) {
       if (e instanceof AxiosError) {
-        if (e.response?.data?.code === "token_not_valid") {
+        if (e.response?.data?.code === "C010001") {
           api.error({
             message: "댓글 수정에 실패하였습니다.",
             description: "로그인이 만료되었습니다.",
