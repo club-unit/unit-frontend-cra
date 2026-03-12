@@ -34,9 +34,7 @@ function AuthCard({ setOpen }: Props) {
         setOpen(false);
       }
     } catch (e: any) {
-      if (
-        e.response.data.detail === "지정된 자격 증명에 해당하는 활성화된 사용자를 찾을 수 없습니다"
-      ) {
+      if (e.response?.data?.code === "C010002") {
         api.error({ message: "인증 오류", description: "아이디 또는 비밀번호가 틀렸습니다." });
         form.resetFields();
       } else {

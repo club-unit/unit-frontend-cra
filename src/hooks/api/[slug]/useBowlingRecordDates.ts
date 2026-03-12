@@ -1,22 +1,22 @@
 import useAuthSWR from "src/hooks/api/useAuthSWR";
 import { CommonListResponse } from "src/types/api/common";
 import { API_ROUTES } from "src/constants/routes";
-import { PersonalBowlingRecord } from "src/types/api/bowling";
+import { BowlingRecordDate } from "src/types/api/bowling";
 import dayjs from "dayjs";
 
-interface BowlingRecordListQuery {
+interface BowlingRecordDatesQuery {
   branch?: string;
   startDate?: Date;
   endDate?: Date;
 }
 
-function useBowlingRecordList(query: BowlingRecordListQuery, isDisabled?: boolean) {
-  const shouldFetch = !isDisabled && query?.startDate && query?.endDate;
+function useBowlingRecordDates(query: BowlingRecordDatesQuery) {
+  const shouldFetch = query?.startDate && query?.endDate;
 
-  const { data, isLoading, mutate, error } = useAuthSWR<CommonListResponse<PersonalBowlingRecord>>(
+  const { data, isLoading, error } = useAuthSWR<CommonListResponse<BowlingRecordDate>>(
     shouldFetch
       ? {
-          url: API_ROUTES.bowling.records(),
+          url: API_ROUTES.bowling.recordDates(),
           query: {
             ...(query.branch && { branch: query.branch }),
             start_date: dayjs(query.startDate).format("YYYY-MM-DD"),
@@ -26,7 +26,7 @@ function useBowlingRecordList(query: BowlingRecordListQuery, isDisabled?: boolea
       : null
   );
 
-  return { data, isLoading, mutate, error };
+  return { data, isLoading, error };
 }
 
-export default useBowlingRecordList;
+export default useBowlingRecordDates;

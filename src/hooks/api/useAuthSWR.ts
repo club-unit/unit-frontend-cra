@@ -20,10 +20,7 @@ function useAuthSWR<T>(params: Params | null) {
       api.error({ message: "권한이 없습니다." });
       navigate("/");
     } else if (error?.response?.status === 401) {
-      if (
-        error.response?.data.detail ===
-        "자격 인증데이터(authentication credentials)가 제공되지 않았습니다."
-      ) {
+      if (error.response?.data?.code === "C010003") {
         api.error({ message: "로그인이 필요합니다." });
         navigate("/");
       } else {

@@ -39,7 +39,7 @@ export function exportBowlingRecordsToExcel(
     rankCounts.set(record.rank, count + 1);
   });
 
-  const baseHeaders = ["순위", "등급", "지구대", "이름", "에버", "게임수", "하이"];
+  const baseHeaders = ["순위", "등급", "지구대", "이름", "에버", "등락", "게임수", "하이"];
   const headerRow1: string[] = [...baseHeaders];
   const headerRow2: (string | null)[] = new Array(baseHeaders.length).fill(null);
 
@@ -61,6 +61,11 @@ export function exportBowlingRecordsToExcel(
       BRANCH_LOOKUP_TABLE[record.profile.branch],
       record.profile.name,
       Number(record.average.toFixed(2)),
+      record.averageChange === null
+        ? ""
+        : record.averageChange > 0
+          ? `+${record.averageChange.toFixed(2)}`
+          : record.averageChange.toFixed(2),
       record.numGames,
       record.high,
     ];
@@ -130,7 +135,7 @@ export function exportBowlingRecordsToExcel(
       };
     }
 
-    const numGamesCell = XLSX.utils.encode_cell({ r: excelRow, c: 5 });
+    const numGamesCell = XLSX.utils.encode_cell({ r: excelRow, c: 6 });
     if (ws[numGamesCell] && record.numGames < 5) {
       ws[numGamesCell].s = {
         font: { color: { rgb: "FF0000" } },
@@ -165,6 +170,7 @@ export function exportBowlingRecordsToExcel(
     { wch: 5.5 }, // 지구대
     { wch: 10 }, // 이름
     { wch: 6.5 }, // 에버
+    { wch: 6 }, // 등락
     { wch: 6 }, // 게임수
     { wch: 4.5 }, // 하이
   ];
