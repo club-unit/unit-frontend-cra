@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Form, Input, Select } from "antd";
+import { Button, Card, DatePicker, Form, Input, Select, Typography } from "antd";
 import { Dispatch } from "react";
 import { clientAxios } from "src/utils/common/clientAxios";
 import { API_ROUTES } from "src/constants/routes";
@@ -87,6 +87,9 @@ function FormSection({ setCurrentStep }: Props) {
         </Form.Item>
       </Card>
       <Card title="회원 개인정보">
+        <Typography.Title level={4} type="success">
+          입력하신 정보는 최초 동아리 가입 신청 후 연락에 사용됩니다. 꼭 정확히 기입해주세요.
+        </Typography.Title>
         <Form.Item
           label="이름"
           name="name"
