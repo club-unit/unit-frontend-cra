@@ -36,7 +36,7 @@ function CommentElement({ comment, isChildren, replyingParent, setReplyingParent
       api.success({ message: "댓글이 삭제되었습니다." });
     } catch (e) {
       if (e instanceof AxiosError) {
-        if (e.response?.data?.code === "token_not_valid") {
+        if (e.response?.data?.code === "C010001") {
           api.error({
             message: "댓글 삭제에 실패했습니다.",
             description: "로그인이 만료되었습니다.",

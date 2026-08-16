@@ -43,7 +43,7 @@ function PostEditSection({ post, setIsEditing, mutate }: Props) {
       api.success({ message: "게시글이 수정되었습니다." });
     } catch (e) {
       if (e instanceof AxiosError) {
-        if (e.response?.data?.code === "token_not_valid") {
+        if (e.response?.data?.code === "C010001") {
           api.error({
             message: "게시글 수정에 실패하였습니다.",
             description: "로그인이 만료되었습니다.",

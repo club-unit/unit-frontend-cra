@@ -42,10 +42,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
         setUser(data);
       } catch (e) {
         if (e instanceof AxiosError) {
-          if (
-            e.response?.data?.code === "token_not_valid" &&
-            !hasShownExpirationNotification.current
-          ) {
+          if (e.response?.data?.code === "C010001" && !hasShownExpirationNotification.current) {
             hasShownExpirationNotification.current = true;
             api.error({
               message: "로그인이 만료되었습니다.",

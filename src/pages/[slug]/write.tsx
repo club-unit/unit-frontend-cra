@@ -43,7 +43,7 @@ function PostWritePage() {
       navigate(`/${slug}/${newPost.id}`);
     } catch (e) {
       if (e instanceof AxiosError) {
-        if (e.response?.data?.code === "token_not_valid") {
+        if (e.response?.data?.code === "C010001") {
           api.error({
             message: "게시글 등록에 실패하였습니다.",
             description: "로그인이 만료되었습니다.",
